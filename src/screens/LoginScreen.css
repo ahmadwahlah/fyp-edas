@@ -1,0 +1,110 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  position: relative;
+  background-color: rgb(240, 242, 245);
+}
+
+.website-name {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  font-size: 25px;
+  font-weight: bold;
+  color: black;
+}
+
+.register-button {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  padding: 10px 20px;
+  background-color: #0000ff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.form-box {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: gray;
+  text-align: center;
+  max-width: 500px;
+  width: 90%;
+}
+
+.form-heading {
+  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  color: black;
+  text-transform: uppercase;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+label {
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+select,
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #052242;
+}
+
+button[type="submit"] {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #052242;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+a {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #052242;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.error {
+  margin-top: 10px;
+  font-size: 14px;
+  color: red;
+}
+
+@media (max-width: 500px) {
+  .form-box {
+    width: 100%;
+  }
+}
