@@ -2,25 +2,18 @@ import React from "react";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import LoginScreen from "./screens/LoginScreen";
-import SignupScreen from "./screens/SignupScreen";
-import RegisteredScreen from "./screens/RegsiteredScreen";
-import ForgotPasswordScreen from "./screens/ForgotPasswordScreen";
-import ForgotPasswordSuccessScreen from "./screens/ForgotPasswordSuccessScreen";
+import SignIn from "./screens/SignIn";
+import SignUp from "./screens/SignUp";
+import AdminDashboard from "./screens/AdminDashboard";
 
 function App() {
   return (
     <Router>
       <div>
         <Routes>
-          <Route index element={<LoginScreen />} />
-          <Route path="/register" element={<SignupScreen />} />
-          <Route path="/registered" element={<RegisteredScreen />} />
-          <Route path="/fogetpassowrd" element={<ForgotPasswordScreen />} />
-          <Route
-            path="/requestsent"
-            element={<ForgotPasswordSuccessScreen />}
-          />
+          <Route index element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/adminhome" element={<AdminDashboard />} />
         </Routes>
       </div>
     </Router>
