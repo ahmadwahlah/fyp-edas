@@ -4,7 +4,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import SignIn from "./screens/SignIn";
 import SignUp from "./screens/SignUp";
-import AdminDashboard from "./screens/AdminDashboard";
+import AdminNavigation from "./screens/AdminNavigation";
+import NavigationTabs from "./screens/test";
 
 function App() {
   return (
@@ -13,7 +14,8 @@ function App() {
         <Routes>
           <Route index element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/adminhome" element={<AdminDashboard />} />
+          <Route path="/adminhome" element={<AdminNavigation />} />
+          <Route path="/test" element={<NavigationTabs />} />
         </Routes>
       </div>
     </Router>

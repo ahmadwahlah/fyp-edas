@@ -13,22 +13,26 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
-function Copyright(props) {
+function CustomSelect(props) {
+  const { label, options, ...rest } = props;
   return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
+    <TextField
+      {...rest}
+      select
+      label={label}
+      SelectProps={{
+        native: true,
+      }}
+      variant="outlined"
     >
-      {"Copyright © "}
-      <Link color="inherit" href="">
-        EDAS
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
+      {options.map((option) => (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </TextField>
   );
 }
 
@@ -43,7 +47,23 @@ export default function SignIn() {
     console.log({
       email: data.get("email"),
       password: data.get("password"),
+      role: data.get("role"),
     });
+    // handle sign-in action based on the selected role
+    switch (data.get("role")) {
+      case "admin":
+        navigate("/adminhome");
+        break;
+      case "faculty":
+        navigate("/facultyhome");
+        break;
+      case "student":
+        navigate("/studenthome");
+        break;
+      default:
+        navigate("/");
+        break;
+    }
   };
 
   return (
@@ -68,6 +88,20 @@ export default function SignIn() {
             noValidate
             sx={{ mt: 1 }}
           >
+            <CustomSelect
+              margin="normal"
+              required
+              fullWidth
+              id="role"
+              label="Sign in as"
+              name="role"
+              autoFocus
+              options={[
+                { value: "admin", label: "Administrator" },
+                { value: "faculty", label: "Faculty/Staff" },
+                { value: "student", label: "Student" },
+              ]}
+            />
             <TextField
               margin="normal"
               required
@@ -76,7 +110,6 @@ export default function SignIn() {
               label="Email Address"
               name="email"
               autoComplete="email"
-              autoFocus
             />
             <TextField
               margin="normal"
@@ -96,7 +129,7 @@ export default function SignIn() {
               type="submit"
               fullWidth
               variant="contained"
-              onClick={() => navigate("/adminhome")}
+              onClick={() => handleSubmit}
               sx={{ mt: 3, mb: 2 }}
             >
               Sign In
@@ -119,8 +152,8 @@ export default function SignIn() {
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
+      <Footer />
     </ThemeProvider>
   );
 }
