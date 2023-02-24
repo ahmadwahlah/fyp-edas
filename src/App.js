@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import SignIn from "./screens/SignIn";
 import SignUp from "./screens/SignUp";
 import AdminNavigation from "./screens/AdminNavigation";
-import NavigationTabs from "./screens/test";
+import LineGraph from "./screens/test";
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
           <Route index element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/adminhome" element={<AdminNavigation />} />
-          <Route path="/test" element={<NavigationTabs />} />
+          <Route path="/test" element={<LineGraph />} />
         </Routes>
       </div>
     </Router>
