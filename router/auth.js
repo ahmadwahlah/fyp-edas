@@ -11,6 +11,7 @@ router.get('/',(req,res)=> {
 })
 
 
+
 // router.post('/register',(req,res)=> {
 //     const { RegNo,FirstName,LastName,Role,Dept,Phone,Email,Password} = req.body;
 //     if (!RegNo || !FirstName || !LastName || !Role || !Dept || !Phone || !Email || !Password) {
