@@ -8,21 +8,39 @@ import PieChart from "./PieChart";
 
 export default function AdminDashboard() {
   return (
-    <Box sx={{ width: "100%", left: 0, top: 0 }}>
+    <Box
+      sx={{
+        width: "100%",
+        left: 0,
+        top: 0,
+        "@media (min-width: 960px)": {
+          flexDirection: "row",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+        },
+      }}
+    >
       <FilterBar />
       <Divider />
       <CardGroup />
-      <div
-        style={{
+      <Box
+        sx={{
+          width: "95%",
           display: "flex",
-          justifyContent: "space-between",
+          flexDirection: "column",
+          justifyContent: "center",
           alignItems: "center",
           margin: "2.5%",
+          "@media (min-width: 960px)": {
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+          },
         }}
       >
         <LineChart />
         <PieChart />
-      </div>
+      </Box>
     </Box>
   );
 }

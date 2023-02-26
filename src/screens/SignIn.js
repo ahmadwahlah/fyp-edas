@@ -1,10 +1,8 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -41,16 +39,38 @@ const theme = createTheme();
 export default function SignIn() {
   const navigate = useNavigate();
 
+  const validCredentials = [
+    { email: "ahmad@gmail.com", password: "password", role: "admin" },
+    { email: "abdullah@gmail.com", password: "password", role: "faculty" },
+    { email: "hamza@gmail.com", password: "password", role: "student" },
+  ];
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const enteredEmail = data.get("email");
+    const enteredPassword = data.get("password");
+
+    // Check if entered credentials match any of the valid credentials
+    const matchedCredential = validCredentials.find(
+      (credential) =>
+        credential.email === enteredEmail &&
+        credential.password === enteredPassword &&
+        credential.role === data.get("role")
+    );
+    if (!matchedCredential) {
+      alert("Invalid email or password");
+      return;
+    }
+
     console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-      role: data.get("role"),
+      email: matchedCredential.email,
+      password: matchedCredential.password,
+      role: matchedCredential.role,
     });
+
     // handle sign-in action based on the selected role
-    switch (data.get("role")) {
+    switch (matchedCredential.role) {
       case "admin":
         navigate("/adminhome");
         break;
@@ -63,6 +83,43 @@ export default function SignIn() {
       default:
         navigate("/");
         break;
+    }
+  };
+
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState(false);
+  const [helperText, setHelperText] = useState("");
+
+  const handleEmailChange = (event) => {
+    const emailValue = event.target.value;
+    setEmail(emailValue);
+
+    if (!emailValue) {
+      setEmailError(true);
+      setHelperText("Email is required");
+    } else if (!/\S+@\S+\.\S+/.test(emailValue)) {
+      setEmailError(true);
+      setHelperText("Invalid email address");
+    } else {
+      setEmailError(false);
+      setHelperText("");
+    }
+  };
+
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState(false);
+  const [helperTextPass, setHelperTextPass] = useState("");
+
+  const handlePasswordChange = (event) => {
+    const passwordValue = event.target.value;
+    setPassword(passwordValue);
+
+    if (!passwordValue) {
+      setPasswordError(true);
+      setHelperTextPass("Password is required");
+    } else {
+      setPasswordError(false);
+      setHelperTextPass("");
     }
   };
 
@@ -110,6 +167,10 @@ export default function SignIn() {
               label="Email Address"
               name="email"
               autoComplete="email"
+              error={emailError}
+              helperText={helperText}
+              value={email}
+              onChange={handleEmailChange}
             />
             <TextField
               margin="normal"
@@ -120,10 +181,10 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              error={passwordError}
+              helperText={helperTextPass}
+              value={password}
+              onChange={handlePasswordChange}
             />
             <Button
               type="submit"
@@ -136,7 +197,11 @@ export default function SignIn() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link
+                  href="#"
+                  variant="body2"
+                  onClick={() => navigate("/forgotpassword")}
+                >
                   Forgot password?
                 </Link>
               </Grid>

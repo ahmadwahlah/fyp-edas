@@ -1,5 +1,5 @@
 import React from "react";
-import { Divider, Grid } from "@mui/material";
+import { Divider } from "@mui/material";
 import Box from "@mui/material/Box";
 import CardGroup from "./CardGroup";
 import FormHistoryList from "./FormHistoryList";
@@ -11,15 +11,37 @@ export default function StudentDashboard() {
     <Box sx={{ width: "100%", left: 0, top: 0 }}>
       <CardGroup />
       <Divider />
-      <Grid container sx={{ alignItems: "center", mb: 2 }}>
-        <Grid item>
-          <Typography variant="h4">Forms History</Typography>
-        </Grid>
-        <Grid item xs />
-        <Grid item>
-          <SearchBar />
-        </Grid>
-      </Grid>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          margin: "2rem",
+        }}
+      >
+        <Typography
+          variant="h5"
+          sx={{
+            fontWeight: "bold",
+            color: "black",
+            textTransform: "uppercase",
+            letterSpacing: 1,
+            mr: 2,
+          }}
+        >
+          Forms History
+        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+          }}
+        >
+          <SearchBar sx={{ ml: 2 }} />
+        </Box>
+      </Box>
+      <Divider />
       <FormHistoryList />
     </Box>
   );

@@ -1,6 +1,7 @@
 import React from "react";
 import { Chart } from "chart.js/auto";
 import { Line } from "react-chartjs-2";
+import Box from "@mui/material/Box";
 
 const data = {
   labels: [
@@ -44,29 +45,42 @@ const options = {
 
 export default function LineChart() {
   return (
-    <div
-      style={{
-        width: "720px",
-        height: "430px",
-        backgroundColor: "#f5f5f5",
-        border: "1px solid #CCC",
-        borderRadius: "5px",
-        padding: "20px",
-        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+    <Box
+      sx={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
       }}
     >
-      <div
-        style={{
-          textAlign: "center",
-          marginBottom: "15px",
-          fontSize: "24px",
-          fontWeight: "bold",
-          color: "black",
+      <Box
+        sx={{
+          width: "100%",
+          maxWidth: "720px",
+          height: "100%",
+          backgroundColor: "#f5f5f5",
+          border: "1px solid #CCC",
+          borderRadius: "5px",
+          padding: "2%",
+          margin: "2.5%",
+          boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
         }}
       >
-        Form Submissions by Day of the Week
-      </div>
-      <Line data={data} options={options} />
-    </div>
+        <Box
+          sx={{
+            textAlign: "center",
+            marginBottom: "15px",
+            fontSize: "24px",
+            fontWeight: "bold",
+            color: "black",
+          }}
+        >
+          Form Submissions by Day of the Week
+        </Box>
+        <Line data={data} options={options} />
+      </Box>
+    </Box>
   );
 }

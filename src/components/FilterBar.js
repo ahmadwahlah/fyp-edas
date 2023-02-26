@@ -50,7 +50,7 @@ export default function FilterBar() {
         Filter By
       </Typography>
 
-      <FormControl sx={{ minWidth: 175 }}>
+      <FormControl sx={{ minWidth: 200 }}>
         <InputLabel id="time-filter-label">Time</InputLabel>
         <Select
           labelId="time-filter-label"
@@ -58,6 +58,7 @@ export default function FilterBar() {
           value={timeFilter}
           label="Time"
           onChange={handleTimeChange}
+          margin="normal"
         >
           <MenuItem value="all">All</MenuItem>
           <MenuItem value="lastWeek">Last Week</MenuItem>
@@ -65,10 +66,11 @@ export default function FilterBar() {
           <MenuItem value="lastYear">Last Year</MenuItem>
         </Select>
       </FormControl>
-      <FormControl sx={{ minWidth: 175 }}>
+      <FormControl sx={{ minWidth: 200 }}>
         <InputLabel id="department-filter-label">Department/Faculty</InputLabel>
         <Select
           labelId="department-filter-label"
+          margin="normal"
           id="department-filter"
           value={departmentFilter}
           label="Department/Faculty"
@@ -79,12 +81,13 @@ export default function FilterBar() {
           <MenuItem value="teamForms">Finance</MenuItem>
         </Select>
       </FormControl>
-      <FormControl sx={{ minWidth: 175 }}>
+      <FormControl sx={{ minWidth: 200 }}>
         <InputLabel id="form-filter-label">Form</InputLabel>
         <Select
           labelId="form-filter-label"
           id="from-filter"
           value={formFilter}
+          margin="normal"
           label="Form"
           onChange={handleFormChange}
         >

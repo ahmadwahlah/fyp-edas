@@ -4,11 +4,12 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import SignIn from "./screens/SignIn";
 import SignUp from "./screens/SignUp";
+import ForgotPassword from "./screens/ForgotPassword";
 import AdminNavigation from "./screens/AdminNavigation";
 import FacultyNavigation from "./screens/FacultyNavigation";
 import StudentNavigation from "./screens/StudentNavigation";
 import Leave from "./components/Forms/Leave";
-import LineGraph from "./screens/test";
+import Test from "./screens/test";
 
 function App() {
   return (
@@ -17,11 +18,12 @@ function App() {
         <Routes>
           <Route index element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgotpassword" element={<ForgotPassword />} />
           <Route path="/adminhome" element={<AdminNavigation />} />
           <Route path="/facultyhome" element={<FacultyNavigation />} />
           <Route path="/studenthome" element={<StudentNavigation />} />
           <Route path="/leave" element={<Leave />} />
-          <Route path="/test" element={<LineGraph />} />
+          <Route path="/test" element={<Test />} />
         </Routes>
       </div>
     </Router>

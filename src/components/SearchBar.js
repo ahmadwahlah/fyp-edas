@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
-  borderRadius: theme.shape.borderRadius,
+  borderRadius: theme.shape.borderRadius + 2,
   backgroundColor: "#f1f1f1",
   "&:hover": {
     backgroundColor: "#fff",
@@ -14,19 +14,23 @@ const Search = styled("div")(({ theme }) => ({
   marginLeft: 0,
   width: "100%",
   boxShadow: "0 2px 4px 0 rgba(0, 0, 0, 0.1)",
+  border: "1px solid black",
   [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(1),
     width: "auto",
   },
 }));
+
 const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
+  padding: theme.spacing(0, 1),
+  borderRadius: theme.shape.borderRadius + 1,
   height: "100%",
   position: "absolute",
   pointerEvents: "none",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  backgroundColor: "black",
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
@@ -46,7 +50,6 @@ const SearchBox = styled(Box)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-  marginTop: theme.spacing(2),
   width: "100%", // increased width to 100%
 }));
 
@@ -55,7 +58,7 @@ export default function SearchBar() {
     <SearchBox>
       <Search>
         <SearchIconWrapper>
-          <SearchIcon />
+          <SearchIcon sx={{ color: "white" }} />
         </SearchIconWrapper>
         <StyledInputBase
           placeholder="Search…"
