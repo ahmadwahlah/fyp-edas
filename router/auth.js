@@ -4,10 +4,11 @@ const pool = require('../database');
 
 
 router.get('/',(req,res)=> {
-    pool.query(`SELECT * FROM Users`, (err,results) => {
-        if(err) throw err;
-        res.json({message:results});
-    });
+    res.json({message: "I am working"});
+    // pool.query(`SELECT * FROM Users`, (err,results) => {
+    //     if(err) throw err;
+    //     res.json({message:results});
+    // });
 })
 
 
