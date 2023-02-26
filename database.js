@@ -1,8 +1,6 @@
 const dotenv = require('dotenv');
 const {createPool} = require('mysql');
 
-
-// dotenv.config({path: './config.env'});
 const pool = createPool({
     host:'edas-admin.csujcs5csopi.ap-south-1.rds.amazonaws.com',
     user:'admin',
