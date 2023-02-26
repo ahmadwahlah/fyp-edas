@@ -1,11 +1,11 @@
 const express = require('express');
-const dotenv = require('dotenv');
+// const dotenv = require('dotenv');
 const app = express();
 
 
 // dotenv.config({path: './config.env'});
 require("./database");
-require('./router/auth');
+// require('./router/auth');
 const PORT = 8080;
 
 app.use(express.json());
