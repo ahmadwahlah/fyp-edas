@@ -12,13 +12,4 @@ const pool = createPool({
     connectionLimit:10
 })
 
-
-// pool.query(`SELECT * FROM Users`, (err, results, fields) => {
-//     if (!err) {
-//         console.log(results);
-//     }else{
-//         console.log(err.message);
-//     }
-// })
-
 module.exports = pool; 
