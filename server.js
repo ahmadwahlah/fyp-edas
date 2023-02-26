@@ -3,10 +3,10 @@ const dotenv = require('dotenv');
 const app = express();
 
 
-dotenv.config({path: './config.env'});
+// dotenv.config({path: './config.env'});
 require("./database");
 require('./router/auth');
-const PORT = process.env.PORT || 8080;
+const PORT = 3000;
 
 app.use(express.json());
 //link the router file 
