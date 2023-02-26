@@ -8,7 +8,8 @@ router.get('/',(req,res)=> {
         if(err){
             console.log(err.message);
         }else {
-            res.send(result);
+            // res.send(result);
+            res.send("Hello I am working");
         }
     });
 })
