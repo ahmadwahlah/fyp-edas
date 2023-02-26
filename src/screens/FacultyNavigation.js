@@ -10,15 +10,17 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import PeopleIcon from "@mui/icons-material/People";
+import DescriptionIcon from "@mui/icons-material/Description";
+import NoteAddIcon from "@mui/icons-material/NoteAdd";
+import PendingActionsIcon from "@mui/icons-material/PendingActions";
 
 import LoggedInHeader from "../components/LoggedInHeader";
-import AdminDashboard from "../components/AdminDashboard";
-import AdminUserManagement from "../components/AdminUserManagement";
+import StudentDashboard from "../components/StudentDashboard";
+import Forms from "../components/Forms";
 
 const drawerWidth = 240;
 
-export default function AdminNavigation() {
+export default function StudentNavigation() {
   const [content, setContent] = React.useState("dashboard");
 
   const handleListItemClick = (event, content) => {
@@ -28,9 +30,13 @@ export default function AdminNavigation() {
   const getContent = () => {
     switch (content) {
       case "dashboard":
-        return <AdminDashboard />;
-      case "userManagement":
-        return <AdminUserManagement />;
+        return <StudentDashboard />;
+      case "forms":
+        return <Forms />;
+      case "createform":
+        return;
+      case "pendingforms":
+        return;
       default:
         return <Typography paragraph>Invalid content selected.</Typography>;
     }
@@ -71,14 +77,38 @@ export default function AdminNavigation() {
             </ListItem>
             <ListItem
               disablePadding
-              onClick={(event) => handleListItemClick(event, "userManagement")}
+              onClick={(event) => handleListItemClick(event, "forms")}
               sx={{ cursor: "pointer" }}
             >
               <ListItemButton>
                 <ListItemIcon sx={{ color: "#000000" }}>
-                  <PeopleIcon />
+                  <DescriptionIcon />
                 </ListItemIcon>
-                <ListItemText primary="User Management" />
+                <ListItemText primary="Forms" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem
+              disablePadding
+              onClick={(event) => handleListItemClick(event, "createform")}
+              sx={{ cursor: "pointer" }}
+            >
+              <ListItemButton>
+                <ListItemIcon sx={{ color: "#000000" }}>
+                  <NoteAddIcon />
+                </ListItemIcon>
+                <ListItemText primary="Create Forms" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem
+              disablePadding
+              onClick={(event) => handleListItemClick(event, "pendingforms")}
+              sx={{ cursor: "pointer" }}
+            >
+              <ListItemButton>
+                <ListItemIcon sx={{ color: "#000000" }}>
+                  <PendingActionsIcon />
+                </ListItemIcon>
+                <ListItemText primary="Pending Forms" />
               </ListItemButton>
             </ListItem>
           </List>

@@ -10,27 +10,35 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import PeopleIcon from "@mui/icons-material/People";
+import DescriptionIcon from "@mui/icons-material/Description";
 
 import LoggedInHeader from "../components/LoggedInHeader";
-import AdminDashboard from "../components/AdminDashboard";
-import AdminUserManagement from "../components/AdminUserManagement";
+import StudentDashboard from "../components/StudentDashboard";
+import Forms from "../components/Forms";
 
 const drawerWidth = 240;
 
-export default function AdminNavigation() {
-  const [content, setContent] = React.useState("dashboard");
+export default function StudentNavigation() {
+  const [content, setContent] = React.useState(() => {
+    // Retrieve the previous state from browser storage
+    const storedContent = window.localStorage.getItem(
+      "studentNavigationContent"
+    );
+    return storedContent ? storedContent : "dashboard";
+  });
 
+  // Update the state and browser storage whenever the user selects a different content
   const handleListItemClick = (event, content) => {
     setContent(content);
+    window.localStorage.setItem("studentNavigationContent", content);
   };
 
   const getContent = () => {
     switch (content) {
       case "dashboard":
-        return <AdminDashboard />;
-      case "userManagement":
-        return <AdminUserManagement />;
+        return <StudentDashboard />;
+      case "forms":
+        return <Forms />;
       default:
         return <Typography paragraph>Invalid content selected.</Typography>;
     }
@@ -49,8 +57,6 @@ export default function AdminNavigation() {
           [`& .MuiDrawer-paper`]: {
             width: drawerWidth,
             boxSizing: "border-box",
-            //            backgroundColor: "#F5F5F5",
-            //            borderRight: "1px solid black",
           },
         }}
       >
@@ -71,14 +77,14 @@ export default function AdminNavigation() {
             </ListItem>
             <ListItem
               disablePadding
-              onClick={(event) => handleListItemClick(event, "userManagement")}
+              onClick={(event) => handleListItemClick(event, "forms")}
               sx={{ cursor: "pointer" }}
             >
               <ListItemButton>
                 <ListItemIcon sx={{ color: "#000000" }}>
-                  <PeopleIcon />
+                  <DescriptionIcon />
                 </ListItemIcon>
-                <ListItemText primary="User Management" />
+                <ListItemText primary="Forms" />
               </ListItemButton>
             </ListItem>
           </List>
