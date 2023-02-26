@@ -6,7 +6,7 @@ const app = express();
 dotenv.config({path: './config.env'});
 require("./database");
 require('./router/auth');
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 //link the router file 
