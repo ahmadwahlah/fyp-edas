@@ -123,6 +123,77 @@ router.post('/api/student/signup', (req, res) => {
         });
     });
 
+    //==========================================================FACULTY==========================================
+    // Defining the API endpoint for signing up a Faculty
+    router.post('/api/faculty/signup', (req, res) => {
+        const {id ,firstname, lastname, email, password, phoneNumber, regnum, role, department } = req.body;
+        const accept = false;
+
+         // Check if all required fields are provided
+        if (!id || !firstname || !lastname || !email || !password || !phoneNumber || !regnum || !role || !department) {
+            return res.status(400).json({ message: 'All fields are required' });
+        }
     
+        // Check if the email address is already in use
+        pool.query('SELECT * FROM Faculty WHERE email = ?', email, (error, results) => {
+            if (error) {
+                console.error(error);
+                return res.status(500).json({ message: 'Internal server error +' });
+            }
+    
+            if (results.length > 0) {
+                return res.status(400).json({ message: 'Email address is already in use' });
+            }
+        })
+    
+        // Hash the password using bcrypt
+        bcrypt.hash(password, 10, (error, hashedPassword) => {
+            if (error) {
+                console.error(error);
+                res.status(500).send('Error hashing password');
+            } else {
+                // Insert the new user into the Faculty table
+                const queryString = 'INSERT INTO Faculty (id, firstname, lastname, email, password, phoneNumber, regnum, role, department, accept) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+                const values = [id, firstname, lastname, email, hashedPassword, phoneNumber, regnum, role, department, accept];
+    
+                pool.query(queryString, values, (error, results) => {
+                    if (error) {
+                        console.error(error);
+                        res.status(500).send('Error inserting new user into database');
+                    } else {
+                        res.status(200).send('User created successfully');
+                    }
+                });
+            }
+        });
+    });
+    
+    // Defining the API endpoint for logini a Faculty
+    router.post('/api/faculty/login', (req, res) => {
+        const email = req.body.email;
+        const password = req.body.password;
+      
+        pool.query('SELECT * FROM Faculty WHERE email = ?', [email], (error, results) => {
+          if (error) {
+            console.error('Error querying database:', error);
+            res.status(500).send('Error querying database');
+          } else if (results.length === 0) {
+            res.status(401).send('Invalid email or password');
+          } else {
+            const hashedPassword = results[0].password;
+      
+            bcrypt.compare(password, hashedPassword, (bcryptError, bcryptResult) => {
+              if (bcryptError) {
+                console.error('Error comparing passwords:', bcryptError);
+                res.status(500).send('Error comparing passwords');
+              } else if (bcryptResult) {
+                res.send('Login successful');
+              } else {
+                res.status(401).send('Invalid email or password');
+              }
+            });
+          }
+        });
+      });
 
     module.exports = router;
