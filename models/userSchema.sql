@@ -22,6 +22,9 @@ CREATE TABLE Admin (
   PRIMARY KEY (id)
 );
 
+-- INSERT INTO Admin (id ,firstname,lastname,email,password,phoneNumber,role)
+-- VALUES (1,'Muhammad Abdullah','Habib','u2019274@giki.edu.pk','pelikan123','03044555991','admin');
+
 CREATE TABLE Faculty (
   id INT NOT NULL ,
   firstname VARCHAR(50) NOT NULL,
@@ -45,5 +48,6 @@ CREATE TABLE Student (
   regnum VARCHAR(20) NOT NULL,
   role VARCHAR(20) NOT NULL,
   department VARCHAR(50) NOT NULL,
+  accept bool,
   PRIMARY KEY (id)
 );
