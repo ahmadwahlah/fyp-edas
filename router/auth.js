@@ -4,7 +4,8 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const pool = require('../database');
 
-//// Defining the API endpoint for testing
+//===============================================TEST========================================================
+// Defining the API endpoint for testing
 router.get('/', (req, res) => {
     pool.query(`SELECT * FROM Users`, (err, results) => {
         if (err) throw err;
@@ -12,6 +13,7 @@ router.get('/', (req, res) => {
     });
 })
 
+//=================================================ADMIN======================================================
 // Defining the API endpoint for login a Admin
 router.post('/api/admin/login', (req, res) => {
     const email = req.body.email;
@@ -37,6 +39,8 @@ router.post('/api/admin/login', (req, res) => {
     });
 });
 
+
+//=======================================================STUDENT====================================================
 // Defining the API endpoint for signing up a new student
 router.post('/api/student/signup', (req, res) => {
     const accept = false;
@@ -119,17 +123,6 @@ router.post('/api/student/signup', (req, res) => {
         });
     });
 
-    // router.post('/register',(req,res)=> {
-    //     const { RegNo,FirstName,LastName,Role,Dept,Phone,Email,Password} = req.body;
-    //     if (!RegNo || !FirstName || !LastName || !Role || !Dept || !Phone || !Email || !Password) {
-    //         res.json({error: "Please fill the fields properly"});
-    //     }
-    //     const sql = `INSERT INTO Users ( RegNo, FirstName, LastName, Role, Dept, Phone, Email, Password ) VALUES (?,?,?,?,?,?,?,?);`;
-    //     pool.query(sql,[RegNo,FirstName,LastName,
-    //         Role,Dept,Phone,Email,Password],(err,result)=>{
-    //             if (err) throw err;
-    //                 res.send("1 row insersted");
-    //         });   
-    // })
+    
 
     module.exports = router;
