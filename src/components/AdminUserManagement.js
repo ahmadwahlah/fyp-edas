@@ -27,9 +27,15 @@ const AdminUserManagementPage = () => {
         value={activeTab}
         onChange={handleTabChange}
         variant="fullWidth"
-        indicatorColor="primary"
-        textColor="primary"
+        indicatorColor="inherit"
+        textColor="inherit"
         aria-label="User management tabs"
+        sx={{
+          color: "black",
+          "& .MuiTabs-indicator": {
+            backgroundColor: "black",
+          },
+        }}
       >
         <Tab
           icon={<ListAltIcon />}

@@ -19,10 +19,16 @@ import AdminUserManagement from "../components/AdminUserManagement";
 const drawerWidth = 240;
 
 export default function AdminNavigation() {
-  const [content, setContent] = React.useState("dashboard");
+  const [content, setContent] = React.useState(() => {
+    // Retrieve the previous state from browser storage
+    const storedContent = window.localStorage.getItem("adminNavigationContent");
+    return storedContent ? storedContent : "dashboard";
+  });
 
+  // Update the state and browser storage whenever the user selects a different content
   const handleListItemClick = (event, content) => {
     setContent(content);
+    window.localStorage.setItem("adminNavigationContent", content);
   };
 
   const getContent = () => {

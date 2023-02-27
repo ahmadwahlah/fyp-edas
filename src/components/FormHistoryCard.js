@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
+import { Box, Card, CardContent, Typography } from "@mui/material";
 import { CheckCircle, Error, HourglassEmpty } from "@mui/icons-material";
 
 const FormHistoryCard = ({ formName, submissionDate, department, status }) => {
@@ -14,7 +14,7 @@ const FormHistoryCard = ({ formName, submissionDate, department, status }) => {
     statusColor = "red";
   } else {
     statusIcon = <HourglassEmpty />;
-    statusColor = "orange";
+    statusColor = "darkorange";
   }
 
   const formattedDate = new Date(submissionDate).toLocaleString();
@@ -22,30 +22,48 @@ const FormHistoryCard = ({ formName, submissionDate, department, status }) => {
   return (
     <Box sx={{ p: 2 }}>
       <Card sx={{ minWidth: 275, backgroundColor: "#f5f5f5" }}>
-        <CardContent>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Typography variant="h5" component="div">
-                {formName}
+        <CardContent sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Box>
+            <Typography
+              variant="h5"
+              component="div"
+              sx={{ fontWeight: "bold" }}
+            >
+              {formName}
+            </Typography>
+            <Typography variant="body2" sx={{ color: "#666666" }}>
+              {formattedDate}
+            </Typography>
+            <Typography variant="body2" sx={{ color: "#666666" }}>
+              {department}
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              width: "6rem",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <span style={{ color: statusColor }}>{statusIcon}</span>
+              <Typography
+                variant="body2"
+                sx={{ color: statusColor, fontWeight: "bold" }}
+              >
+                {status}
               </Typography>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Typography variant="body2">
-                Form Submission Date: {formattedDate}
-              </Typography>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Typography variant="body2">Department: {department}</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography component="div">
-                Status:{" "}
-                <span style={{ color: statusColor }}>
-                  {statusIcon} {status}
-                </span>
-              </Typography>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </CardContent>
       </Card>
     </Box>

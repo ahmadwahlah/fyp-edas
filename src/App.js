@@ -8,6 +8,7 @@ import ForgotPassword from "./screens/ForgotPassword";
 import AdminNavigation from "./screens/AdminNavigation";
 import FacultyNavigation from "./screens/FacultyNavigation";
 import StudentNavigation from "./screens/StudentNavigation";
+import Profile from "./screens/Profile";
 import Leave from "./components/Forms/Leave";
 import Test from "./screens/test";
 
@@ -22,6 +23,7 @@ function App() {
           <Route path="/adminhome" element={<AdminNavigation />} />
           <Route path="/facultyhome" element={<FacultyNavigation />} />
           <Route path="/studenthome" element={<StudentNavigation />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/leave" element={<Leave />} />
           <Route path="/test" element={<Test />} />
         </Routes>

@@ -14,7 +14,7 @@ import DescriptionIcon from "@mui/icons-material/Description";
 
 import LoggedInHeader from "../components/LoggedInHeader";
 import StudentDashboard from "../components/StudentDashboard";
-import Forms from "../components/Forms";
+import Forms from "../components/StudentForms";
 
 const drawerWidth = 240;
 

@@ -53,7 +53,7 @@ const SearchBox = styled(Box)(({ theme }) => ({
   width: "100%", // increased width to 100%
 }));
 
-export default function SearchBar() {
+export default function SearchBar({ func }) {
   return (
     <SearchBox>
       <Search>
@@ -63,6 +63,7 @@ export default function SearchBar() {
         <StyledInputBase
           placeholder="Search…"
           inputProps={{ "aria-label": "search" }}
+          onChange={func}
         />
       </Search>
     </SearchBox>
