@@ -39,7 +39,6 @@ router.post('/api/admin/login', (req, res) => {
     });
 });
 
-
 //=======================================================STUDENT====================================================
 // Defining the API endpoint for signing up a new student
 router.post('/api/student/signup', (req, res) => {
@@ -123,7 +122,7 @@ router.post('/api/student/signup', (req, res) => {
         });
     });
 
-    //==========================================================FACULTY==========================================
+    //====================================================FACULTY==========================================
     // Defining the API endpoint for signing up a Faculty
     router.post('/api/faculty/signup', (req, res) => {
         const {id ,firstname, lastname, email, password, phoneNumber, regnum, role, department } = req.body;
