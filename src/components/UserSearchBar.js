@@ -43,7 +43,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     transition: theme.transitions.create("width"),
     width: "100%",
     [theme.breakpoints.up("md")]: {
-      width: "30ch", // increased width to 30 characters
+      width: "80ch", // increased width to 30 characters
     },
   },
 }));
@@ -55,7 +55,7 @@ const SearchBox = styled(Box)(({ theme }) => ({
   width: "100%", // increased width to 100%
 }));
 
-export default function SearchBar({ func }) {
+export default function UserSearchBar({ func }) {
   return (
     <SearchBox>
       <Search>

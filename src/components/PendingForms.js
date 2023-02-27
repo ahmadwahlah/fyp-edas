@@ -1,44 +1,51 @@
 import { useState } from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
+import Typography from "@mui/material/Typography";
 import ListItemText from "@mui/material/ListItemText";
-import IconButton from "@mui/material/IconButton";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import CancelIcon from "@mui/icons-material/Cancel";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import { Divider } from "@mui/material";
+import { HourglassEmpty } from "@mui/icons-material";
+import moment from "moment";
 
-const newRequests = [
+const pendingForms = [
   {
     id: 1,
-    name: "Bob Johnson",
-    image: "https://via.placeholder.com/150",
-    email: "bob.johnson@example.com",
-    formName: "Expense Report",
-    department: "Finance",
-    date: "2023-02-25",
-    time: "13:45",
+    formName: "Student Enrollment",
+    submissionDate: "2022-09-01",
+    submissionTime: "09:30:00",
+    submittedBy: { name: "John Smith", role: "Student" },
+    department: "Admissions",
+    email: "john.smith@example.com",
   },
   {
     id: 2,
-    name: "Alice Thompson",
-    image: "https://via.placeholder.com/150",
-    email: "alice.thompson@example.com",
-    formName: "Leave Request",
-    department: "HR",
-    date: "2023-03-02",
-    time: "10:30",
+    formName: "Faculty Leave Request",
+    submissionDate: "2022-08-15",
+    submissionTime: "02:15:00",
+    submittedBy: { name: "Emily Jones", role: "Faculty" },
+    department: "Human Resources",
+    email: "emily.jones@example.com",
   },
-]; // Add more users as needed
+  {
+    id: 3,
+    formName: "IT Helpdesk Ticket",
+    submissionDate: "2022-07-22",
+    submissionTime: "10:45:00",
+    submittedBy: { name: "Michael Lee", role: "Staff" },
+    department: "Information Technology",
+    email: "michael.lee@example.com",
+  },
+];
 
 const PendingForms = () => {
   const [selectedForm, setSelectedForm] = useState(null);
-  const [forms, setForms] = useState(newRequests);
+  const [forms, setForms] = useState(pendingForms);
 
   const handleFormClick = (form) => {
     setSelectedForm(form);
@@ -60,42 +67,181 @@ const PendingForms = () => {
 
   return (
     <div>
-      <List>
-        {forms.map((form) => (
-          <div key={form.id} onClick={() => handleFormClick(form)}>
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar alt={form.name} src={form.image} />
-              </ListItemAvatar>
-              <ListItemText
-                primary={form.formName}
-                secondary={
-                  <div>
-                    <div>{form.name}</div>
-                    <div>{form.department}</div>
-                    <div>
-                      {form.date}, {form.time}
-                    </div>
-                    <div>{form.email}</div>
-                  </div>
-                }
-              />
-            </ListItem>
-          </div>
-        ))}
-      </List>
+      <Box style={{ width: "100%" }}>
+        <List>
+          {forms.map((form) => (
+            <Box
+              sx={{
+                borderRadius: ".5rem",
+                boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.25)",
+                margin: "1.5rem",
+                padding: ".5rem",
+                backgroundColor: "#f5f5f5",
+                transition: "all 0.2s ease",
+                "&:hover": {
+                  transform: "scale(1.01)",
+                  boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.3)",
+                  backgroundColor: "#e5e5e5",
+                },
+              }}
+            >
+              <div
+                key={form.id}
+                onClick={() => handleFormClick(form)}
+                style={{ cursor: "pointer" }}
+              >
+                <ListItem alignItems="flex-start" style={{ padding: ".5rem" }}>
+                  <ListItemText
+                    primary={
+                      <Box
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Box
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            alignItems: "flex-start",
+                            width: "35%",
+                          }}
+                        >
+                          <Typography
+                            variant="h6"
+                            style={{
+                              fontFamily: "Arial, sans-serif",
+                              fontWeight: "bold",
+                              color: "black",
+                              textTransform: "uppercase",
+                            }}
+                          >
+                            {form.formName}
+                          </Typography>{" "}
+                          <Typography
+                            variant="subtitle1"
+                            style={{
+                              flex: 1,
+                              fontFamily: "Arial, sans-serif",
+                              fontWeight: "bold",
+                              color: "black",
+                            }}
+                          >
+                            {`${form.submittedBy.name} (${form.submittedBy.role})`}
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "space-between",
+                            alignItems: "flex-start",
+                            borderRadius: "4px",
+                            width: "40%",
+                          }}
+                        >
+                          <Typography
+                            variant="body2"
+                            style={{
+                              flex: 1,
+                              fontFamily: "Arial, sans-serif",
+                              color: "black",
+                              fontWeight: "bold",
+                              fontStyle: "italic",
+                            }}
+                          >
+                            {`Submission Date: ${moment(
+                              form.submissionDate
+                            ).format("DD-MM-YYYY")}`}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            style={{
+                              flex: 1,
+                              fontFamily: "Arial, sans-serif",
+                              color: "black",
+                              fontWeight: "bold",
+                              fontStyle: "italic",
+                            }}
+                          >
+                            {`Submission Time: ${moment(
+                              form.submissionTime,
+                              "HH:mm:ss"
+                            ).format("hh:mm:ss")}`}
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            width: "6rem",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              alignItems: "center",
+                              justifyContent: "center",
+                            }}
+                          >
+                            <span style={{ color: "darkorange" }}>
+                              {<HourglassEmpty />}
+                            </span>
+                            <Typography
+                              variant="body2"
+                              sx={{ color: "darkorange", fontWeight: "bold" }}
+                            >
+                              Pending
+                            </Typography>
+                          </Box>
+                        </Box>
+                      </Box>
+                    }
+                  />
+                </ListItem>
+              </div>
+            </Box>
+          ))}
+        </List>
+      </Box>
+
       <Dialog
         open={selectedForm !== null}
         onClose={() => setSelectedForm(null)}
       >
         <DialogTitle>{selectedForm?.formName}</DialogTitle>
         <DialogContent>
-          <div>{selectedForm?.name}</div>
-          <div>{selectedForm?.department}</div>
-          <div>
-            {selectedForm?.date}, {selectedForm?.time}
-          </div>
-          <div>{selectedForm?.email}</div>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+            }}
+          >
+            <span style={{ marginBottom: "8px" }}>
+              <strong>Form Name:</strong> {selectedForm?.formName}
+            </span>
+            <Divider style={{ marginBottom: "8px" }} />
+            <span style={{ marginBottom: "8px" }}>
+              <strong>Submission Date:</strong>{" "}
+              {`${selectedForm?.submissionDate} ${selectedForm?.submissionTime}`}
+            </span>
+            <Divider style={{ marginBottom: "8px" }} />
+            <span style={{ marginBottom: "8px" }}>
+              <strong>Submitted By:</strong>{" "}
+              {`${selectedForm?.submittedBy.name} (${selectedForm?.submittedBy.role})`}
+            </span>
+            <Divider style={{ marginBottom: "8px" }} />
+            <span style={{ marginBottom: "8px" }}>
+              <strong>Department:</strong> {selectedForm?.department}
+            </span>
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDisapprove} color="error">

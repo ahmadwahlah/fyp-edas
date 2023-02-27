@@ -31,8 +31,6 @@ const StudentLeaveApplicationForm = () => {
   const [currentApproverIndex, setCurrentApproverIndex] = useState(0);
   const approvers = ["John", "Jane", "Jim"]; // replace with actual user IDs
   const [formData, setFormData] = useState({
-    name: "",
-    regNo: "",
     leaveRequiredFrom: "",
     leaveRequiredTill: "",
     numOfDays: "",
@@ -90,24 +88,6 @@ const StudentLeaveApplicationForm = () => {
       <StyledPaper>
         <h2>Student Leave Application Form</h2>
         <form onSubmit={handleSubmit}>
-          <TextField
-            label="Student's Name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            required
-          />
-          <TextField
-            label="Reg No"
-            name="regNo"
-            value={formData.regNo}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-            required
-          />
           <StyledFormControl fullWidth margin="normal" required>
             <InputLabel>Leave Required From</InputLabel>
             <Select

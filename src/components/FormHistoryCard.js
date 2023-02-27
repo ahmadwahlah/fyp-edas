@@ -1,8 +1,14 @@
 import React from "react";
+import moment from "moment";
 import { Box, Card, CardContent, Typography } from "@mui/material";
 import { CheckCircle, Error, HourglassEmpty } from "@mui/icons-material";
 
-const FormHistoryCard = ({ formName, submissionDate, department, status }) => {
+const FormHistoryCard = ({
+  formName,
+  submissionDate,
+  submissionTime,
+  status,
+}) => {
   let statusIcon;
   let statusColor;
 
@@ -17,7 +23,8 @@ const FormHistoryCard = ({ formName, submissionDate, department, status }) => {
     statusColor = "darkorange";
   }
 
-  const formattedDate = new Date(submissionDate).toLocaleString();
+  const formattedDate = moment(submissionDate).format("DD-MM-YYYY");
+  const formattedTime = moment(submissionTime).format("HH:mm:ss");
 
   return (
     <Box sx={{ p: 2 }}>
@@ -31,11 +38,30 @@ const FormHistoryCard = ({ formName, submissionDate, department, status }) => {
             >
               {formName}
             </Typography>
-            <Typography variant="body2" sx={{ color: "#666666" }}>
-              {formattedDate}
+            <Typography
+              variant="body2"
+              style={{
+                flex: 1,
+                fontFamily: "Arial, sans-serif",
+                color: "black",
+                fontWeight: "bold",
+                fontStyle: "italic",
+                marginTop: "0.5rem",
+              }}
+            >
+              {`Submission Date: ${formattedDate}`}
             </Typography>
-            <Typography variant="body2" sx={{ color: "#666666" }}>
-              {department}
+            <Typography
+              variant="body2"
+              style={{
+                flex: 1,
+                fontFamily: "Arial, sans-serif",
+                color: "black",
+                fontWeight: "bold",
+                fontStyle: "italic",
+              }}
+            >
+              {`Submission Time: ${formattedTime}`}
             </Typography>
           </Box>
           <Box

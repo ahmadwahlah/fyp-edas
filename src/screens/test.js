@@ -1,55 +1,34 @@
-import React from "react";
-import { Chart } from "chart.js/auto";
-import { Pie } from "react-chartjs-2";
-import Box from "@mui/material/Box";
+import * as React from "react";
 
-const PieChart = () => {
-  const data = {
-    labels: ["Approved", "Rejected", "Pending"],
-    datasets: [
-      {
-        data: [15, 7, 5],
-        backgroundColor: ["#36A2EB", "#FF6384", "#FFCE56"],
-        hoverBackgroundColor: ["#36A2EB", "#FF6384", "#FFCE56"],
-      },
-    ],
-  };
+import TextField from "@mui/material/TextField";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-  const boxStyle = {
-    border: "1px solid #ccc",
-    backgroundColor: "#f5f5f5",
-    borderRadius: "5px",
-    padding: "20px",
-    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
-    maxwidth: "100%",
-    height: "100%",
-  };
-
-  const headingStyle = {
-    textAlign: "center",
-    marginBottom: "15px",
-    fontSize: "24px",
-    fontWeight: "bold",
-    color: "black",
-  };
+export default function BasicDatePicker() {
+  const [fromDate, setFromDate] = React.useState(null);
+  const [toDate, setToDate] = React.useState(null);
 
   return (
-    <Box
-      sx={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Box sx={boxStyle}>
-        <Box style={headingStyle}>Status Chart</Box>
-        <Pie data={data} />
-      </Box>
-    </Box>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <div>
+        <DatePicker
+          label="From"
+          value={fromDate}
+          onChange={(newValue) => {
+            setFromDate(newValue);
+          }}
+          renderInput={(params) => <TextField {...params} />}
+        />
+        <DatePicker
+          label="To"
+          value={toDate}
+          onChange={(newValue) => {
+            setToDate(newValue);
+          }}
+          renderInput={(params) => <TextField {...params} />}
+        />
+      </div>
+    </LocalizationProvider>
   );
-};
-
-export default PieChart;
+}

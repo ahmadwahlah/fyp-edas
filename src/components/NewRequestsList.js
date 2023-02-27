@@ -7,7 +7,7 @@ import ListItemText from "@mui/material/ListItemText";
 import IconButton from "@mui/material/IconButton";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
-import SearchBar from "./SearchBar";
+import UserSearchBar from "./UserSearchBar";
 import { Divider } from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -46,38 +46,11 @@ const NewRequestsList = () => {
         sx={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-around",
+          justifyContent: "center",
           margin: "2rem",
         }}
       >
-        <Box
-          sx={{
-            width: "30%",
-            textAlign: "center",
-          }}
-        >
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: "bold",
-              color: "black",
-              textTransform: "uppercase",
-              letterSpacing: 1,
-              mr: 2,
-            }}
-          >
-            Search Requests
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end",
-          }}
-        >
-          <SearchBar sx={{ ml: 2 }} value={searchQuery} func={handleSearch} />
-        </Box>
+        <UserSearchBar sx={{ ml: 2 }} value={searchQuery} func={handleSearch} />
       </Box>
       <Divider />
       <List>

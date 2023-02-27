@@ -9,41 +9,22 @@ import FormHistoryCard from "./FormHistoryCard";
 const forms = [
   {
     formName: "Hall Requisition",
-    submissionDate: "2022-02-25, 10:00:00",
-    department: "Department A",
+    submissionDate: "2022-09-01",
+    submissionTime: "09:30:00",
     status: "Approved",
   },
   {
-    formName: "Leave",
-    submissionDate: "2022-02-24, 12:00:00",
-    department: "Department B",
+    formName: "Leave Application",
+    submissionDate: "2022-08-15",
+    submissionTime: "13:45:00",
     status: "Pending",
   },
   {
-    formName: "Medical Leave",
-    submissionDate: "2022-02-23, 8:08:08",
-    department: "Department C",
+    formName: "Expense Reimbursement",
+    submissionDate: "2022-10-03",
+    submissionTime: "11:15:00",
     status: "Disapproved",
   },
-  {
-    formName: "Vehicle Requisition",
-    submissionDate: "2022-02-22, 6:00:00",
-    department: "Department D",
-    status: "Pending",
-  },
-  {
-    formName: "Form 5",
-    submissionDate: "2022-02-21, 9:09:00",
-    department: "Department E",
-    status: "Approved",
-  },
-  {
-    formName: "Form 6",
-    submissionDate: "2022-02-20, 10:00:00",
-    department: "Department F",
-    status: "Disapproved",
-  },
-  // add more objects for the remaining forms
 ];
 
 export default function StudentDashboard() {
@@ -101,7 +82,7 @@ export default function StudentDashboard() {
             key={index}
             formName={data.formName}
             submissionDate={data.submissionDate}
-            department={data.department}
+            department={data.submissionTime}
             status={data.status}
           />
         ))}

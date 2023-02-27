@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axios from "axios";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -39,40 +40,30 @@ const theme = createTheme();
 export default function SignIn() {
   const navigate = useNavigate();
 
-  const validCredentials = [
-    { email: "ahmad@gmail.com", password: "password", role: "admin" },
-    { email: "abdullah@gmail.com", password: "password", role: "faculty" },
-    { email: "hamza@gmail.com", password: "password", role: "student" },
-  ];
-
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const enteredRole = data.get("role");
     const enteredEmail = data.get("email");
     const enteredPassword = data.get("password");
 
-    // Check if entered credentials match any of the valid credentials
-    const matchedCredential = validCredentials.find(
-      (credential) =>
-        credential.email === enteredEmail &&
-        credential.password === enteredPassword &&
-        credential.role === data.get("role")
-    );
-    if (!matchedCredential) {
-      alert("Invalid email or password");
-      return;
-    }
-
-    console.log({
-      email: matchedCredential.email,
-      password: matchedCredential.password,
-      role: matchedCredential.role,
-    });
-
     // handle sign-in action based on the selected role
-    switch (matchedCredential.role) {
+    switch (enteredRole) {
       case "admin":
+        try {
+          const response = await axios.post(
+            "http://ec2-3-110-204-134.ap-south-1.compute.amazonaws.com:8080/api/admin/login",
+            {
+              email: enteredEmail,
+              password: enteredPassword,
+            }
+          );
+          console.log(response);
+        } catch (error) {
+          console.error(error);
+        }
         navigate("/adminhome");
+
         break;
       case "faculty":
         navigate("/facultyhome");
