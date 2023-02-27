@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const pool = require('../database');
 
@@ -27,12 +27,18 @@ router.post('/api/admin/login', (req, res) => {
         } else {
             // Login successful
             const user = results[0];
+            const payload ={
+                email : user.email,
+                password : user.password,
+            };
+            const token = jwt.sign(payload,abdullahmohammad2019274);
             res.json({
                 message: 'Login successful',
                 user: {
                     id: user.id,
                     email: user.email,
-                    name: user.name
+                    name: user.name,
+                    accessToken: token
                 }
             });
         }
