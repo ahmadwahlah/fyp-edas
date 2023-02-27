@@ -31,7 +31,10 @@ router.post('/api/admin/login', (req, res) => {
                 email : user.email,
                 password : user.password,
             };
-            const token = jwt.sign(payload,abdullahmohammad2019274);
+            const options = {
+                expiresIn: '1h', // token will expire in 1 hour
+              };
+            const token = jwt.sign(payload,`abdullahmohammad2019274`,options);
             res.json({
                 message: 'Login successful',
                 user: {
