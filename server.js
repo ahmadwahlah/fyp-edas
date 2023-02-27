@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 8000 ;
 
 app.use(bodyParser.json());
 app.use(express.json());
+
 //link the router file 
 app.use(require('./router/auth'));
 
