@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 dotenv.config({path: './config.env'});
 require("./database");
 require('./router/auth');
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8000 ;
 
 app.use(bodyParser.json());
 app.use(express.json());
