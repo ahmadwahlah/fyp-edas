@@ -15,7 +15,7 @@ router.get('/api/admin/student/notapproved', (req, res) => {
 router.get('/api/admin/faculty/notapproved', (req, res) => {
     pool.query(`SELECT * FROM Faculty WHERE accept = false`, (err, results) => {
         if (err) throw err;
-        res.send(results);
+        res.json(results);
     });
 })
 
