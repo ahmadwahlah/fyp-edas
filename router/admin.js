@@ -15,7 +15,7 @@ router.get('/api/admin/student/notapproved', (req, res) => {
 router.get('/api/admin/faculty/notapproved', (req, res) => {
     pool.query(`SELECT * FROM Faculty WHERE accept = false`, (err, results) => {
         if (err) throw err;
-        res.json({ message: results });
+        res.send(results);
     });
 })
 
@@ -61,6 +61,7 @@ router.put('/students/:id', (req, res) => {
       res.json({ message: `Student with id ${id} has been deleted.` });
     });
   });
+
 
 
 
