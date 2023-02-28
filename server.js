@@ -15,6 +15,7 @@ app.use(express.json());
 //link the router file 
 app.use(require('./router/admin'));
 app.use(require('./router/auth'));
+app.use(require('./router/student'));
 
 app.listen(PORT, ()=>{
     console.log(`server is running on port number ${PORT}`);
