@@ -55,10 +55,10 @@ router.post('/api/admin/login', (req, res) => {
 router.post('/api/student/signup', (req, res) => {
     const accept = false;
     const newUuid = uuidv4();
-    const {firstname, lastname, email, password, phoneNumber, regnum, role, department, batch } = req.body;
+    const {firstname, lastname, email, password, phoneNumber, regnum, role, faculty, batch } = req.body;
 
     // Check if all required fields are provided
-    if (!firstname || !lastname || !email || !password || !phoneNumber || !regnum || !role || !department || !batch) {
+    if (!firstname || !lastname || !email || !password || !phoneNumber || !regnum || !role || !faculty || !batch) {
         return res.status(400).json({ message: 'All fields are required' });
     }
 
@@ -81,8 +81,8 @@ router.post('/api/student/signup', (req, res) => {
             }
 
             // Insert the new student into the database
-            pool.query('INSERT INTO Student (id, firstname, lastname, email, password, phoneNumber, regnum, role, department ,accept) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                [newUuid, firstname, lastname, email,hash, phoneNumber, regnum, role, department, accept, batch],
+            pool.query('INSERT INTO Student (id, firstname, lastname, email, password, phoneNumber, regnum, role, faculty ,accept) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                [newUuid, firstname, lastname, email,hash, phoneNumber, regnum, role, faculty, accept, batch],
                 (error, results) => {
                     if (error) {
                         console.error(error);
