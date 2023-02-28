@@ -3,6 +3,8 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const pool = require('../database');
+const { v4: uuidv4 } = require('uuid');
+
 
 //===============================================TEST========================================================
 // Defining the API endpoint for testing
@@ -52,10 +54,11 @@ router.post('/api/admin/login', (req, res) => {
 // Defining the API endpoint for signing up a new student
 router.post('/api/student/signup', (req, res) => {
     const accept = false;
-    const { id, firstname, lastname, email, password, phoneNumber, regnum, role, department } = req.body;
+    const newUuid = uuidv4();
+    const {firstname, lastname, email, password, phoneNumber, regnum, role, department, batch } = req.body;
 
     // Check if all required fields are provided
-    if (!id || !firstname || !lastname || !email || !password || !phoneNumber || !regnum || !role || !department) {
+    if (!firstname || !lastname || !email || !password || !phoneNumber || !regnum || !role || !department || !batch) {
         return res.status(400).json({ message: 'All fields are required' });
     }
 
@@ -79,7 +82,7 @@ router.post('/api/student/signup', (req, res) => {
 
             // Insert the new student into the database
             pool.query('INSERT INTO Student (id, firstname, lastname, email, password, phoneNumber, regnum, role, department ,accept) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                [id, firstname, lastname, email,hash, phoneNumber, regnum, role, department, accept],
+                [newUuid, firstname, lastname, email,hash, phoneNumber, regnum, role, department, accept, batch],
                 (error, results) => {
                     if (error) {
                         console.error(error);

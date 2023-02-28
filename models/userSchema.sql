@@ -45,6 +45,7 @@ CREATE TABLE Student (
   regnum VARCHAR(20) NOT NULL,
   role VARCHAR(20) NOT NULL,
   department VARCHAR(50) NOT NULL,
+  batch INT NOT NULL,
   accept bool,
   PRIMARY KEY (id)
 );
