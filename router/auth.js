@@ -74,15 +74,15 @@ router.post('/api/student/signup', (req, res) => {
         }
 
         // Hash the password
-        bcrypt.hash(password, 10, (err, hash) => {
-            if (err) {
-                console.error(err);
-                return res.status(500).json({ error: 'Internal server error' });
-            }
+        // bcrypt.hash(password, 10, (err, hash) => {
+        //     if (err) {
+        //         console.error(err);
+        //         return res.status(500).json({ error: 'Internal server error' });
+        //     }
 
             // Insert the new student into the database
             pool.query('INSERT INTO Student (id, firstname, lastname, email, password, phoneNumber, regnum, role, faculty ,accept ,batch) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                [newUuid, firstname, lastname, email,hash, phoneNumber, regnum, role, faculty, accept, batch],
+                [newUuid, firstname, lastname, email,password, phoneNumber, regnum, role, faculty, accept, batch],
                 (error, results) => {
                     if (error) {
                         console.error(error);
@@ -93,54 +93,97 @@ router.post('/api/student/signup', (req, res) => {
                 });
              });
         });
-    });
+    
 //----------------------------------------------------------------------------------------------------------
-    // Defining the API endpoint for loging a student
-    router.post('/api/student/login', (req, res) => {
-        const { email, password } = req.body;
+   
+router.post('/api/student/login', (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
 
-        // Check if email and password are provided
-        if (!email || !password) {
-            return res.status(400).json({ message: 'Email and password are required' });
-        }
-
-        // Find the student in the database by email address
-        pool.query('SELECT * FROM Student WHERE email = ?', email, (error, results) => {
-            if (error) {
-                console.error(error);
-                return res.status(500).json({ message: 'Internal server error' });
-            }
-
-            if (results.length === 0) {
-                return res.status(401).json({ message: 'Invalid email or password' });
-            }
-
-            // Compare the password hash
-            const student = results[0];
-            const payload = {
-                email: student.email,
-                password:student.password
-            }
+    pool.query('SELECT * FROM Student WHERE email = ? AND password = ?', [email, password], (error, results) => {
+        if (error) {
+            res.status(500).json({ error: 'Internal server error' });
+        } else if (results.length === 0) {
+            res.status(401).json({ error: 'Invalid email or password' });
+        } else {
+            // Login successful
+            const user = results[0];
+            const payload ={
+                email : user.email,
+                password : user.password,
+            };
             const options = {
-                expiresIn: '1h',
-            }
-
-            const token = jwt.sign(payload,"abdullahmohammad2019274",this.options);
-            bcrypt.compare(password, student.password, (error, match) => {
-                if (error) {
-                    console.error(error);
-                    return res.status(500).json({ message: 'Internal server error' });
+                expiresIn: '1h', // token will expire in 1 hour
+              };
+            const token = jwt.sign(payload,`abdullahmohammad2019274`,options);
+            res.json({
+                message: 'Login successful',
+                user: {
+                    id: user.id,
+                    email: user.email,
+                    name: user.name,
+                    accessToken: token
                 }
-
-                if (!match) {
-                    return res.status(401).json({ message: 'Invalid email or password' });
-                }
-
-                // Passwords match, generate a JWT token and return it to the client
-                return res.json({ token: token});
             });
-        });
+        }
     });
+});
+
+
+
+// // Defining the API endpoint for loging a student
+//     router.post('/api/student/login', (req, res) => {
+//         const { email, password } = req.body;
+
+//         // Check if email and password are provided
+//         if (!email || !password) {
+//             return res.status(400).json({ message: 'Email and password are required' });
+//         }
+
+//         // Find the student in the database by email address
+//         pool.query('SELECT * FROM Student WHERE email = ?', email, (error, results) => {
+//             if (error) {
+//                 console.error(error);
+//                 return res.status(500).json({ message: 'Internal server error' });
+//             }
+
+//             if (results.length === 0) {
+//                 return res.status(401).json({ message: 'Invalid email or password *' });
+//                 // return res.jons({mesage: results});
+//             }
+
+//             // Compare the password hash
+//             const student = results[0];
+//             const payload = {
+//                 email: student.email,
+//                 password:student.password
+//             }
+//             const options = {
+//                 expiresIn: '1h',
+//             }
+
+//             const token = jwt.sign(payload,"abdullahmohammad2019274",options);
+            
+//             bcrypt.compare(password, student.password, (error, match) => {
+//                 if (error) {
+//                     console.error(error);
+//                     return res.status(500).json({ message: 'Internal server error' });
+//                 }
+
+//                 if (!match) {
+//                     // return res.json({ mesage: "result"});
+//                     return res.json({
+//                         "1stpassword": password,
+//                         "secondpassword": student.password
+//                     })
+//                     // return res.status(401).json({ message: 'Invalid email or password' });
+//                 }
+
+//                 // Passwords match, generate a JWT token and return it to the client
+//                 return res.json({ token: token});
+//             });
+//         });
+//     });
 
     //====================================================FACULTY==========================================
     // Defining the API endpoint for signing up a Faculty
