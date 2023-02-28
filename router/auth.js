@@ -159,7 +159,6 @@ router.post('/api/student/login', (req, res) => {
                     }
                 });
         });
-    // });
     
     // Defining the API endpoint for logini a Faculty
     router.post('/api/faculty/login', (req, res) => {
