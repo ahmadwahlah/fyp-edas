@@ -79,3 +79,4 @@ CREATE TABLE Form_Progress (
   PRIMARY KEY (id),
   FOREIGN KEY (progress_id) REFERENCES Hierarchy(id)
 );
+-- INSERT INTO Form_Progress (progress_id, progress) VALUES (4, JSON_OBJECT('Society Advisor', JSON_OBJECT('id', 1, 'isPending', true, 'isApproved', false, 'isDisapproved', false, 'passToNext', false)));
