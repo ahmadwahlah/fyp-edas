@@ -81,7 +81,7 @@ router.post('/api/student/signup', (req, res) => {
             }
 
             // Insert the new student into the database
-            pool.query('INSERT INTO Student (id, firstname, lastname, email, password, phoneNumber, regnum, role, faculty ,accept) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            pool.query('INSERT INTO Student (id, firstname, lastname, email, password, phoneNumber, regnum, role, faculty ,accept) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
                 [newUuid, firstname, lastname, email,hash, phoneNumber, regnum, role, faculty, accept, batch],
                 (error, results) => {
                     if (error) {

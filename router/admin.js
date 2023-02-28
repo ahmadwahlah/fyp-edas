@@ -37,7 +37,7 @@ router.get('/api/admin/faculty/approved', (req, res) => {
 })
 
 // 5- Defining the API endpoint for Admin to update the approval for student
-router.put('/students/:id', (req, res) => {
+router.put('/api/admin/student/:id', (req, res) => {
     const id = req.params.id;
     const query = `UPDATE students SET accept = true WHERE id = ${id}`;
   
@@ -50,7 +50,33 @@ router.put('/students/:id', (req, res) => {
   });
 
 // 6- Defining the API endpoint for Admin to delete student
-  router.delete('/students/:id', (req, res) => {
+  router.delete('/api/admin/student/:id', (req, res) => {
+    const id = req.params.id;
+    const query = `UPDATE students SET accept = false WHERE id = ${id}`;
+  
+    pool.query(query, (error, results, fields) => {
+      if (error) throw error;
+  
+      // Send a success response
+      res.json({ message: `Student with id ${id} has been deleted.` });
+    });
+  });
+
+// 7- Defining the API endpoint for Admin to update the approval for Faculty
+router.put('/api/admin/faculty/:id', (req, res) => {
+    const id = req.params.id;
+    const query = `UPDATE students SET accept = true WHERE id = ${id}`;
+  
+    connection.query(query, (error, results, fields) => {
+      if (error) throw error;
+  
+      // Send a success response
+      res.json({ message: `Student with id ${id} has been approved.` });
+    });
+  });
+
+// 8- Defining the API endpoint for Admin to delete Faculty
+  router.delete('/api/admin/faculty/:id', (req, res) => {
     const id = req.params.id;
     const query = `UPDATE students SET accept = false WHERE id = ${id}`;
   
