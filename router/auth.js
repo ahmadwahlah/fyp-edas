@@ -114,6 +114,15 @@ router.post('/api/student/signup', (req, res) => {
 
             // Compare the password hash
             const student = results[0];
+            const payload = {
+                email: student.email,
+                password:student.password
+            }
+            const options = {
+                expiresIn: '1h',
+            }
+
+            const token = jwt.sign(payload,"abdullahmohammad2019274",this.options);
             bcrypt.compare(password, student.password, (error, match) => {
                 if (error) {
                     console.error(error);
@@ -126,7 +135,7 @@ router.post('/api/student/signup', (req, res) => {
 
                 // Passwords match, generate a JWT token and return it to the client
                 // const token = generateToken(student.id);
-                return res.json({ token: "Valid"});
+                return res.json({ token: token});
             });
         });
     });
@@ -189,13 +198,26 @@ router.post('/api/student/signup', (req, res) => {
             res.status(401).send('Invalid email or password');
           } else {
             const hashedPassword = results[0].password;
+            const faculty = result[0];
+            const payload =  {
+                email: faculty.email,
+                password: faculty.password
+            }
+            const options = {
+                expiresIn: '1h',
+            }
+
+            const token = jwt.sign(payload, "abdullahmohammad2019274", options);
       
             bcrypt.compare(password, hashedPassword, (bcryptError, bcryptResult) => {
               if (bcryptError) {
                 console.error('Error comparing passwords:', bcryptError);
                 res.status(500).send('Error comparing passwords');
               } else if (bcryptResult) {
-                res.send('Login successful');
+                res.json({
+                    message: "Login Sucessful",
+                    token: token,
+                });
               } else {
                 res.status(401).send('Invalid email or password');
               }
