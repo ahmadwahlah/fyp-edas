@@ -73,13 +73,6 @@ router.post('/api/student/signup', (req, res) => {
             return res.status(400).json({ message: 'Email address is already in use' });
         }
 
-        // Hash the password
-        // bcrypt.hash(password, 10, (err, hash) => {
-        //     if (err) {
-        //         console.error(err);
-        //         return res.status(500).json({ error: 'Internal server error' });
-        //     }
-
             // Insert the new student into the database
             pool.query('INSERT INTO Student (id, firstname, lastname, email, password, phoneNumber, regnum, role, faculty ,accept ,batch) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
                 [newUuid, firstname, lastname, email,password, phoneNumber, regnum, role, faculty, accept, batch],
@@ -130,69 +123,15 @@ router.post('/api/student/login', (req, res) => {
 });
 
 
-
-// // Defining the API endpoint for loging a student
-//     router.post('/api/student/login', (req, res) => {
-//         const { email, password } = req.body;
-
-//         // Check if email and password are provided
-//         if (!email || !password) {
-//             return res.status(400).json({ message: 'Email and password are required' });
-//         }
-
-//         // Find the student in the database by email address
-//         pool.query('SELECT * FROM Student WHERE email = ?', email, (error, results) => {
-//             if (error) {
-//                 console.error(error);
-//                 return res.status(500).json({ message: 'Internal server error' });
-//             }
-
-//             if (results.length === 0) {
-//                 return res.status(401).json({ message: 'Invalid email or password *' });
-//                 // return res.jons({mesage: results});
-//             }
-
-//             // Compare the password hash
-//             const student = results[0];
-//             const payload = {
-//                 email: student.email,
-//                 password:student.password
-//             }
-//             const options = {
-//                 expiresIn: '1h',
-//             }
-
-//             const token = jwt.sign(payload,"abdullahmohammad2019274",options);
-            
-//             bcrypt.compare(password, student.password, (error, match) => {
-//                 if (error) {
-//                     console.error(error);
-//                     return res.status(500).json({ message: 'Internal server error' });
-//                 }
-
-//                 if (!match) {
-//                     // return res.json({ mesage: "result"});
-//                     return res.json({
-//                         "1stpassword": password,
-//                         "secondpassword": student.password
-//                     })
-//                     // return res.status(401).json({ message: 'Invalid email or password' });
-//                 }
-
-//                 // Passwords match, generate a JWT token and return it to the client
-//                 return res.json({ token: token});
-//             });
-//         });
-//     });
-
     //====================================================FACULTY==========================================
     // Defining the API endpoint for signing up a Faculty
     router.post('/api/faculty/signup', (req, res) => {
-        const {id ,firstname, lastname, email, password, phoneNumber, regnum, role, department } = req.body;
+        const {firstname, lastname, email, password, phoneNumber, regnum, role, department,subrole } = req.body;
         const accept = false;
+        const newUuid = uuidv4();
 
          // Check if all required fields are provided
-        if (!id || !firstname || !lastname || !email || !password || !phoneNumber || !regnum || !role || !department) {
+        if ( !firstname || !lastname || !email || !password || !phoneNumber || !regnum || !role || !department || !subrole) {
             return res.status(400).json({ message: 'All fields are required' });
         }
     
@@ -207,16 +146,9 @@ router.post('/api/student/login', (req, res) => {
                 return res.status(400).json({ message: 'Email address is already in use' });
             }
         })
-    
-        // Hash the password using bcrypt
-        bcrypt.hash(password, 10, (error, hashedPassword) => {
-            if (error) {
-                console.error(error);
-                res.status(500).send('Error hashing password');
-            } else {
                 // Insert the new user into the Faculty table
-                const queryString = 'INSERT INTO Faculty (id, firstname, lastname, email, password, phoneNumber, regnum, role, department, accept) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-                const values = [id, firstname, lastname, email, hashedPassword, phoneNumber, regnum, role, department, accept];
+                const queryString = 'INSERT INTO Faculty (id, firstname, lastname, email, password, phoneNumber, regnum, role, department, accept, subrole) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+                const values = [newUuid, firstname, lastname, email, password, phoneNumber, regnum, role, department, accept, subrole];
     
                 pool.query(queryString, values, (error, results) => {
                     if (error) {
@@ -226,9 +158,8 @@ router.post('/api/student/login', (req, res) => {
                         res.status(200).send('User created successfully');
                     }
                 });
-            }
         });
-    });
+    // });
     
     // Defining the API endpoint for logini a Faculty
     router.post('/api/faculty/login', (req, res) => {
