@@ -94,7 +94,7 @@ router.post('/api/student/signup', (req, res) => {
              });
         });
     });
-
+//----------------------------------------------------------------------------------------------------------
     // Defining the API endpoint for loging a student
     router.post('/api/student/login', (req, res) => {
         const { email, password } = req.body;
@@ -137,7 +137,6 @@ router.post('/api/student/signup', (req, res) => {
                 }
 
                 // Passwords match, generate a JWT token and return it to the client
-                // const token = generateToken(student.id);
                 return res.json({ token: token});
             });
         });

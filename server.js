@@ -13,6 +13,7 @@ app.use(bodyParser.json());
 app.use(express.json());
 
 //link the router file 
+app.use(require('./router/admin'));
 app.use(require('./router/auth'));
 
 app.listen(PORT, ()=>{
