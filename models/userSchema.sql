@@ -50,5 +50,32 @@ CREATE TABLE Student (
   PRIMARY KEY (id)
 );
 
--- INSERT INTO Admin (id ,firstname,lastname,email,password,phoneNumber,role)
--- VALUES (1,'Muhammad Abdullah','Habib','u2019274@giki.edu.pk','pelikan123','03044555991','admin');
+-- INSERT INTO From (id ,formType,formInitiator) VALUES (1,'Leave From','Student');
+
+CREATE TABLE Form (
+  id INT NOT NULL AUTO_INCREMENT,
+  formtype VARCHAR(255) NOT NULL,
+  formInitiator VARCHAR(255) NOT NULL,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE Hierarchy (
+  id INT NOT NULL AUTO_INCREMENT,
+  form_id INT NOT NULL,
+  hierarchy JSON NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (form_id) REFERENCES Form(id)
+);
+
+-- SELECT *
+-- FROM Form
+-- JOIN Hierarchy
+-- ON Form.id = Hierarchy.form_id;
+
+CREATE TABLE Form_Progress (
+  id INT NOT NULL AUTO_INCREMENT,
+  progress_id INT NOT NULL,
+  progress JSON NOT NULL,
+  PRIMARY KEY (id),
+  FOREIGN KEY (progress_id) REFERENCES Hierarchy(id)
+);
