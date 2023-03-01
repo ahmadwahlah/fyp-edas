@@ -126,12 +126,12 @@ router.post('/api/student/login', (req, res) => {
     //====================================================FACULTY==========================================
     // Defining the API endpoint for signing up a Faculty
     router.post('/api/faculty/signup', (req, res) => {
-        const {firstname, lastname, email, password, phoneNumber, regnum, role, department,subrole } = req.body;
+        const {firstname, lastname, email, password, phoneNumber, role, department, subrole} = req.body;
         const accept = false;
         const newUuid = uuidv4();
 
          // Check if all required fields are provided
-        if ( !firstname || !lastname || !email || !password || !phoneNumber || !regnum || !role || !department || !subrole) {
+        if ( !firstname || !lastname || !email || !password || !phoneNumber || !role || !department || !subrole) {
             return res.status(400).json({ message: 'All fields are required' });
         }
     
@@ -147,8 +147,8 @@ router.post('/api/student/login', (req, res) => {
             }
         })
                 // Insert the new user into the Faculty table
-                const queryString = 'INSERT INTO Faculty (id, firstname, lastname, email, password, phoneNumber, regnum, role, department, accept, subrole) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-                const values = [newUuid, firstname, lastname, email, password, phoneNumber, regnum, role, department, accept, subrole];
+                const queryString = 'INSERT INTO Faculty (id, firstname, lastname, email, password, phoneNumber, role, department, accept, subrole) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+                const values = [newUuid, firstname, lastname, email, password, phoneNumber, role, department, accept, subrole];
     
                 pool.query(queryString, values, (error, results) => {
                     if (error) {
