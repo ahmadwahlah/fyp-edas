@@ -11,10 +11,12 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
+import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
 
 import LoggedInHeader from "../components/LoggedInHeader";
 import AdminDashboard from "../components/AdminDashboard";
 import AdminUserManagement from "../components/AdminUserManagement";
+import DefineHierarchy from "../components/DefineHierarchy";
 
 const drawerWidth = 240;
 
@@ -37,6 +39,8 @@ export default function AdminNavigation() {
         return <AdminDashboard />;
       case "userManagement":
         return <AdminUserManagement />;
+      case "formHierarchy":
+        return <DefineHierarchy />;
       default:
         return <Typography paragraph>Invalid content selected.</Typography>;
     }
@@ -85,6 +89,18 @@ export default function AdminNavigation() {
                   <PeopleIcon />
                 </ListItemIcon>
                 <ListItemText primary="User Management" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem
+              disablePadding
+              onClick={(event) => handleListItemClick(event, "formHierarchy")}
+              sx={{ cursor: "pointer" }}
+            >
+              <ListItemButton>
+                <ListItemIcon sx={{ color: "#000000" }}>
+                  <FormatListNumberedIcon />
+                </ListItemIcon>
+                <ListItemText primary="Form Hierarchy" />
               </ListItemButton>
             </ListItem>
           </List>

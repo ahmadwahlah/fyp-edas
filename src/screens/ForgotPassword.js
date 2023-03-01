@@ -10,6 +10,8 @@ function ForgotPasswordPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission logic here
+    alert("Request sent successfully");
+    navigate("/");
     setSubmitted(true);
   };
 

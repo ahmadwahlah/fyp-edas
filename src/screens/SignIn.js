@@ -51,26 +51,73 @@ export default function SignIn() {
     switch (enteredRole) {
       case "admin":
         try {
-          const response = await axios.post(
-            "http://ec2-3-110-204-134.ap-south-1.compute.amazonaws.com:8080/api/admin/login",
-            {
-              email: enteredEmail,
-              password: enteredPassword,
-            }
-          );
+          const response = await axios.post("/api/admin/login", {
+            email: enteredEmail,
+            password: enteredPassword,
+          });
           console.log(response);
+          if (response.status === 200) {
+            navigate("/adminhome");
+          } else {
+            console.error("An error occurred. Please try again later.");
+          }
         } catch (error) {
           console.error(error);
+          if (error.response && error.response.status === 401) {
+            console.error("Incorrect email or password. Please try again.");
+            window.alert("Incorrect email or password. Please try again.");
+          } else {
+            console.error("An error occurred. Please try again later.");
+          }
         }
-        navigate("/adminhome");
+        break;
 
-        break;
       case "faculty":
-        navigate("/facultyhome");
+        try {
+          const response = await axios.post("/api/faculty/login", {
+            email: enteredEmail,
+            password: enteredPassword,
+          });
+          console.log(response);
+          if (response.status === 200) {
+            navigate("/facultyhome");
+          } else {
+            console.error("An error occurred. Please try again later.");
+          }
+        } catch (error) {
+          console.error(error);
+          if (error.response && error.response.status === 401) {
+            console.error("Incorrect email or password. Please try again.");
+            window.alert("Incorrect email or password. Please try again.");
+          } else {
+            console.error("An error occurred. Please try again later.");
+          }
+        }
         break;
+
       case "student":
-        navigate("/studenthome");
+        try {
+          const response = await axios.post("/api/student/login", {
+            email: enteredEmail,
+            password: enteredPassword,
+          });
+          console.log(response);
+          if (response.status === 200) {
+            navigate("/studenthome");
+          } else {
+            console.error("An error occurred. Please try again later.");
+          }
+        } catch (error) {
+          console.error(error);
+          if (error.response && error.response.status === 401) {
+            console.error("Incorrect email or password. Please try again.");
+            window.alert("Incorrect email or password. Please try again.");
+          } else {
+            console.error("An error occurred. Please try again later.");
+          }
+        }
         break;
+
       default:
         navigate("/");
         break;

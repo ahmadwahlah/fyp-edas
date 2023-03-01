@@ -10,6 +10,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import axios from "axios";
+import { Stack } from "@mui/system";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -46,31 +48,102 @@ export default function SignUp() {
     setRole(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    if (
-      !firstNameError &&
-      !lastNameError &&
-      !emailError &&
-      !passwordError &&
-      !phoneNumberError
-    ) {
-      console.log({
-        email: data.get("email"),
-        password: data.get("password"),
-        firstName: data.get("firstName"),
-        lastName: data.get("lastName"),
-        phoneNumber: data.get("phoneNumber"),
-        role: data.get("role"),
-        department: data.get("department"),
-        faculty: data.get("faculty"),
-      });
+    const firstname = data.get("firstName");
+    const lastname = data.get("lastName");
+    const email = data.get("email");
+    const password = data.get("password");
+    const phoneNumber = data.get("phoneNumber");
+    const role = data.get("role");
+    const department = data.get("department");
+    const faculty = data.get("faculty");
+    const regnum = data.get("regNo");
+    const batch = data.get("batchNo");
+    const subrole = data.get("subrole");
 
-      // Add code here to submit the form
-    } else {
-      alert("Please fix all errors before submitting the form");
+    console.log("First Name: ", firstname);
+    console.log("Last Name: ", lastname);
+    console.log("Email: ", email);
+    console.log("Password: ", password);
+    console.log("Phone Number: ", phoneNumber);
+    console.log("Role: ", role);
+    console.log("Department: ", department);
+    console.log("Faculty: ", faculty);
+    console.log("Registration Number: ", regnum);
+    console.log("Batch Number: ", batch);
+    console.log("Subrole: ", subrole);
+
+    if (role === "student") {
+      if (
+        firstname &&
+        lastname &&
+        email &&
+        password &&
+        phoneNumber &&
+        role &&
+        faculty &&
+        regnum &&
+        batch
+      ) {
+        try {
+          const response = await axios.post("/api/student/signup", {
+            firstname,
+            lastname,
+            email,
+            password,
+            phoneNumber,
+            role,
+            faculty,
+            regnum,
+            batch,
+          });
+
+          console.log("Form submitted successfully");
+          navigate("/");
+          alert("Signup request sent successfully");
+        } catch (error) {
+          console.error("An error occurred while submitting the form", error);
+          // Add code here to handle error
+        }
+      } else {
+        alert("Please fill all fields before submitting the form");
+      }
+    } else if (role === "faculty") {
+      if (
+        firstname &&
+        lastname &&
+        email &&
+        password &&
+        phoneNumber &&
+        role &&
+        department &&
+        subrole
+      ) {
+        try {
+          const response = await axios.post("/api/faculty/signup", {
+            firstname,
+            lastname,
+            email,
+            password,
+            phoneNumber,
+            role,
+            department,
+            subrole,
+          });
+
+          console.log("Form submitted successfully");
+          navigate("/");
+          alert("Signup request sent successfully");
+        } catch (error) {
+          console.error("An error occurred while submitting the form", error);
+          // Add code here to handle error
+        }
+      } else {
+        alert("Please fill all fields before submitting the form");
+      }
     }
   };
 
@@ -170,6 +243,40 @@ export default function SignUp() {
     }
   };
 
+  const [batchNo, setBatchNo] = useState("");
+  const [batchNoError, setBatchNoError] = useState(false);
+  const [helperTextBatch, setHelperTextBatch] = useState("");
+
+  const handleBatchNoChange = (event) => {
+    const batchNoValue = event.target.value;
+    setBatchNo(batchNoValue);
+
+    if (!batchNoValue) {
+      setBatchNoError(true);
+      setHelperTextBatch("Batch No is required");
+    } else {
+      setBatchNoError(false);
+      setHelperTextBatch("");
+    }
+  };
+
+  const [regNo, setRegNo] = useState("");
+  const [regNoError, setRegNoError] = useState(false);
+  const [helperTextReg, setHelperTextReg] = useState("");
+
+  const handleRegNoChange = (event) => {
+    const regNoValue = event.target.value;
+    setRegNo(regNoValue);
+
+    if (!regNoValue) {
+      setRegNoError(true);
+      setHelperTextReg("Registration No is required");
+    } else {
+      setRegNoError(false);
+      setHelperTextReg("");
+    }
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Header />
@@ -238,33 +345,91 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 {role === "student" ? (
-                  <CustomSelect
-                    required
-                    fullWidth
-                    id="faculty"
-                    label="Faculty"
-                    name="faculty"
-                    options={[
-                      { value: "FME", label: "FME" },
-                      { value: "FCSE", label: "FCSE" },
-                      { value: "FES", label: "FES" },
-                    ]}
-                  />
+                  <>
+                    <CustomSelect
+                      required
+                      fullWidth
+                      id="faculty"
+                      label="Faculty"
+                      name="faculty"
+                      options={[
+                        { value: "FME", label: "FME" },
+                        { value: "FCSE", label: "FCSE" },
+                        { value: "FES", label: "FES" },
+                      ]}
+                    />
+                    <Box
+                      sx={{
+                        marginTop: "1rem",
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Grid container spacing={2}>
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            name="batchNo"
+                            required
+                            fullWidth
+                            id="batchNo"
+                            label="Batch No."
+                            error={batchNoError}
+                            helperText={helperTextBatch}
+                            value={batchNo}
+                            onChange={handleBatchNoChange}
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            required
+                            fullWidth
+                            id="regNo"
+                            label="Reg. No."
+                            name="regNo"
+                            error={regNoError}
+                            helperText={helperTextReg}
+                            value={regNo}
+                            onChange={handleRegNoChange}
+                          />
+                        </Grid>
+                      </Grid>
+                    </Box>
+                  </>
                 ) : (
-                  <CustomSelect
-                    required
-                    fullWidth
-                    id="department"
-                    label="Department"
-                    name="department"
-                    options={[
-                      { value: "FME", label: "FME" },
-                      { value: "FCSE", label: "FCSE" },
-                      { value: "FES", label: "FES" },
-                      { value: "Procurement", label: "Procurement" },
-                      { value: "Finance", label: "Finance" },
-                    ]}
-                  />
+                  <Stack gap={2.5}>
+                    <CustomSelect
+                      required
+                      fullWidth
+                      id="department"
+                      label="Department"
+                      name="department"
+                      options={[
+                        { value: "FME", label: "FME" },
+                        { value: "FCSE", label: "FCSE" },
+                        { value: "FES", label: "FES" },
+                        { value: "Procurement", label: "Procurement" },
+                        { value: "Finance", label: "Finance" },
+                      ]}
+                    />
+                    <CustomSelect
+                      required
+                      fullWidth
+                      autoFocus
+                      id="subrole"
+                      label=" Sub Role"
+                      onChange={handleRoleChange}
+                      name="subrole"
+                      options={[
+                        { value: "dean", label: "Dean" },
+                        { value: "advisor", label: "Advisor" },
+                        {
+                          value: "committeconvener",
+                          label: "Committee Convener",
+                        },
+                      ]}
+                    />
+                  </Stack>
                 )}
               </Grid>
               <Grid item xs={12}>
@@ -315,6 +480,7 @@ export default function SignUp() {
               type="submit"
               fullWidth
               variant="contained"
+              onClick={() => handleSubmit}
               sx={{ mt: 3, mb: 2 }}
             >
               Sign Up

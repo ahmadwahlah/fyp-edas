@@ -1,15 +1,25 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import SearchBar from "./SearchBar";
-import { Box, Card, CardContent, Divider, Typography } from "@mui/material";
-import { styled } from "@mui/system";
+import { useNavigate } from "react-router-dom";
 
-const StyledCard = styled(Card)({
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Divider,
+  Typography,
+} from "@mui/material";
+import { styled } from "@mui/system";
+import FormHierarchy from "./FormHierarchy";
+
+const StyledButton = styled(Button)({
   display: "flex",
   flexDirection: "row",
   justifyContent: "space-between",
   alignItems: "center",
   padding: ".25rem",
+  width: "100%",
   marginBottom: "1rem",
   backgroundColor: "#f5f5f5",
   borderRadius: "0.5rem",
@@ -21,25 +31,22 @@ const StyledCard = styled(Card)({
   "&:hover": {
     transform: "scale(1.0075)",
     boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
-    background: "linear-gradient(145deg, #fff, #000)",
+    background: "lightgray",
   },
-});
-
-const StyledLink = styled(Link)({
-  textDecoration: "none",
 });
 
 // Define the form names and their respective routes
 const forms = [
-  { name: "Leave", route: "/leave" },
-  { name: "Hall Requisition", route: "/hallrequisition" },
-  { name: "Medical Leave", route: "/medical-leave" },
-  { name: "Vehicle Requisition", route: "/vehicle-requisition" },
+  { id: 1, name: "Leave" },
+  { id: 2, name: "Hall Requisition" },
+  { id: 3, name: "Medical Leave" },
+  { id: 4, name: "Vehicle Requisition" },
 ];
 
 export default function Forms() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredForms, setFilteredForms] = useState(forms);
+  const navigate = useNavigate();
 
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
@@ -49,6 +56,10 @@ export default function Forms() {
       form.name.trim().replace(/\s/g, " ").toLowerCase().includes(value)
     );
     setFilteredForms(filtered);
+  };
+
+  const handleClick = (formId, formName) => {
+    navigate(`/formhierarchy?id=${formId}&name=${formName}`);
   };
 
   return (
@@ -77,7 +88,6 @@ export default function Forms() {
         <Box
           sx={{
             display: "flex",
-            alignItems: "center",
             justifyContent: "flex-end",
           }}
         >
@@ -87,23 +97,21 @@ export default function Forms() {
       <Divider />
       <Box sx={{ padding: "1rem" }}>
         {filteredForms.map((form) => (
-          <StyledLink to={form.route} key={form.name}>
-            <StyledCard>
-              <CardContent>
-                <Typography
-                  variant="h6"
-                  style={{
-                    fontFamily: "Arial, sans-serif",
-                    fontWeight: "bold",
-                    color: "black",
-                    textTransform: "uppercase",
-                  }}
-                >
-                  {form.name}
-                </Typography>
-              </CardContent>
-            </StyledCard>
-          </StyledLink>
+          <StyledButton onClick={() => handleClick(form.id, form.name)}>
+            <CardContent>
+              <Typography
+                variant="h6"
+                style={{
+                  fontFamily: "Arial, sans-serif",
+                  fontWeight: "bold",
+                  color: "black",
+                  textTransform: "uppercase",
+                }}
+              >
+                {form.name}
+              </Typography>
+            </CardContent>
+          </StyledButton>
         ))}
       </Box>
     </Box>

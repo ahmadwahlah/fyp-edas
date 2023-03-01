@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
 import ListItemText from "@mui/material/ListItemText";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -12,40 +11,61 @@ import { Divider } from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
-const Users = [
-  {
-    name: "Bob Johnson",
-    image: "https://via.placeholder.com/150",
-    email: "bob.johnson@example.com",
-  },
-  {
-    name: "Alice Thompson",
-    image: "https://via.placeholder.com/150",
-    email: "alice.thompson@example.com",
-  },
-  {
-    name: "John Doe",
-    image: "https://via.placeholder.com/150",
-    email: "john.doe@example.com",
-  },
-  {
-    name: "Jane Smith",
-    image: "https://via.placeholder.com/150",
-    email: "jane.smith@example.com",
-  },
-  // Add more users as needed
-];
-
 const CurrentUsersList = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredUsers, setFilteredUsers] = useState(Users);
+  const [currentUsers, setCurrentUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
+
+  useEffect(() => {
+    Promise.all([
+      axios.get("/api/admin/student/approved"),
+      axios.get("/api/admin/faculty/approved"),
+    ])
+      .then(([studentResponse, teacherResponse]) => {
+        console.log(
+          "Received responses:",
+          studentResponse.data,
+          teacherResponse.data
+        );
+        const studentRequests = studentResponse.data;
+        const teacherRequests = Array.isArray(teacherResponse.data)
+          ? teacherResponse.data
+          : [];
+        const combinedRequests = [...studentRequests, ...teacherRequests];
+        setCurrentUsers(combinedRequests);
+        setFilteredUsers(combinedRequests);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  const handleDelete = (id, role) => {
+    console.log(`Deleting users with id ${id}`);
+    axios
+      .delete(`/api/admin/${role}/${id}`)
+      .then(() => {
+        console.log("User deleted successfully");
+        const updatedUsers = currentUsers.filter((user) => user.id !== id);
+        console.log("Updated users:", updatedUsers);
+        setCurrentUsers(updatedUsers);
+        setFilteredUsers(updatedUsers);
+      })
+      .catch((error) => {
+        console.error("Error deleting request:", error);
+      });
+  };
 
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
     setSearchQuery(value);
 
-    const filtered = Users.filter((user) =>
-      user.name.trim().replace(/\s/g, " ").toLowerCase().includes(value)
+    const filtered = currentUsers.filter((currentUser) =>
+      `${currentUser.firstname} ${currentUser.lastname}`
+        .trim()
+        .replace(/\s/g, " ")
+        .toLowerCase()
+        .includes(value)
     );
     setFilteredUsers(filtered);
   };
@@ -64,21 +84,66 @@ const CurrentUsersList = () => {
       </Box>
       <Divider />
       <List>
-        {filteredUsers.map((user, index) => (
-          <div key={index}>
-            <ListItem>
-              <ListItemAvatar>
-                <Avatar alt={user.name} src={user.image} />
-              </ListItemAvatar>
-              <ListItemText primary={user.name} secondary={user.email} />
-              <IconButton aria-label="edit">
-                <EditIcon />
-              </IconButton>
-              <IconButton aria-label="delete">
-                <DeleteIcon />
-              </IconButton>
-            </ListItem>
-          </div>
+        {filteredUsers.map((currentUser) => (
+          <Box
+            key={currentUser.id}
+            sx={{
+              borderRadius: ".5rem",
+              boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.25)",
+              margin: "1rem",
+              padding: ".5rem",
+              backgroundColor: "#f5f5f5",
+              transition: "all 0.2s ease",
+              "&:hover": {
+                transform: "scale(1.01)",
+                boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.3)",
+                backgroundColor: "#e5e5e5",
+              },
+            }}
+          >
+            <div>
+              <ListItem>
+                <ListItemText
+                  primary={
+                    <Box>
+                      <Typography
+                        variant="h6"
+                        style={{
+                          flex: 1,
+                          fontFamily: "Arial, sans-serif",
+                          fontWeight: "bold",
+                          color: "black",
+                        }}
+                      >
+                        {`${currentUser.firstname} ${
+                          currentUser.lastname
+                        } (${currentUser.role.toUpperCase()})`}
+                      </Typography>
+                      <Typography
+                        variant="subtitle1"
+                        style={{
+                          flex: 1,
+                          fontFamily: "Arial, sans-serif",
+                          color: "black",
+                        }}
+                      >
+                        {`${currentUser.email}`}
+                      </Typography>
+                    </Box>
+                  }
+                />
+                <IconButton aria-label="edit">
+                  <EditIcon fontSize="large" />
+                </IconButton>
+                <IconButton
+                  aria-label="delete"
+                  onClick={() => handleDelete(currentUser.id, currentUser.role)}
+                >
+                  <DeleteIcon fontSize="large" />
+                </IconButton>
+              </ListItem>
+            </div>
+          </Box>
         ))}
       </List>
     </>
