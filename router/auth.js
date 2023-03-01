@@ -165,40 +165,30 @@ router.post('/api/student/login', (req, res) => {
         const email = req.body.email;
         const password = req.body.password;
       
-        pool.query('SELECT * FROM Faculty WHERE email = ?', [email], (error, results) => {
-          if (error) {
-            console.error('Error querying database:', error);
-            res.status(500).send('Error querying database');
-          } else if (results.length === 0) {
-            res.status(401).send('Invalid email or password');
-          } else {
-            const hashedPassword = results[0].password;
-            const faculty = result[0];
-            const payload =  {
-                email: faculty.email,
-                password: faculty.password
-            }
-            const options = {
-                expiresIn: '1h',
-            }
-
-            const token = jwt.sign(payload, "abdullahmohammad2019274", options);
-      
-            bcrypt.compare(password, hashedPassword, (bcryptError, bcryptResult) => {
-              if (bcryptError) {
-                console.error('Error comparing passwords:', bcryptError);
-                res.status(500).send('Error comparing passwords');
-              } else if (bcryptResult) {
+        pool.query('SELECT * FROM Faculty WHERE email = ? AND password = ?', [email , password], (error, results) => {
+            if (error) {
+                console.error('Error querying database:', error);
+                res.status(500).send('Error querying database');
+            } else if (results.length === 0) {
+                res.status(401).send('Invalid email or password');
+            } else {
+                const faculty = results[0];
+                const payload =  {
+                    email: faculty.email,
+                    password: faculty.password
+                }
+                const options = {
+                    expiresIn: '1h',
+                }
+                const token = jwt.sign(payload, "abdullahmohammad2019274", options);
                 res.json({
                     message: "Login Sucessful",
                     token: token,
                 });
-              } else {
-                res.status(401).send('Invalid email or password');
-              }
-            });
-          }
+            }
         });
-      });
+    });
+    
+
 
     module.exports = router;
