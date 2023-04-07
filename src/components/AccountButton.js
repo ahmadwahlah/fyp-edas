@@ -80,12 +80,6 @@ export default function AccountButton() {
           <Avatar /> Profile
         </MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <Settings fontSize="small" />
-          </ListItemIcon>
-          Settings
-        </MenuItem>
         <MenuItem onClick={(handleClose, () => navigate("/"))}>
           <ListItemIcon>
             <Logout fontSize="small" />
