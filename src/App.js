@@ -13,6 +13,7 @@ import Leave from "./components/Forms/Leave";
 import HallRequisition from "./components/Forms/HallRequisition";
 import Test from "./screens/test";
 import FormHierarchy from "./components/FormHierarchy";
+import CourseRegistrationForm from "./components/Forms/CourseRegistrationForm";
 
 function App() {
   return (
@@ -28,6 +29,10 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/leave" element={<Leave />} />
           <Route path="/hallrequisition" element={<HallRequisition />} />
+          <Route
+            path="/courseregistration"
+            element={<CourseRegistrationForm />}
+          />
           <Route path="/formhierarchy" element={<FormHierarchy />} />
           <Route path="/test" element={<Test />} />
         </Routes>

@@ -11,9 +11,8 @@ import LoggedInHeader from "../LoggedInHeader";
 import CssBaseline from "@mui/material/CssBaseline";
 import FileUploadButton from "../FileUploadButton";
 import { useNavigate } from "react-router";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+
+import DateRangePicker from "../DateRangePicker";
 import dayjs from "dayjs";
 
 const StyledContainer = styled(Container)(({ theme }) => ({
@@ -96,46 +95,25 @@ const StudentLeaveApplicationForm = () => {
           <Divider />
           <form onSubmit={handleSubmit}>
             <Box sx={{ marginTop: "1.5rem" }}>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <Box
+              <DateRangePicker
+                fromDate={fromDate}
+                setFromDate={setFromDate}
+                toDate={toDate}
+                setToDate={setToDate}
+                minDate={today}
+              />
+              {formData.numOfDays && (
+                <Typography
+                  variant="body1"
                   sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "2.5rem",
+                    marginTop: ".5rem",
+                    marginLeft: ".5rem",
+                    fontWeight: "bold",
                   }}
                 >
-                  <DatePicker
-                    label="From"
-                    value={fromDate}
-                    onChange={(newValue) => {
-                      setFromDate(newValue);
-                    }}
-                    renderInput={(params) => <TextField {...params} required />}
-                    minDate={today}
-                  />
-                  <DatePicker
-                    label="To"
-                    value={toDate}
-                    onChange={(newValue) => {
-                      setToDate(newValue);
-                    }}
-                    renderInput={(params) => <TextField {...params} required />}
-                    minDate={today}
-                  />
-                </Box>
-                {formData.numOfDays && (
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      marginTop: ".5rem",
-                      marginLeft: ".5rem",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Number of days: {formData.numOfDays}
-                  </Typography>
-                )}
-              </LocalizationProvider>
+                  Number of days: {formData.numOfDays}
+                </Typography>
+              )}
             </Box>
             <TextField
               label="Reason"

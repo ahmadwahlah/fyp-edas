@@ -13,6 +13,8 @@ import { Divider } from "@mui/material";
 import { HourglassEmpty } from "@mui/icons-material";
 import moment from "moment";
 
+const DividerLine = () => <Divider style={{ marginBottom: "8px" }} />;
+
 const pendingForms = [
   {
     id: 1,
@@ -210,44 +212,54 @@ const PendingForms = () => {
           ))}
         </List>
       </Box>
-
       <Dialog
-        open={selectedForm !== null}
+        open={Boolean(selectedForm)}
         onClose={() => setSelectedForm(null)}
       >
-        <DialogTitle>{selectedForm?.formName}</DialogTitle>
+        <DialogTitle>
+          <Typography variant="h6" color="primary">
+            {selectedForm?.formName}
+          </Typography>
+        </DialogTitle>
         <DialogContent>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-start",
-            }}
-          >
-            <span style={{ marginBottom: "8px" }}>
-              <strong>Form Name:</strong> {selectedForm?.formName}
-            </span>
-            <Divider style={{ marginBottom: "8px" }} />
-            <span style={{ marginBottom: "8px" }}>
-              <strong>Submission Date:</strong>{" "}
-              {`${selectedForm?.submissionDate} ${selectedForm?.submissionTime}`}
-            </span>
-            <Divider style={{ marginBottom: "8px" }} />
-            <span style={{ marginBottom: "8px" }}>
-              <strong>Submitted By:</strong>{" "}
-              {`${selectedForm?.submittedBy.name} (${selectedForm?.submittedBy.role})`}
-            </span>
-            <Divider style={{ marginBottom: "8px" }} />
-            <span style={{ marginBottom: "8px" }}>
-              <strong>Department:</strong> {selectedForm?.department}
-            </span>
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="subtitle1">
+                <strong>Form Name:</strong> {selectedForm?.formName}
+              </Typography>
+            </Box>
+            <DividerLine />
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="subtitle1">
+                <strong>Submission Date:</strong>{" "}
+                {`${selectedForm?.submissionDate} ${selectedForm?.submissionTime}`}
+              </Typography>
+            </Box>
+            <DividerLine />
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="subtitle1">
+                <strong>Submitted By:</strong>{" "}
+                {`${selectedForm?.submittedBy?.name} (${selectedForm?.submittedBy?.role})`}
+              </Typography>
+            </Box>
+            <DividerLine />
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="subtitle1">
+                <strong>Department:</strong> {selectedForm?.department}
+              </Typography>
+            </Box>
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDisapprove} color="error">
+          <Button onClick={handleDisapprove} variant="text" color="error">
             Disapprove
           </Button>
-          <Button onClick={handleApprove} color="success" autoFocus>
+          <Button
+            onClick={handleApprove}
+            variant="contained"
+            color="success"
+            autoFocus
+          >
             Approve
           </Button>
         </DialogActions>

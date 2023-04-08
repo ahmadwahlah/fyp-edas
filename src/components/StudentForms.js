@@ -32,6 +32,7 @@ const StyledLink = styled(Link)({
 // Define the form names and their respective routes
 const forms = [
   { name: "Leave", route: "/leave" },
+  { name: "Course Registration", route: "/courseregistration" },
   { name: "Hall Requisition", route: "/hallrequisition" },
   { name: "Medical Leave", route: "/medical-leave" },
   { name: "Vehicle Requisition", route: "/vehicle-requisition" },
