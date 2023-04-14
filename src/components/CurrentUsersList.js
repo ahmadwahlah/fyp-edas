@@ -11,10 +11,29 @@ import { Divider } from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
+const defaultUsers = [
+  {
+    id: 1,
+    firstname: "John",
+    lastname: "Doe",
+    email: "johndoe@example.com",
+    role: "student",
+  },
+  {
+    id: 2,
+    firstname: "Jane",
+    lastname: "Doe",
+    email: "janedoe@example.com",
+    role: "faculty",
+  },
+];
+
 const CurrentUsersList = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentUsers, setCurrentUsers] = useState([]);
-  const [filteredUsers, setFilteredUsers] = useState([]);
+  const [currentUsers, setCurrentUsers] = useState(defaultUsers);
+  const [filteredUsers, setFilteredUsers] = useState(defaultUsers);
+  //const [currentUsers, setCurrentUsers] = useState([]);
+  //const [filteredUsers, setFilteredUsers] = useState([]);
 
   useEffect(() => {
     Promise.all([

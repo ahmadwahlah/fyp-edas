@@ -12,9 +12,27 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 
 const NewRequestsList = () => {
+  const defaultUsers = [
+    {
+      id: 1,
+      firstname: "John",
+      lastname: "Doe",
+      email: "johndoe@example.com",
+      role: "student",
+    },
+    {
+      id: 2,
+      firstname: "Jane",
+      lastname: "Doe",
+      email: "janedoe@example.com",
+      role: "faculty",
+    },
+  ];
   const [searchQuery, setSearchQuery] = useState("");
-  const [newRequests, setNewRequests] = useState([]);
-  const [filteredRequests, setFilteredRequests] = useState([]);
+  const [newRequests, setNewRequests] = useState(defaultUsers);
+  const [filteredRequests, setFilteredRequests] = useState(defaultUsers);
+  //const [newRequests, setNewRequests] = useState([]);
+  //const [filteredRequests, setFilteredRequests] = useState([]);
 
   useEffect(() => {
     Promise.all([
