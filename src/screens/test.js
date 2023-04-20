@@ -1,12 +1,7 @@
 import React from "react";
-import Main from "../components/DynamicForm/FormBuilderContainer";
 
 function test() {
-  return (
-    <div>
-      <Main />
-    </div>
-  );
+  return <div>test</div>;
 }
 
 export default test;

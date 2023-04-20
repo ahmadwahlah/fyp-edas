@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogContent from "@mui/material/DialogContent";
@@ -8,13 +8,25 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Button from "@mui/material/Button";
 
-const InputFieldDialog = ({ open, onClose, onSave }) => {
+const InputFieldDialog = ({ open, onClose, onSave, editingField }) => {
   const [name, setName] = useState("");
   const [placeholder, setPlaceholder] = useState("");
   const [required, setRequired] = useState(false);
 
+  useEffect(() => {
+    if (editingField) {
+      setName(editingField.name);
+      setPlaceholder(editingField.placeholder);
+      setRequired(editingField.required);
+    } else {
+      setName("");
+      setPlaceholder("");
+      setRequired(false);
+    }
+  }, [editingField]);
+
   const handleClose = () => {
-    onClose();
+    onClose && onClose();
   };
 
   const handleSave = () => {
@@ -23,7 +35,7 @@ const InputFieldDialog = ({ open, onClose, onSave }) => {
   };
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={Boolean(open)} onClose={handleClose}>
       <DialogTitle>Add Input Field</DialogTitle>
       <DialogContent>
         <TextField

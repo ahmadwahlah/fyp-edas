@@ -27,20 +27,7 @@ const DraggableElement = ({ type, onAddField }) => {
               userSelect: "none",
             }}
           >
-            Input Field
-          </Typography>
-        );
-      case "button":
-        return (
-          <Typography
-            variant="button"
-            sx={{
-              color: "white",
-              fontWeight: "bold",
-              userSelect: "none",
-            }}
-          >
-            Button
+            Text Input
           </Typography>
         );
       case "multiTextArea":
@@ -56,6 +43,33 @@ const DraggableElement = ({ type, onAddField }) => {
             Muilti-text Area
           </Typography>
         );
+      case "radioButton":
+        return (
+          <Typography
+            variant="button"
+            sx={{
+              color: "white",
+              fontWeight: "bold",
+              userSelect: "none",
+            }}
+          >
+            Radio Button Group
+          </Typography>
+        );
+      case "checkboxGroup":
+        return (
+          <Typography
+            variant="button"
+            sx={{
+              color: "white",
+              fontWeight: "bold",
+              userSelect: "none",
+            }}
+          >
+            Checkbox Group
+          </Typography>
+        );
+
       default:
         return null;
     }

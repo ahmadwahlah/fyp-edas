@@ -11,7 +11,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import DescriptionIcon from "@mui/icons-material/Description";
-import NoteAddIcon from "@mui/icons-material/NoteAdd";
+
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 
 import LoggedInHeader from "../components/LoggedInHeader";
@@ -42,8 +42,6 @@ export default function StudentNavigation() {
         return <StudentDashboard />;
       case "forms":
         return <FacultyForms />;
-      case "createform":
-        return;
       case "pendingforms":
         return <PendingForms />;
       default:
@@ -94,18 +92,6 @@ export default function StudentNavigation() {
                   <DescriptionIcon />
                 </ListItemIcon>
                 <ListItemText primary="Forms" />
-              </ListItemButton>
-            </ListItem>
-            <ListItem
-              disablePadding
-              onClick={(event) => handleListItemClick(event, "createform")}
-              sx={{ cursor: "pointer" }}
-            >
-              <ListItemButton>
-                <ListItemIcon sx={{ color: "#000000" }}>
-                  <NoteAddIcon />
-                </ListItemIcon>
-                <ListItemText primary="Create Forms" />
               </ListItemButton>
             </ListItem>
             <ListItem

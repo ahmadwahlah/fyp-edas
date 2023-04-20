@@ -14,6 +14,7 @@ import HallRequisition from "./components/Forms/HallRequisition";
 import Test from "./screens/test";
 import FormHierarchy from "./components/FormHierarchy";
 import CourseRegistrationForm from "./components/Forms/CourseRegistrationForm";
+import FormBuilderContainer from "./components/DynamicForm/FormBuilderContainer";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
             path="/courseregistration"
             element={<CourseRegistrationForm />}
           />
+          <Route path="/formbuilder" element={<FormBuilderContainer />} />
           <Route path="/formhierarchy" element={<FormHierarchy />} />
           <Route path="/test" element={<Test />} />
         </Routes>

@@ -1,6 +1,7 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { v4 as uuid } from "uuid";
 import DraggableElement from "./DraggableElement";
 import FormEditor from "./FormEditor";
 import FormPreview from "./FormPreview";
@@ -12,12 +13,14 @@ import {
   Paper,
   Divider,
   Button,
+  TextField,
 } from "@mui/material";
 
 import LoggedInHeader from "../LoggedInHeader";
 import InputFieldDialog from "./Toolbox/InputFieldDialog";
 import MultiTextAreaDialog from "./Toolbox/MultiTextAreaDialog";
-import ButtonDialog from "./Toolbox/ButtonDialog";
+import RadioButtonDialog from "./Toolbox/RadioButtonDialog";
+import CheckboxGroupDialog from "./Toolbox/CheckboxGroupDialog";
 
 const styles = {
   mainContainer: {
@@ -25,36 +28,50 @@ const styles = {
     flexDirection: "column",
     minHeight: "100vh",
     backgroundColor: "#f5f5f5",
+    paddingBottom: "1rem",
   },
   paper: {
     p: 2,
     display: "flex",
     flexDirection: "column",
     flexGrow: 1,
-    height: "100%",
+    marginBottom: "1rem",
+    padding: "1rem",
   },
 };
 
 const FormBuilderContainer = () => {
   const [fields, setFields] = useState([]);
+  const [formName, setFormName] = useState("");
+  const [editingField, setEditingField] = useState(null);
 
-  const [openDialog, setOpenDialog] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
+
   const [currentField, setCurrentField] = useState(null);
+  const [openDialog, setOpenDialog] = useState(false);
   const [openMultiTextAreaDialog, setOpenMultiTextAreaDialog] = useState(false);
-  const [openButtonDialog, setOpenButtonDialog] = useState(false);
+  const [openRadioButtonDialog, setOpenRadioButtonDialog] = useState(false);
+  const [openCheckboxGroupDialog, setOpenCheckboxGroupDialog] = useState(false);
 
-  const onAddField = useCallback((newField) => {
-    if (newField.type === "inputField") {
-      setOpenDialog(true);
-      setCurrentField(newField);
-    } else if (newField.type === "multiTextArea") {
-      setOpenMultiTextAreaDialog(true);
-      setCurrentField(newField);
-    } else if (newField.type === "button") {
-      setOpenButtonDialog(true);
-      setCurrentField(newField);
+  const onAddField = useCallback((newField, editing = false) => {
+    if (editing) {
+      setEditingField(newField);
     } else {
-      setFields((fields) => [...fields, newField]);
+      if (newField.type === "inputField") {
+        setOpenDialog(true);
+        setCurrentField(newField);
+      } else if (newField.type === "multiTextArea") {
+        setOpenMultiTextAreaDialog(true);
+        setCurrentField(newField);
+      } else if (newField.type === "radioButton") {
+        setOpenRadioButtonDialog(true);
+        setCurrentField(newField);
+      } else if (newField.type === "checkboxGroup") {
+        setOpenCheckboxGroupDialog(true);
+        setCurrentField(newField);
+      } else {
+        setFields((fields) => [...fields, newField]);
+      }
     }
   }, []);
 
@@ -62,8 +79,16 @@ const FormBuilderContainer = () => {
     setFields((fields) => fields.filter((field) => field.id !== id));
   }, []);
 
-  const onSetHierarchy = () => {
-    console.log("Form data to store in the database:", fields);
+  useEffect(() => {
+    setIsFormValid(formName && fields.length > 0);
+  }, [fields, formName]);
+
+  const onSaveForm = () => {
+    console.log({
+      id: uuid(),
+      name: formName,
+      fields: fields,
+    });
   };
 
   return (
@@ -77,11 +102,12 @@ const FormBuilderContainer = () => {
           pt: "80px",
         }}
       >
-        <Typography variant="h4">Form Builder</Typography>
+        <Typography variant="h4">Form Builder</Typography>{" "}
         <Button
           variant="contained"
           color="primary"
-          onClick={onSetHierarchy}
+          disabled={!isFormValid}
+          onClick={onSaveForm}
           sx={{
             backgroundColor: "black",
             ":hover": {
@@ -95,12 +121,28 @@ const FormBuilderContainer = () => {
         </Button>
       </Box>
       <Divider />
+      <Box
+        sx={{
+          p: 2,
+          display: "flex",
+          justifyContent: "flex-start",
+        }}
+      >
+        {" "}
+        <TextField
+          label="Form Name"
+          value={formName}
+          onChange={(e) => setFormName(e.target.value)}
+          sx={{ width: "20rem", marginLeft: ".5rem" }}
+        />
+      </Box>
+      <Divider />
       <Box sx={{ pt: "1rem", flexGrow: 1 }}>
         <DndProvider backend={HTML5Backend}>
           <Container maxWidth="xl">
             <Box sx={{ display: "flex", flexGrow: 1 }}>
-              <Grid container spacing={2} sx={{ flexGrow: 1, height: "75vh" }}>
-                <Grid item xs={12} md={3}>
+              <Grid container spacing={2} sx={{ flexGrow: 1, display: "flex" }}>
+                <Grid item xs={12} md={3} sx={{ display: "flex" }}>
                   <Paper sx={styles.paper}>
                     <Typography variant="h5" gutterBottom>
                       Toolbox
@@ -111,43 +153,121 @@ const FormBuilderContainer = () => {
                       onAddField={onAddField}
                     />
                     <InputFieldDialog
-                      open={openDialog}
-                      onClose={() => setOpenDialog(false)}
-                      onSave={(fieldData) => {
-                        setFields((fields) => [
-                          ...fields,
-                          { ...currentField, ...fieldData },
-                        ]);
+                      open={openDialog || editingField}
+                      onClose={() => {
+                        setOpenDialog(false);
+                        setEditingField(null);
                       }}
-                    />{" "}
+                      onSave={(fieldData) => {
+                        if (editingField) {
+                          setFields((fields) =>
+                            fields.map((field) =>
+                              field.id === editingField.id
+                                ? { ...editingField, ...fieldData }
+                                : field
+                            )
+                          );
+                          setEditingField(null);
+                        } else {
+                          setFields((fields) => [
+                            ...fields,
+                            { ...currentField, ...fieldData },
+                          ]);
+                        }
+                      }}
+                      editingField={editingField}
+                    />
+
                     <DraggableElement
                       type="multiTextArea"
                       onAddField={onAddField}
                     />
                     <MultiTextAreaDialog
-                      open={openMultiTextAreaDialog}
-                      onClose={() => setOpenMultiTextAreaDialog(false)}
-                      onSave={(fieldData) => {
-                        setFields((fields) => [
-                          ...fields,
-                          { ...currentField, ...fieldData },
-                        ]);
+                      open={openMultiTextAreaDialog || editingField}
+                      onClose={() => {
+                        setOpenMultiTextAreaDialog(false);
+                        setEditingField(null);
                       }}
+                      onSave={(fieldData) => {
+                        if (editingField) {
+                          setFields((fields) =>
+                            fields.map((field) =>
+                              field.id === editingField.id
+                                ? { ...editingField, ...fieldData }
+                                : field
+                            )
+                          );
+                          setEditingField(null);
+                        } else {
+                          setFields((fields) => [
+                            ...fields,
+                            { ...currentField, ...fieldData },
+                          ]);
+                        }
+                      }}
+                      editingField={editingField}
                     />
-                    <DraggableElement type="button" onAddField={onAddField} />
-                    <ButtonDialog
-                      open={openButtonDialog}
-                      onClose={() => setOpenButtonDialog(false)}
-                      onSave={(fieldData) => {
-                        setFields((fields) => [
-                          ...fields,
-                          { ...currentField, ...fieldData },
-                        ]);
+                    <DraggableElement
+                      type="radioButton"
+                      onAddField={onAddField}
+                    />
+                    <RadioButtonDialog
+                      open={openRadioButtonDialog || editingField}
+                      onClose={() => {
+                        setOpenRadioButtonDialog(false);
+                        setEditingField(null);
                       }}
+                      onSave={(fieldData) => {
+                        if (editingField) {
+                          setFields((fields) =>
+                            fields.map((field) =>
+                              field.id === editingField.id
+                                ? { ...editingField, ...fieldData }
+                                : field
+                            )
+                          );
+                          setEditingField(null);
+                        } else {
+                          setFields((fields) => [
+                            ...fields,
+                            { ...currentField, ...fieldData },
+                          ]);
+                        }
+                      }}
+                      editingField={editingField}
+                    />
+                    <DraggableElement
+                      type="checkboxGroup"
+                      onAddField={onAddField}
+                    />
+                    <CheckboxGroupDialog
+                      open={openCheckboxGroupDialog || editingField}
+                      onClose={() => {
+                        setOpenCheckboxGroupDialog(false);
+                        setEditingField(null);
+                      }}
+                      onSave={(fieldData) => {
+                        if (editingField) {
+                          setFields((fields) =>
+                            fields.map((field) =>
+                              field.id === editingField.id
+                                ? { ...editingField, ...fieldData }
+                                : field
+                            )
+                          );
+                          setEditingField(null);
+                        } else {
+                          setFields((fields) => [
+                            ...fields,
+                            { ...currentField, ...fieldData },
+                          ]);
+                        }
+                      }}
+                      editingField={editingField}
                     />
                   </Paper>
                 </Grid>
-                <Grid item xs={12} md={4.5}>
+                <Grid item xs={12} md={4.5} sx={{ display: "flex" }}>
                   <Paper sx={styles.paper}>
                     <Typography variant="h5" gutterBottom>
                       Form Editor
@@ -160,13 +280,13 @@ const FormBuilderContainer = () => {
                     />
                   </Paper>
                 </Grid>
-                <Grid item xs={12} md={4.5}>
+                <Grid item xs={12} md={4.5} sx={{ display: "flex" }}>
                   <Paper sx={styles.paper}>
                     <Typography variant="h5" gutterBottom>
                       Form Preview
                     </Typography>
                     <Divider sx={{ mb: 2 }} />
-                    <FormPreview fields={fields} />
+                    <FormPreview fields={fields} formName={formName} />
                   </Paper>
                 </Grid>
               </Grid>

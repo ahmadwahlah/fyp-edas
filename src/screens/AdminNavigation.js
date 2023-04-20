@@ -8,6 +8,7 @@ import Typography from "@mui/material/Typography";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
+import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import ListItemText from "@mui/material/ListItemText";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
@@ -17,10 +18,13 @@ import LoggedInHeader from "../components/LoggedInHeader";
 import AdminDashboard from "../components/AdminDashboard";
 import AdminUserManagement from "../components/AdminUserManagement";
 import DefineHierarchy from "../components/DefineHierarchy";
+import FormBuilder from "../components/DynamicForm/FormBuilderContainer";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
 export default function AdminNavigation() {
+  const navigate = useNavigate();
   const [content, setContent] = React.useState(() => {
     // Retrieve the previous state from browser storage
     const storedContent = window.localStorage.getItem("adminNavigationContent");
@@ -42,7 +46,7 @@ export default function AdminNavigation() {
       case "formHierarchy":
         return <DefineHierarchy />;
       default:
-        return <Typography paragraph>Invalid content selected.</Typography>;
+        return <AdminDashboard />;
     }
   };
 
@@ -89,6 +93,18 @@ export default function AdminNavigation() {
                   <PeopleIcon />
                 </ListItemIcon>
                 <ListItemText primary="User Management" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem
+              disablePadding
+              onClick={(event) => handleListItemClick(event, "createform")}
+              sx={{ cursor: "pointer" }}
+            >
+              <ListItemButton onClick={() => navigate("/formbuilder")}>
+                <ListItemIcon sx={{ color: "#000000" }}>
+                  <NoteAddIcon />
+                </ListItemIcon>
+                <ListItemText primary="Create Forms" />
               </ListItemButton>
             </ListItem>
             <ListItem

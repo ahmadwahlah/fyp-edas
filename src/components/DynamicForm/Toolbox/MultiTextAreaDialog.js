@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -15,13 +15,26 @@ const MultiTextAreaDialog = ({
   name,
   placeholder,
   required,
+  editingField,
 }) => {
   const [inputName, setInputName] = useState(name || "");
   const [inputPlaceholder, setInputPlaceholder] = useState(placeholder || "");
   const [isRequired, setIsRequired] = useState(required || false);
 
+  useEffect(() => {
+    if (editingField) {
+      setInputName(editingField.name);
+      setInputPlaceholder(editingField.placeholder);
+      setIsRequired(editingField.required);
+    } else {
+      setInputName("");
+      setInputPlaceholder("");
+      setIsRequired(false);
+    }
+  }, [editingField]);
+
   const handleClose = () => {
-    onClose();
+    onClose && onClose();
   };
 
   const handleSave = () => {
@@ -30,11 +43,11 @@ const MultiTextAreaDialog = ({
       placeholder: inputPlaceholder,
       required: isRequired,
     });
-    onClose();
+    handleClose();
   };
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={Boolean(open)} onClose={handleClose}>
       <DialogTitle>Multi-Text Area Settings</DialogTitle>
       <DialogContent>
         <TextField
