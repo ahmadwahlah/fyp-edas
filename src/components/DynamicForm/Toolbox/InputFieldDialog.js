@@ -36,7 +36,7 @@ const InputFieldDialog = ({ open, onClose, onSave, editingField }) => {
 
   return (
     <Dialog open={Boolean(open)} onClose={handleClose}>
-      <DialogTitle>Add Input Field</DialogTitle>
+      <DialogTitle>Add Text Input</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus

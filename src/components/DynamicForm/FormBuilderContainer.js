@@ -153,7 +153,10 @@ const FormBuilderContainer = () => {
                       onAddField={onAddField}
                     />
                     <InputFieldDialog
-                      open={openDialog || editingField}
+                      open={
+                        openDialog ||
+                        (!!editingField && editingField.type === "inputField")
+                      }
                       onClose={() => {
                         setOpenDialog(false);
                         setEditingField(null);
@@ -175,7 +178,11 @@ const FormBuilderContainer = () => {
                           ]);
                         }
                       }}
-                      editingField={editingField}
+                      editingField={
+                        editingField && editingField.type === "inputField"
+                          ? editingField
+                          : null
+                      }
                     />
 
                     <DraggableElement
@@ -183,7 +190,11 @@ const FormBuilderContainer = () => {
                       onAddField={onAddField}
                     />
                     <MultiTextAreaDialog
-                      open={openMultiTextAreaDialog || editingField}
+                      open={
+                        openMultiTextAreaDialog ||
+                        (!!editingField &&
+                          editingField.type === "multiTextArea")
+                      }
                       onClose={() => {
                         setOpenMultiTextAreaDialog(false);
                         setEditingField(null);
@@ -205,14 +216,21 @@ const FormBuilderContainer = () => {
                           ]);
                         }
                       }}
-                      editingField={editingField}
+                      editingField={
+                        editingField && editingField.type === "multiTextArea"
+                          ? editingField
+                          : null
+                      }
                     />
                     <DraggableElement
                       type="radioButton"
                       onAddField={onAddField}
                     />
                     <RadioButtonDialog
-                      open={openRadioButtonDialog || editingField}
+                      open={
+                        openRadioButtonDialog ||
+                        (!!editingField && editingField.type === "radioButton")
+                      }
                       onClose={() => {
                         setOpenRadioButtonDialog(false);
                         setEditingField(null);
@@ -234,14 +252,22 @@ const FormBuilderContainer = () => {
                           ]);
                         }
                       }}
-                      editingField={editingField}
+                      editingField={
+                        editingField && editingField.type === "radioButton"
+                          ? editingField
+                          : null
+                      }
                     />
                     <DraggableElement
                       type="checkboxGroup"
                       onAddField={onAddField}
                     />
                     <CheckboxGroupDialog
-                      open={openCheckboxGroupDialog || editingField}
+                      open={
+                        openCheckboxGroupDialog ||
+                        (!!editingField &&
+                          editingField.type === "checkboxGroup")
+                      }
                       onClose={() => {
                         setOpenCheckboxGroupDialog(false);
                         setEditingField(null);
@@ -263,7 +289,11 @@ const FormBuilderContainer = () => {
                           ]);
                         }
                       }}
-                      editingField={editingField}
+                      editingField={
+                        editingField && editingField.type === "checkboxGroup"
+                          ? editingField
+                          : null
+                      }
                     />
                   </Paper>
                 </Grid>

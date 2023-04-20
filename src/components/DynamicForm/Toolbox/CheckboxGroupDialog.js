@@ -6,7 +6,10 @@ import {
   DialogActions,
   TextField,
   Button,
+  IconButton,
+  Grid,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const CheckboxGroupDialog = ({ open, onClose, onSave, editingField }) => {
   const [heading, setHeading] = useState("");
@@ -39,8 +42,14 @@ const CheckboxGroupDialog = ({ open, onClose, onSave, editingField }) => {
     setOptions([...options, `Option ${options.length + 1}`]);
   };
 
+  const deleteOption = (index) => {
+    if (options.length > 1) {
+      setOptions(options.filter((_, idx) => idx !== index));
+    }
+  };
+
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={Boolean(open)} onClose={handleClose}>
       <DialogTitle>Add Checkbox Group</DialogTitle>
       <DialogContent>
         <TextField
@@ -52,14 +61,29 @@ const CheckboxGroupDialog = ({ open, onClose, onSave, editingField }) => {
           onChange={(e) => setHeading(e.target.value)}
         />
         {options.map((option, index) => (
-          <TextField
-            key={index}
-            margin="dense"
-            label={`Option ${index + 1}`}
-            fullWidth
-            value={option}
-            onChange={(e) => handleOptionChange(index, e.target.value)}
-          />
+          <Grid container spacing={2} key={index} alignItems="center">
+            <Grid item xs={10}>
+              <TextField
+                margin="dense"
+                label={`Option ${index + 1}`}
+                fullWidth
+                value={option}
+                onChange={(e) => handleOptionChange(index, e.target.value)}
+              />
+            </Grid>
+            <Grid item xs={2}>
+              {editingField && (
+                <IconButton
+                  edge="end"
+                  color="error"
+                  onClick={() => deleteOption(index)}
+                  disabled={options.length === 1}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              )}
+            </Grid>
+          </Grid>
         ))}
         <Button onClick={addOption}>Add Option</Button>
       </DialogContent>

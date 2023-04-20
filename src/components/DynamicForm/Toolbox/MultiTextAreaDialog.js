@@ -48,7 +48,7 @@ const MultiTextAreaDialog = ({
 
   return (
     <Dialog open={Boolean(open)} onClose={handleClose}>
-      <DialogTitle>Multi-Text Area Settings</DialogTitle>
+      <DialogTitle>Add Multi-Text Area</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus
