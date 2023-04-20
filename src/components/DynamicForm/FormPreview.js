@@ -12,6 +12,7 @@ import {
   Typography,
   Select,
   MenuItem,
+  ListItemText,
 } from "@mui/material";
 import { useState } from "react";
 
@@ -26,6 +27,13 @@ const FormPreview = ({ fields, formName }) => {
   const handleSelectChange = (event) => {
     setSelectedValue(event.target.value);
   };
+
+  const [selectedValues, setSelectedValues] = useState([]);
+
+  const handleMultiSelectChange = (event) => {
+    setSelectedValues(event.target.value);
+  };
+
   return (
     <div className="formPreview">
       <Typography
@@ -166,6 +174,33 @@ const FormPreview = ({ fields, formName }) => {
                   {field.options.map((option, index) => (
                     <MenuItem key={index} value={option}>
                       {option}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            );
+          case "dropdownMultiSelect":
+            return (
+              <FormControl
+                key={field.id}
+                sx={{ marginBottom: 2, display: "block" }}
+              >
+                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                  {field.heading || "Dropdown Multi-Select"}
+                </Typography>
+                <Select
+                  labelId={field.id}
+                  id={field.id}
+                  multiple
+                  value={selectedValues}
+                  onChange={handleMultiSelectChange}
+                  fullWidth
+                  renderValue={(selected) => selected.join(", ")}
+                >
+                  {field.options.map((option, index) => (
+                    <MenuItem key={index} value={option}>
+                      <Checkbox checked={selectedValues.indexOf(option) > -1} />
+                      <ListItemText primary={option} />
                     </MenuItem>
                   ))}
                 </Select>

@@ -82,6 +82,19 @@ const DraggableElement = ({ type, onAddField }) => {
             Dropdown Select
           </Typography>
         );
+      case "dropdownMultiSelect":
+        return (
+          <Typography
+            variant="button"
+            sx={{
+              color: "white",
+              fontWeight: "bold",
+              userSelect: "none",
+            }}
+          >
+            Dropdown Multi-Select
+          </Typography>
+        );
 
       default:
         return null;

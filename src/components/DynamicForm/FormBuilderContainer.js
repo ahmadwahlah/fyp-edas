@@ -22,6 +22,7 @@ import MultiTextAreaDialog from "./Toolbox/MultiTextAreaDialog";
 import RadioButtonDialog from "./Toolbox/RadioButtonDialog";
 import CheckboxGroupDialog from "./Toolbox/CheckboxGroupDialog";
 import DropdownSelectDialog from "./Toolbox/DropdownSelectDialog";
+import DropdownMultiSelectDialog from "./Toolbox/DropdownMultiSelectDialog";
 
 const styles = {
   mainContainer: {
@@ -55,6 +56,8 @@ const FormBuilderContainer = () => {
   const [openCheckboxGroupDialog, setOpenCheckboxGroupDialog] = useState(false);
   const [openDropdownSelectDialog, setOpenDropdownSelectDialog] =
     useState(false);
+  const [openDropdownMultiSelectDialog, setOpenDropdownMultiSelectDialog] =
+    useState(false);
 
   const onAddField = useCallback((newField, editing = false) => {
     if (editing) {
@@ -74,6 +77,9 @@ const FormBuilderContainer = () => {
         setCurrentField(newField);
       } else if (newField.type === "dropdownSelect") {
         setOpenDropdownSelectDialog(true);
+        setCurrentField(newField);
+      } else if (newField.type === "dropdownMultiSelect") {
+        setOpenDropdownMultiSelectDialog(true);
         setCurrentField(newField);
       } else {
         setFields((fields) => [...fields, newField]);
@@ -334,6 +340,44 @@ const FormBuilderContainer = () => {
                       }}
                       editingField={
                         editingField && editingField.type === "dropdownSelect"
+                          ? editingField
+                          : null
+                      }
+                    />
+                    <DraggableElement
+                      type="dropdownMultiSelect"
+                      onAddField={onAddField}
+                    />
+                    <DropdownMultiSelectDialog
+                      open={
+                        openDropdownMultiSelectDialog ||
+                        (!!editingField &&
+                          editingField.type === "dropdownMultiSelect")
+                      }
+                      onClose={() => {
+                        setOpenDropdownMultiSelectDialog(false);
+                        setEditingField(null);
+                      }}
+                      onSave={(fieldData) => {
+                        if (editingField) {
+                          setFields((fields) =>
+                            fields.map((field) =>
+                              field.id === editingField.id
+                                ? { ...editingField, ...fieldData }
+                                : field
+                            )
+                          );
+                          setEditingField(null);
+                        } else {
+                          setFields((fields) => [
+                            ...fields,
+                            { ...currentField, ...fieldData },
+                          ]);
+                        }
+                      }}
+                      editingField={
+                        editingField &&
+                        editingField.type === "dropdownMultiSelect"
                           ? editingField
                           : null
                       }
