@@ -21,6 +21,7 @@ import InputFieldDialog from "./Toolbox/InputFieldDialog";
 import MultiTextAreaDialog from "./Toolbox/MultiTextAreaDialog";
 import RadioButtonDialog from "./Toolbox/RadioButtonDialog";
 import CheckboxGroupDialog from "./Toolbox/CheckboxGroupDialog";
+import DropdownSelectDialog from "./Toolbox/DropdownSelectDialog";
 
 const styles = {
   mainContainer: {
@@ -52,6 +53,8 @@ const FormBuilderContainer = () => {
   const [openMultiTextAreaDialog, setOpenMultiTextAreaDialog] = useState(false);
   const [openRadioButtonDialog, setOpenRadioButtonDialog] = useState(false);
   const [openCheckboxGroupDialog, setOpenCheckboxGroupDialog] = useState(false);
+  const [openDropdownSelectDialog, setOpenDropdownSelectDialog] =
+    useState(false);
 
   const onAddField = useCallback((newField, editing = false) => {
     if (editing) {
@@ -68,6 +71,9 @@ const FormBuilderContainer = () => {
         setCurrentField(newField);
       } else if (newField.type === "checkboxGroup") {
         setOpenCheckboxGroupDialog(true);
+        setCurrentField(newField);
+      } else if (newField.type === "dropdownSelect") {
+        setOpenDropdownSelectDialog(true);
         setCurrentField(newField);
       } else {
         setFields((fields) => [...fields, newField]);
@@ -295,6 +301,43 @@ const FormBuilderContainer = () => {
                           : null
                       }
                     />
+                    <DraggableElement
+                      type="dropdownSelect"
+                      onAddField={onAddField}
+                    />
+                    <DropdownSelectDialog
+                      open={
+                        openDropdownSelectDialog ||
+                        (!!editingField &&
+                          editingField.type === "dropdownSelect")
+                      }
+                      onClose={() => {
+                        setOpenDropdownSelectDialog(false);
+                        setEditingField(null);
+                      }}
+                      onSave={(fieldData) => {
+                        if (editingField) {
+                          setFields((fields) =>
+                            fields.map((field) =>
+                              field.id === editingField.id
+                                ? { ...editingField, ...fieldData }
+                                : field
+                            )
+                          );
+                          setEditingField(null);
+                        } else {
+                          setFields((fields) => [
+                            ...fields,
+                            { ...currentField, ...fieldData },
+                          ]);
+                        }
+                      }}
+                      editingField={
+                        editingField && editingField.type === "dropdownSelect"
+                          ? editingField
+                          : null
+                      }
+                    />
                   </Paper>
                 </Grid>
                 <Grid item xs={12} md={4.5} sx={{ display: "flex" }}>
@@ -329,3 +372,5 @@ const FormBuilderContainer = () => {
 };
 
 export default FormBuilderContainer;
+
+//  DropdownMulti-Select, DatePicker, TimePicker, FileUpload, Switch, Slider.

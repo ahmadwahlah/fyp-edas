@@ -7,10 +7,17 @@ import InputField from "./Toolbox/InputField";
 import MultiTextAreaField from "./Toolbox/MultiTextAreaField";
 import RadioButtonField from "./Toolbox/RadioButtonField";
 import CheckboxGroupField from "./Toolbox/CheckboxGroupField";
+import DropdownSelectField from "./Toolbox/DropdownSelectField";
 
 const FormEditor = ({ fields, onAddField, onRemoveField }) => {
   const [{ isOver }, drop] = useDrop(() => ({
-    accept: ["inputField", "multiTextArea", "radioButton", "checkboxGroup"],
+    accept: [
+      "inputField",
+      "multiTextArea",
+      "radioButton",
+      "checkboxGroup",
+      "dropdownSelect",
+    ],
     drop: () => ({ name: "formBuilder" }),
     collect: (monitor) => ({
       isOver: monitor.isOver(),
@@ -84,6 +91,19 @@ const FormEditor = ({ fields, onAddField, onRemoveField }) => {
             case "checkboxGroup":
               return (
                 <CheckboxGroupField
+                  key={field.id}
+                  id={field.id}
+                  name={field.name}
+                  heading={field.heading}
+                  options={field.options}
+                  onRemove={onRemoveField}
+                  onEdit={(fieldData) => onAddField(fieldData, true)}
+                  fieldData={field}
+                />
+              );
+            case "dropdownSelect":
+              return (
+                <DropdownSelectField
                   key={field.id}
                   id={field.id}
                   name={field.name}

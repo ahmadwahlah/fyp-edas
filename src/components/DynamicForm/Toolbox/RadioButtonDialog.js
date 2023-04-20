@@ -73,16 +73,14 @@ const RadioButtonDialog = ({ open, onClose, onSave, editingField }) => {
               />
             </Grid>
             <Grid item xs={2}>
-              {editingField && (
-                <IconButton
-                  edge="end"
-                  color="error"
-                  onClick={() => deleteOption(index)}
-                  disabled={options.length === 1}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              )}
+              <IconButton
+                edge="end"
+                color="error"
+                onClick={() => deleteOption(index)}
+                disabled={options.length === 1}
+              >
+                <DeleteIcon />
+              </IconButton>
             </Grid>
           </Grid>
         ))}

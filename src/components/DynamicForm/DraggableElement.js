@@ -69,6 +69,19 @@ const DraggableElement = ({ type, onAddField }) => {
             Checkbox Group
           </Typography>
         );
+      case "dropdownSelect":
+        return (
+          <Typography
+            variant="button"
+            sx={{
+              color: "white",
+              fontWeight: "bold",
+              userSelect: "none",
+            }}
+          >
+            Dropdown Select
+          </Typography>
+        );
 
       default:
         return null;

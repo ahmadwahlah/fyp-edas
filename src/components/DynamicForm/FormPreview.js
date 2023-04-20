@@ -10,6 +10,8 @@ import {
   FormGroup,
   FormLabel,
   Typography,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { useState } from "react";
 
@@ -18,6 +20,11 @@ const FormPreview = ({ fields, formName }) => {
 
   const handleChange = (event, id) => {
     setInputValues({ ...inputValues, [id]: event.target.value });
+  };
+  const [selectedValue, setSelectedValue] = useState("");
+
+  const handleSelectChange = (event) => {
+    setSelectedValue(event.target.value);
   };
   return (
     <div className="formPreview">
@@ -138,6 +145,30 @@ const FormPreview = ({ fields, formName }) => {
                     />
                   ))}
                 </FormGroup>
+              </FormControl>
+            );
+          case "dropdownSelect":
+            return (
+              <FormControl
+                key={field.id}
+                sx={{ marginBottom: 2, display: "block" }}
+              >
+                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                  {field.heading || "Dropdown Select"}
+                </Typography>
+                <Select
+                  labelId={field.id}
+                  id={field.id}
+                  value={selectedValue}
+                  onChange={handleSelectChange}
+                  fullWidth
+                >
+                  {field.options.map((option, index) => (
+                    <MenuItem key={index} value={option}>
+                      {option}
+                    </MenuItem>
+                  ))}
+                </Select>
               </FormControl>
             );
 

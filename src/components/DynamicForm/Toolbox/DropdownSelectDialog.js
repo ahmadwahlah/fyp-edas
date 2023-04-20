@@ -1,3 +1,4 @@
+// DropdownSelectDialog.js
 import React, { useEffect, useState } from "react";
 import {
   Dialog,
@@ -11,7 +12,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-const CheckboxGroupDialog = ({ open, onClose, onSave, editingField }) => {
+const DropdownSelectDialog = ({ open, onClose, onSave, editingField }) => {
   const [heading, setHeading] = useState("");
   const [options, setOptions] = useState(["Option 1"]);
 
@@ -50,7 +51,7 @@ const CheckboxGroupDialog = ({ open, onClose, onSave, editingField }) => {
 
   return (
     <Dialog open={Boolean(open)} onClose={handleClose}>
-      <DialogTitle>Add Checkbox Group</DialogTitle>
+      <DialogTitle>Add Dropdown Select</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus
@@ -95,4 +96,4 @@ const CheckboxGroupDialog = ({ open, onClose, onSave, editingField }) => {
   );
 };
 
-export default CheckboxGroupDialog;
+export default DropdownSelectDialog;
