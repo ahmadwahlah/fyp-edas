@@ -95,6 +95,19 @@ const DraggableElement = ({ type, onAddField }) => {
             Dropdown Multi-Select
           </Typography>
         );
+      case "datePicker":
+        return (
+          <Typography
+            variant="button"
+            sx={{
+              color: "white",
+              fontWeight: "bold",
+              userSelect: "none",
+            }}
+          >
+            Date Picker
+          </Typography>
+        );
 
       default:
         return null;

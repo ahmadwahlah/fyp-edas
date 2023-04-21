@@ -23,6 +23,7 @@ import RadioButtonDialog from "./Toolbox/RadioButtonDialog";
 import CheckboxGroupDialog from "./Toolbox/CheckboxGroupDialog";
 import DropdownSelectDialog from "./Toolbox/DropdownSelectDialog";
 import DropdownMultiSelectDialog from "./Toolbox/DropdownMultiSelectDialog";
+import DatePickerDialog from "./Toolbox/DatePickerDialog";
 
 const styles = {
   mainContainer: {
@@ -58,6 +59,7 @@ const FormBuilderContainer = () => {
     useState(false);
   const [openDropdownMultiSelectDialog, setOpenDropdownMultiSelectDialog] =
     useState(false);
+  const [openDatePickerDialog, setOpenDatePickerDialog] = useState(false);
 
   const onAddField = useCallback((newField, editing = false) => {
     if (editing) {
@@ -80,6 +82,9 @@ const FormBuilderContainer = () => {
         setCurrentField(newField);
       } else if (newField.type === "dropdownMultiSelect") {
         setOpenDropdownMultiSelectDialog(true);
+        setCurrentField(newField);
+      } else if (newField.type === "datePicker") {
+        setOpenDatePickerDialog(true);
         setCurrentField(newField);
       } else {
         setFields((fields) => [...fields, newField]);
@@ -145,7 +150,7 @@ const FormBuilderContainer = () => {
           label="Form Name"
           value={formName}
           onChange={(e) => setFormName(e.target.value)}
-          sx={{ width: "20rem", marginLeft: ".5rem" }}
+          sx={{ width: "21rem", marginLeft: ".5rem" }}
         />
       </Box>
       <Divider />
@@ -382,6 +387,42 @@ const FormBuilderContainer = () => {
                           : null
                       }
                     />
+                    <DraggableElement
+                      type="datePicker"
+                      onAddField={onAddField}
+                    />
+                    <DatePickerDialog
+                      open={
+                        openDatePickerDialog ||
+                        (!!editingField && editingField.type === "datePicker")
+                      }
+                      onClose={() => {
+                        setOpenDatePickerDialog(false);
+                        setEditingField(null);
+                      }}
+                      onSave={(fieldData) => {
+                        if (editingField) {
+                          setFields((fields) =>
+                            fields.map((field) =>
+                              field.id === editingField.id
+                                ? { ...editingField, ...fieldData }
+                                : field
+                            )
+                          );
+                          setEditingField(null);
+                        } else {
+                          setFields((fields) => [
+                            ...fields,
+                            { ...currentField, ...fieldData },
+                          ]);
+                        }
+                      }}
+                      editingField={
+                        editingField && editingField.type === "datePicker"
+                          ? editingField
+                          : null
+                      }
+                    />
                   </Paper>
                 </Grid>
                 <Grid item xs={12} md={4.5} sx={{ display: "flex" }}>
@@ -417,4 +458,4 @@ const FormBuilderContainer = () => {
 
 export default FormBuilderContainer;
 
-//  DropdownMulti-Select, DatePicker, TimePicker, FileUpload, Switch, Slider.
+// TimePicker, FileUpload, Switch, Slider.

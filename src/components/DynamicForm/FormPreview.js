@@ -15,9 +15,17 @@ import {
   ListItemText,
 } from "@mui/material";
 import { useState } from "react";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import Box from "@mui/material/Box";
+import dayjs from "dayjs";
 
 const FormPreview = ({ fields, formName }) => {
   const [inputValues, setInputValues] = useState({});
+  const [date, setDate] = useState(null);
+  const today = dayjs();
+  const [datePickerError, setDatePickerError] = useState(null);
 
   const handleChange = (event, id) => {
     setInputValues({ ...inputValues, [id]: event.target.value });
@@ -48,6 +56,20 @@ const FormPreview = ({ fields, formName }) => {
         {formName || "Untitled Form"}
       </Typography>
       {fields.map((field) => {
+        const handleDatePickerChange = (newValue) => {
+          setDate(newValue);
+          if (field.required && !newValue) {
+            setDatePickerError("Date is required");
+          } else if (
+            !field.allowBeforeToday &&
+            (!newValue || newValue.isBefore(dayjs().startOf("day")))
+          ) {
+            setDatePickerError("Date cannot be before today");
+          } else {
+            setDatePickerError(null);
+          }
+        };
+
         switch (field.type) {
           case "inputField":
             return (
@@ -204,6 +226,36 @@ const FormPreview = ({ fields, formName }) => {
                     </MenuItem>
                   ))}
                 </Select>
+              </FormControl>
+            );
+          case "datePicker":
+            return (
+              <FormControl key={field.id} sx={{ marginBottom: 2 }}>
+                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                  {field.heading || "Date Picker"}
+                </Typography>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 2,
+                    }}
+                  >
+                    <DatePicker
+                      value={date}
+                      onChange={handleDatePickerChange} // Use the new handler function
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          error={Boolean(datePickerError)}
+                          helperText={datePickerError}
+                        />
+                      )}
+                      minDate={field.allowBeforeToday ? undefined : today}
+                    />
+                  </Box>
+                </LocalizationProvider>
               </FormControl>
             );
 
