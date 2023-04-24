@@ -108,6 +108,19 @@ const DraggableElement = ({ type, onAddField }) => {
             Date Picker
           </Typography>
         );
+      case "timePicker":
+        return (
+          <Typography
+            variant="button"
+            sx={{
+              color: "white",
+              fontWeight: "bold",
+              userSelect: "none",
+            }}
+          >
+            Time Picker
+          </Typography>
+        );
 
       default:
         return null;

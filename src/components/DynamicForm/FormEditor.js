@@ -10,6 +10,7 @@ import CheckboxGroupField from "./Toolbox/CheckboxGroupField";
 import DropdownSelectField from "./Toolbox/DropdownSelectField";
 import DropdownMultiSelectField from "./Toolbox/DropdownMultiSelectField";
 import DatePickerField from "./Toolbox/DatePickerField";
+import TimePickerField from "./Toolbox/TimePickerField";
 
 const FormEditor = ({ fields, onAddField, onRemoveField }) => {
   const [{ isOver }, drop] = useDrop(() => ({
@@ -21,6 +22,7 @@ const FormEditor = ({ fields, onAddField, onRemoveField }) => {
       "dropdownSelect",
       "dropdownMultiSelect",
       "datePicker",
+      "timePicker",
     ],
     drop: () => ({ name: "formBuilder" }),
     collect: (monitor) => ({
@@ -141,6 +143,20 @@ const FormEditor = ({ fields, onAddField, onRemoveField }) => {
                   heading={field.heading}
                   required={field.required}
                   allowBeforeToday={field.allowBeforeToday}
+                  onRemove={onRemoveField}
+                  onEdit={(fieldData) => onAddField(fieldData, true)}
+                  fieldData={field}
+                />
+              );
+            case "timePicker":
+              return (
+                <TimePickerField
+                  key={field.id}
+                  id={field.id}
+                  name={field.name}
+                  heading={field.heading}
+                  required={field.required}
+                  clockFormat={field.clockFormat}
                   onRemove={onRemoveField}
                   onEdit={(fieldData) => onAddField(fieldData, true)}
                   fieldData={field}

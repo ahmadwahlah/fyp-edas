@@ -20,26 +20,30 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import Box from "@mui/material/Box";
 import dayjs from "dayjs";
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
 const FormPreview = ({ fields, formName }) => {
   const [inputValues, setInputValues] = useState({});
-  const [date, setDate] = useState(null);
   const today = dayjs();
+  const [date, setDate] = useState(null);
   const [datePickerError, setDatePickerError] = useState(null);
+  const [time, setTime] = useState(null);
 
   const handleChange = (event, id) => {
     setInputValues({ ...inputValues, [id]: event.target.value });
   };
-  const [selectedValue, setSelectedValue] = useState("");
 
-  const handleSelectChange = (event) => {
-    setSelectedValue(event.target.value);
+  const [selectedValue, setSelectedValue] = useState({});
+  const handleSelectChange = (event, id) => {
+    setSelectedValue({ ...selectedValue, [id]: event.target.value });
   };
 
-  const [selectedValues, setSelectedValues] = useState([]);
-
-  const handleMultiSelectChange = (event) => {
-    setSelectedValues(event.target.value);
+  const [multiSelectedValues, setMultiSelectedValues] = useState({});
+  const handleMultiSelectChange = (event, id) => {
+    setMultiSelectedValues({
+      ...multiSelectedValues,
+      [id]: event.target.value,
+    });
   };
 
   return (
@@ -189,8 +193,8 @@ const FormPreview = ({ fields, formName }) => {
                 <Select
                   labelId={field.id}
                   id={field.id}
-                  value={selectedValue}
-                  onChange={handleSelectChange}
+                  value={selectedValue[field.id] || ""}
+                  onChange={(event) => handleSelectChange(event, field.id)}
                   fullWidth
                 >
                   {field.options.map((option, index) => (
@@ -214,14 +218,20 @@ const FormPreview = ({ fields, formName }) => {
                   labelId={field.id}
                   id={field.id}
                   multiple
-                  value={selectedValues}
-                  onChange={handleMultiSelectChange}
+                  value={multiSelectedValues[field.id] || []}
+                  onChange={(event) => handleMultiSelectChange(event, field.id)}
                   fullWidth
                   renderValue={(selected) => selected.join(", ")}
                 >
                   {field.options.map((option, index) => (
                     <MenuItem key={index} value={option}>
-                      <Checkbox checked={selectedValues.indexOf(option) > -1} />
+                      <Checkbox
+                        checked={
+                          (multiSelectedValues[field.id] || []).indexOf(
+                            option
+                          ) > -1
+                        }
+                      />
                       <ListItemText primary={option} />
                     </MenuItem>
                   ))}
@@ -230,7 +240,10 @@ const FormPreview = ({ fields, formName }) => {
             );
           case "datePicker":
             return (
-              <FormControl key={field.id} sx={{ marginBottom: 2 }}>
+              <FormControl
+                key={field.id}
+                sx={{ marginBottom: 2, display: "block" }}
+              >
                 <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                   {field.heading || "Date Picker"}
                 </Typography>
@@ -255,6 +268,34 @@ const FormPreview = ({ fields, formName }) => {
                       minDate={field.allowBeforeToday ? undefined : today}
                     />
                   </Box>
+                </LocalizationProvider>
+              </FormControl>
+            );
+          case "timePicker":
+            return (
+              <FormControl
+                key={field.id}
+                sx={{ marginBottom: 2, display: "block" }}
+              >
+                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                  {field.heading || "Time Picker"}
+                </Typography>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <TimePicker
+                    ampm={field.clockFormat === "12h"}
+                    value={time}
+                    onChange={(newValue) => setTime(newValue)}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        required={field.required}
+                        error={Boolean(field.required && !time)}
+                        helperText={
+                          field.required && !time ? "Time is required" : ""
+                        }
+                      />
+                    )}
+                  />
                 </LocalizationProvider>
               </FormControl>
             );
