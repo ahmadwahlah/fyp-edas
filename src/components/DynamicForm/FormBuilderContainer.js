@@ -501,6 +501,4 @@ export default FormBuilderContainer;
 
 // FileUpload, Switch, Slider.
 
-// Date Picker+errors, Time Picker state error.
-
 // Add required field to Radio, Checkbox, Dropdown, DropdownMulti.

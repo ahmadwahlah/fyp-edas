@@ -25,9 +25,13 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 const FormPreview = ({ fields, formName }) => {
   const [inputValues, setInputValues] = useState({});
   const today = dayjs();
-  const [date, setDate] = useState(null);
-  const [datePickerError, setDatePickerError] = useState(null);
-  const [time, setTime] = useState(null);
+  const [dateValues, setDateValues] = useState({});
+  const [timeValues, setTimeValues] = useState({});
+  const handleTimePickerChange = (newValue, id) => {
+    setTimeValues({ ...timeValues, [id]: newValue });
+  };
+
+  const [datePickerError, setDatePickerError] = useState({});
 
   const handleChange = (event, id) => {
     setInputValues({ ...inputValues, [id]: event.target.value });
@@ -60,17 +64,23 @@ const FormPreview = ({ fields, formName }) => {
         {formName || "Untitled Form"}
       </Typography>
       {fields.map((field) => {
-        const handleDatePickerChange = (newValue) => {
-          setDate(newValue);
+        const handleDatePickerChange = (newValue, id) => {
+          setDateValues({ ...dateValues, [id]: newValue });
           if (field.required && !newValue) {
-            setDatePickerError("Date is required");
+            setDatePickerError({
+              ...datePickerError,
+              [id]: "Date is required",
+            });
           } else if (
             !field.allowBeforeToday &&
             (!newValue || newValue.isBefore(dayjs().startOf("day")))
           ) {
-            setDatePickerError("Date cannot be before today");
+            setDatePickerError({
+              ...datePickerError,
+              [id]: "Date cannot be before today",
+            });
           } else {
-            setDatePickerError(null);
+            setDatePickerError({ ...datePickerError, [id]: null });
           }
         };
 
@@ -256,13 +266,15 @@ const FormPreview = ({ fields, formName }) => {
                     }}
                   >
                     <DatePicker
-                      value={date}
-                      onChange={handleDatePickerChange} // Use the new handler function
+                      value={dateValues[field.id] || null}
+                      onChange={(newValue) =>
+                        handleDatePickerChange(newValue, field.id)
+                      }
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          error={Boolean(datePickerError)}
-                          helperText={datePickerError}
+                          error={Boolean(datePickerError[field.id])}
+                          helperText={datePickerError[field.id]}
                         />
                       )}
                       minDate={field.allowBeforeToday ? undefined : today}
@@ -283,15 +295,19 @@ const FormPreview = ({ fields, formName }) => {
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <TimePicker
                     ampm={field.clockFormat === "12h"}
-                    value={time}
-                    onChange={(newValue) => setTime(newValue)}
+                    value={timeValues[field.id] || null}
+                    onChange={(newValue) =>
+                      handleTimePickerChange(newValue, field.id)
+                    }
                     renderInput={(params) => (
                       <TextField
                         {...params}
                         required={field.required}
-                        error={Boolean(field.required && !time)}
+                        error={Boolean(field.required && !timeValues[field.id])}
                         helperText={
-                          field.required && !time ? "Time is required" : ""
+                          field.required && !timeValues[field.id]
+                            ? "Time is required"
+                            : ""
                         }
                       />
                     )}
