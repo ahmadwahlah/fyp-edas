@@ -89,6 +89,7 @@ const FormEditor = ({ fields, onAddField, onRemoveField }) => {
                   name={field.name}
                   heading={field.heading}
                   options={field.options}
+                  required={field.required}
                   onRemove={onRemoveField}
                   onEdit={(fieldData) => onAddField(fieldData, true)}
                   fieldData={field}
@@ -102,6 +103,7 @@ const FormEditor = ({ fields, onAddField, onRemoveField }) => {
                   name={field.name}
                   heading={field.heading}
                   options={field.options}
+                  required={field.required}
                   onRemove={onRemoveField}
                   onEdit={(fieldData) => onAddField(fieldData, true)}
                   fieldData={field}
@@ -115,6 +117,7 @@ const FormEditor = ({ fields, onAddField, onRemoveField }) => {
                   name={field.name}
                   heading={field.heading}
                   options={field.options}
+                  required={field.required}
                   onRemove={onRemoveField}
                   onEdit={(fieldData) => onAddField(fieldData, true)}
                   fieldData={field}
@@ -129,6 +132,7 @@ const FormEditor = ({ fields, onAddField, onRemoveField }) => {
                   name={field.name}
                   heading={field.heading}
                   options={field.options}
+                  required={field.required}
                   onRemove={onRemoveField}
                   onEdit={(fieldData) => onAddField(fieldData, true)}
                   fieldData={field}

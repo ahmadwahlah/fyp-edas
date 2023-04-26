@@ -20,6 +20,7 @@ const DropdownMultiSelectField = ({
   onRemove,
   onEdit,
   fieldData,
+  required,
 }) => {
   const [selectedValues, setSelectedValues] = useState([]);
 
@@ -46,6 +47,7 @@ const DropdownMultiSelectField = ({
         >
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
             {heading || "Dropdown Multi-Select"}
+            {required && "*"}
           </Typography>
           <FormControl fullWidth>
             <Select
@@ -55,6 +57,7 @@ const DropdownMultiSelectField = ({
               value={selectedValues}
               onChange={handleChange}
               renderValue={(selected) => selected.join(", ")}
+              required={required}
               disabled
             >
               {options.map((option, index) => (

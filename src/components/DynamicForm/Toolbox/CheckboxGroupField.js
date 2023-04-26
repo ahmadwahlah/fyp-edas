@@ -14,6 +14,7 @@ const CheckboxGroupField = ({
   id,
   heading,
   options,
+  required,
   onRemove,
   onEdit,
   fieldData,
@@ -37,6 +38,7 @@ const CheckboxGroupField = ({
         >
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
             {heading || "Checkbox Group"}
+            {required ? " *" : ""}
           </Typography>
           <FormGroup>
             {options.map((option, index) => (
@@ -44,6 +46,7 @@ const CheckboxGroupField = ({
                 key={index}
                 control={<Checkbox />}
                 label={option}
+                required={required}
                 disabled
               />
             ))}

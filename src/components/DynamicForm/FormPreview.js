@@ -13,6 +13,7 @@ import {
   Select,
   MenuItem,
   ListItemText,
+  FormHelperText,
 } from "@mui/material";
 import { useState } from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -23,7 +24,15 @@ import dayjs from "dayjs";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
 const FormPreview = ({ fields, formName }) => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      // Your submit logic here
+    }
+  };
+
   const [inputValues, setInputValues] = useState({});
+
   const today = dayjs();
   const [dateValues, setDateValues] = useState({});
   const [timeValues, setTimeValues] = useState({});
@@ -37,6 +46,9 @@ const FormPreview = ({ fields, formName }) => {
     setInputValues({ ...inputValues, [id]: event.target.value });
   };
 
+  const [radioSelectedValue, setRadioSelectedValue] = useState({});
+  const [checkboxSelectedValues, setCheckboxSelectedValues] = useState({});
+
   const [selectedValue, setSelectedValue] = useState({});
   const handleSelectChange = (event, id) => {
     setSelectedValue({ ...selectedValue, [id]: event.target.value });
@@ -48,6 +60,37 @@ const FormPreview = ({ fields, formName }) => {
       ...multiSelectedValues,
       [id]: event.target.value,
     });
+  };
+
+  const [formErrors, setFormErrors] = useState({});
+  const validateForm = () => {
+    const errors = {};
+
+    fields.forEach((field) => {
+      if (field.required) {
+        if (field.type === "dropdownSelect" && !selectedValue[field.id]) {
+          errors[field.id] = "This field is required.";
+        } else if (
+          field.type === "dropdownMultiSelect" &&
+          (!multiSelectedValues[field.id] ||
+            multiSelectedValues[field.id].length === 0)
+        ) {
+          errors[field.id] = "This field is required.";
+        }
+        if (field.type === "radioButton" && !radioSelectedValue[field.id]) {
+          errors[field.id] = "This field is required.";
+        } else if (
+          field.type === "checkboxGroup" &&
+          (!checkboxSelectedValues[field.id] ||
+            checkboxSelectedValues[field.id].length === 0)
+        ) {
+          errors[field.id] = "This field is required.";
+        }
+      }
+    });
+
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
   };
 
   return (
@@ -141,6 +184,7 @@ const FormPreview = ({ fields, formName }) => {
                 key={field.id}
                 component="fieldset"
                 sx={{ marginBottom: 2, display: "block" }}
+                error={!!formErrors[field.id]}
               >
                 <FormLabel component="legend">
                   <Typography
@@ -148,21 +192,29 @@ const FormPreview = ({ fields, formName }) => {
                     sx={{ fontWeight: "bold", color: "black" }}
                   >
                     {field.heading || "Radio Button Group"}
+                    {field.required && "*"}
                   </Typography>
                 </FormLabel>
                 <RadioGroup
                   name={field.name}
                   defaultValue={field.options[0].value}
+                  onChange={(event) =>
+                    setRadioSelectedValue({
+                      ...radioSelectedValue,
+                      [field.id]: event.target.value,
+                    })
+                  }
                 >
                   {field.options.map((option, index) => (
                     <FormControlLabel
                       key={index}
                       value={option}
-                      control={<Radio />}
+                      control={<Radio required={field.required} />}
                       label={option}
                     />
                   ))}
                 </RadioGroup>
+                <FormHelperText>{formErrors[field.id]}</FormHelperText>
               </FormControl>
             );
           case "checkboxGroup":
@@ -171,6 +223,7 @@ const FormPreview = ({ fields, formName }) => {
                 key={field.id}
                 component="fieldset"
                 sx={{ marginBottom: 2, display: "block" }}
+                error={!!formErrors[field.id]}
               >
                 <FormLabel component="legend">
                   <Typography
@@ -178,27 +231,56 @@ const FormPreview = ({ fields, formName }) => {
                     sx={{ fontWeight: "bold", color: "black" }}
                   >
                     {field.heading || "Checkbox Group"}
+                    {field.required && "*"}
                   </Typography>
                 </FormLabel>
                 <FormGroup>
                   {field.options.map((option, index) => (
                     <FormControlLabel
                       key={index}
-                      control={<Checkbox />}
+                      control={
+                        <Checkbox
+                          required={field.required}
+                          onChange={(event) => {
+                            if (event.target.checked) {
+                              setCheckboxSelectedValues({
+                                ...checkboxSelectedValues,
+                                [field.id]: [
+                                  ...(checkboxSelectedValues[field.id] || []),
+                                  option,
+                                ],
+                              });
+                            } else {
+                              setCheckboxSelectedValues({
+                                ...checkboxSelectedValues,
+                                [field.id]: (
+                                  checkboxSelectedValues[field.id] || []
+                                ).filter(
+                                  (selectedOption) => selectedOption !== option
+                                ),
+                              });
+                            }
+                          }}
+                        />
+                      }
                       label={option}
                     />
                   ))}
                 </FormGroup>
+                <FormHelperText>{formErrors[field.id]}</FormHelperText>
               </FormControl>
             );
+
           case "dropdownSelect":
             return (
               <FormControl
                 key={field.id}
                 sx={{ marginBottom: 2, display: "block" }}
+                error={!!formErrors[field.id]}
               >
                 <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                   {field.heading || "Dropdown Select"}
+                  {field.required && "*"}
                 </Typography>
                 <Select
                   labelId={field.id}
@@ -206,7 +288,10 @@ const FormPreview = ({ fields, formName }) => {
                   value={selectedValue[field.id] || ""}
                   onChange={(event) => handleSelectChange(event, field.id)}
                   fullWidth
+                  required={field.required} // Add required attribute here
                 >
+                  <FormHelperText>{formErrors[field.id]}</FormHelperText>
+
                   {field.options.map((option, index) => (
                     <MenuItem key={index} value={option}>
                       {option}
@@ -220,9 +305,11 @@ const FormPreview = ({ fields, formName }) => {
               <FormControl
                 key={field.id}
                 sx={{ marginBottom: 2, display: "block" }}
+                error={!!formErrors[field.id]}
               >
                 <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                   {field.heading || "Dropdown Multi-Select"}
+                  {field.required && "*"}
                 </Typography>
                 <Select
                   labelId={field.id}
@@ -232,7 +319,10 @@ const FormPreview = ({ fields, formName }) => {
                   onChange={(event) => handleMultiSelectChange(event, field.id)}
                   fullWidth
                   renderValue={(selected) => selected.join(", ")}
+                  required={field.required} // Add required attribute here
                 >
+                  <FormHelperText>{formErrors[field.id]}</FormHelperText>
+
                   {field.options.map((option, index) => (
                     <MenuItem key={index} value={option}>
                       <Checkbox
@@ -248,6 +338,7 @@ const FormPreview = ({ fields, formName }) => {
                 </Select>
               </FormControl>
             );
+
           case "datePicker":
             return (
               <FormControl

@@ -48,10 +48,9 @@ const FormBuilderContainer = () => {
   const [fields, setFields] = useState([]);
   const [formName, setFormName] = useState("");
   const [editingField, setEditingField] = useState(null);
-
   const [isFormValid, setIsFormValid] = useState(false);
-
   const [currentField, setCurrentField] = useState(null);
+
   const [openDialog, setOpenDialog] = useState(false);
   const [openMultiTextAreaDialog, setOpenMultiTextAreaDialog] = useState(false);
   const [openRadioButtonDialog, setOpenRadioButtonDialog] = useState(false);
@@ -499,6 +498,4 @@ const FormBuilderContainer = () => {
 
 export default FormBuilderContainer;
 
-// FileUpload, Switch, Slider.
-
-// Add required field to Radio, Checkbox, Dropdown, DropdownMulti.
+// FileUpload, Switch, Slider, Email, Numbers.

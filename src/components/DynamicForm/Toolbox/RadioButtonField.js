@@ -1,4 +1,3 @@
-// RadioButtonField.js
 import React from "react";
 import {
   RadioGroup,
@@ -15,6 +14,7 @@ const RadioButtonField = ({
   id,
   heading,
   options,
+  required,
   onRemove,
   onEdit,
   fieldData,
@@ -38,6 +38,7 @@ const RadioButtonField = ({
         >
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
             {heading || "Radio Button Group"}
+            {required ? " *" : ""}
           </Typography>
           <RadioGroup aria-label={heading} name={id}>
             {options.map((option, index) => (
@@ -46,6 +47,7 @@ const RadioButtonField = ({
                 value={option}
                 control={<Radio />}
                 label={option}
+                required={required}
                 disabled
               />
             ))}

@@ -17,6 +17,7 @@ const DropdownSelectField = ({
   onRemove,
   onEdit,
   fieldData,
+  required,
 }) => {
   const [selectedValue, setSelectedValue] = useState("");
 
@@ -42,6 +43,7 @@ const DropdownSelectField = ({
         >
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
             {heading || "Dropdown Select"}
+            {required && "*"}
           </Typography>
           <Select
             labelId={`${id}-label`}
@@ -49,6 +51,7 @@ const DropdownSelectField = ({
             value={selectedValue}
             onChange={handleChange}
             fullWidth
+            required={required}
             disabled
           >
             {options.map((option, index) => (

@@ -9,20 +9,25 @@ import {
   Button,
   IconButton,
   Grid,
+  Box,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { FormControlLabel, Checkbox } from "@mui/material";
 
 const RadioButtonDialog = ({ open, onClose, onSave, editingField }) => {
   const [heading, setHeading] = useState("");
   const [options, setOptions] = useState(["Option 1"]);
+  const [required, setRequired] = useState(false);
 
   useEffect(() => {
     if (editingField) {
       setHeading(editingField.heading);
       setOptions(editingField.options);
+      setRequired(editingField.required);
     } else {
       setHeading("");
       setOptions(["Option 1"]);
+      setRequired(false);
     }
   }, [editingField]);
 
@@ -31,7 +36,7 @@ const RadioButtonDialog = ({ open, onClose, onSave, editingField }) => {
   };
 
   const handleSave = () => {
-    onSave({ heading, options });
+    onSave({ heading, options, required });
     handleClose();
   };
 
@@ -61,6 +66,7 @@ const RadioButtonDialog = ({ open, onClose, onSave, editingField }) => {
           value={heading}
           onChange={(e) => setHeading(e.target.value)}
         />
+
         {options.map((option, index) => (
           <Grid container spacing={2} key={index} alignItems="center">
             <Grid item xs={10}>
@@ -84,7 +90,18 @@ const RadioButtonDialog = ({ open, onClose, onSave, editingField }) => {
             </Grid>
           </Grid>
         ))}
-        <Button onClick={addOption}>Add Option</Button>
+        <Box sx={{ display: "flex", flexDirection: "column" }}>
+          <Button onClick={addOption}>Add Option</Button>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={required}
+                onChange={(e) => setRequired(e.target.checked)}
+              />
+            }
+            label="Required"
+          />
+        </Box>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
