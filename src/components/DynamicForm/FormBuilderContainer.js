@@ -25,6 +25,7 @@ import DropdownSelectDialog from "./Toolbox/DropdownSelectDialog";
 import DropdownMultiSelectDialog from "./Toolbox/DropdownMultiSelectDialog";
 import DatePickerDialog from "./Toolbox/DatePickerDialog";
 import TimePickerDialog from "./Toolbox/TimePickerDialog";
+import FileUploadDialog from "./Toolbox/FileUploadDialog";
 
 const styles = {
   mainContainer: {
@@ -61,6 +62,7 @@ const FormBuilderContainer = () => {
     useState(false);
   const [openDatePickerDialog, setOpenDatePickerDialog] = useState(false);
   const [openTimePickerDialog, setOpenTimePickerDialog] = useState(false);
+  const [openFileUploadDialog, setOpenFileUploadDialog] = useState(false);
 
   const onAddField = useCallback((newField, editing = false) => {
     if (editing) {
@@ -89,6 +91,9 @@ const FormBuilderContainer = () => {
         setCurrentField(newField);
       } else if (newField.type === "timePicker") {
         setOpenTimePickerDialog(true);
+        setCurrentField(newField);
+      } else if (newField.type === "fileUpload") {
+        setOpenFileUploadDialog(true);
         setCurrentField(newField);
       } else {
         setFields((fields) => [...fields, newField]);
@@ -463,6 +468,42 @@ const FormBuilderContainer = () => {
                           : null
                       }
                     />
+                    <DraggableElement
+                      type="fileUpload"
+                      onAddField={onAddField}
+                    />
+                    <FileUploadDialog
+                      open={
+                        openFileUploadDialog ||
+                        (!!editingField && editingField.type === "fileUpload")
+                      }
+                      onClose={() => {
+                        setOpenFileUploadDialog(false);
+                        setEditingField(null);
+                      }}
+                      onSave={(fieldData) => {
+                        if (editingField) {
+                          setFields((fields) =>
+                            fields.map((field) =>
+                              field.id === editingField.id
+                                ? { ...editingField, ...fieldData }
+                                : field
+                            )
+                          );
+                          setEditingField(null);
+                        } else {
+                          setFields((fields) => [
+                            ...fields,
+                            { ...currentField, ...fieldData },
+                          ]);
+                        }
+                      }}
+                      editingField={
+                        editingField && editingField.type === "fileUpload"
+                          ? editingField
+                          : null
+                      }
+                    />
                   </Paper>
                 </Grid>
                 <Grid item xs={12} md={4.5} sx={{ display: "flex" }}>
@@ -498,4 +539,4 @@ const FormBuilderContainer = () => {
 
 export default FormBuilderContainer;
 
-// FileUpload, Switch, Slider, Email, Numbers.
+// Switch, Slider, Email, Numbers.

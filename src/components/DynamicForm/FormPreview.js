@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
 import RadioGroup from "@mui/material/RadioGroup";
 import Radio from "@mui/material/Radio";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import {
   Checkbox,
   FormControl,
@@ -14,8 +15,9 @@ import {
   MenuItem,
   ListItemText,
   FormHelperText,
+  Button,
 } from "@mui/material";
-import { useState } from "react";
+
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -61,6 +63,25 @@ const FormPreview = ({ fields, formName }) => {
       [id]: event.target.value,
     });
   };
+
+  const [selectedFiles, setSelectedFiles] = useState({});
+  const [inputRefs, setInputRefs] = useState({});
+
+  const handleFileSelect = (event, id) => {
+    const file = event.target.files[0];
+    setSelectedFiles({ ...selectedFiles, [id]: file });
+    // Update the fileName property of the field object
+  };
+
+  useEffect(() => {
+    const newInputRefs = fields.reduce((acc, field) => {
+      if (field.type === "fileUpload") {
+        acc[field.id] = React.createRef();
+      }
+      return acc;
+    }, {});
+    setInputRefs(newInputRefs);
+  }, [fields]);
 
   const [formErrors, setFormErrors] = useState({});
   const validateForm = () => {
@@ -406,7 +427,43 @@ const FormPreview = ({ fields, formName }) => {
                 </LocalizationProvider>
               </FormControl>
             );
-
+          case "fileUpload":
+            return (
+              <div key={field.id} style={{ marginBottom: "16px" }}>
+                <Typography
+                  variant="h6"
+                  sx={{ fontWeight: "bold", color: "black" }}
+                >
+                  {field.heading || "File Upload"}
+                  {field.required && "*"}
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  component="span"
+                  startIcon={<CloudUploadIcon />}
+                  onClick={() => inputRefs[field.id].current.click()}
+                >
+                  Upload
+                </Button>
+                <input
+                  type="file"
+                  id={field.id}
+                  name={field.name}
+                  required={field.required}
+                  hidden
+                  accept=".pdf,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*"
+                  ref={inputRefs[field.id]}
+                  onChange={(event) => handleFileSelect(event, field.id)}
+                />
+                {selectedFiles[field.id] && (
+                  <p style={{ marginTop: "8px" }}>
+                    Selected file:{" "}
+                    <strong>{selectedFiles[field.id].name}</strong>
+                  </p>
+                )}
+              </div>
+            );
           default:
             return null;
         }

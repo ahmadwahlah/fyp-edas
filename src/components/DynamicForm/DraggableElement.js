@@ -121,6 +121,19 @@ const DraggableElement = ({ type, onAddField }) => {
             Time Picker
           </Typography>
         );
+      case "fileUpload":
+        return (
+          <Typography
+            variant="button"
+            sx={{
+              color: "white",
+              fontWeight: "bold",
+              userSelect: "none",
+            }}
+          >
+            File Upload
+          </Typography>
+        );
 
       default:
         return null;
