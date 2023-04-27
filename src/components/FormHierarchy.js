@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Button,
@@ -25,7 +26,8 @@ const CustomSelect = ({ label, options, ...rest }) => (
     }}
     variant="outlined"
   >
-    <option value="">None</option>
+    {" "}
+    <option value="" disabled></option>
     {options.map((option) => (
       <option key={option.value} value={option.value}>
         {option.label}
@@ -57,11 +59,17 @@ const FormHierarchy = () => {
   const id = searchParams.get("id");
   const name = searchParams.get("name");
   const navigate = useNavigate();
-
+  const formRef = useRef();
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const enteredRole = data.get("role");
+    if (selectedOptions.every((option) => option !== "")) {
+      const data = new FormData(formRef.current); // Change this line
+      const enteredRole = data.get("role");
+      // Submit the form or perform any other actions with the selected options
+    } else {
+      // Display an error message or handle the case when not all options are selected
+      console.log("error");
+    }
   };
 
   const [fields, setFields] = useState([
@@ -73,7 +81,7 @@ const FormHierarchy = () => {
   ]);
 
   const [selectedOptions, setSelectedOptions] = useState(
-    new Array(hierarchyOptions.length).fill("")
+    new Array(fields.length).fill("")
   );
 
   const handleAddField = () => {
@@ -138,6 +146,7 @@ const FormHierarchy = () => {
             <Box
               component="form"
               onSubmit={handleSubmit}
+              ref={formRef}
               noValidate
               sx={{ mt: 1 }}
             >

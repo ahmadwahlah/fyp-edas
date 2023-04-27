@@ -15,6 +15,7 @@ import {
   Button,
   TextField,
 } from "@mui/material";
+import axios from "axios";
 
 import LoggedInHeader from "../LoggedInHeader";
 import InputFieldDialog from "./Toolbox/InputFieldDialog";
@@ -26,6 +27,8 @@ import DropdownMultiSelectDialog from "./Toolbox/DropdownMultiSelectDialog";
 import DatePickerDialog from "./Toolbox/DatePickerDialog";
 import TimePickerDialog from "./Toolbox/TimePickerDialog";
 import FileUploadDialog from "./Toolbox/FileUploadDialog";
+
+import FormDialog from "./FormDialog";
 
 const styles = {
   mainContainer: {
@@ -109,12 +112,37 @@ const FormBuilderContainer = () => {
     setIsFormValid(formName && fields.length > 0);
   }, [fields, formName]);
 
-  const onSaveForm = () => {
-    console.log({
-      id: uuid(),
-      name: formName,
+  const [formDialogOpen, setFormDialogOpen] = useState(false);
+  const handleSaveForm = () => {
+    setFormDialogOpen(true);
+  };
+
+  const handleFormSave = ({
+    facultyVisibility,
+    studentVisibility,
+    approvalHierarchy,
+  }) => {
+    const formData = {
+      formName: formName,
       fields: fields,
-    });
+      facultyVisibility,
+      studentVisibility,
+      approvalHierarchy,
+    };
+    console.log(formData);
+    saveFormDataToAPI(formData);
+  };
+
+  const saveFormDataToAPI = async (formData) => {
+    try {
+      const response = await axios.post(
+        "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/dynamicforms",
+        formData
+      );
+      console.log("Form saved successfully:", response.data);
+    } catch (error) {
+      console.error("Error saving form data:", error);
+    }
   };
 
   return (
@@ -133,7 +161,7 @@ const FormBuilderContainer = () => {
           variant="contained"
           color="primary"
           disabled={!isFormValid}
-          onClick={onSaveForm}
+          onClick={handleSaveForm}
           sx={{
             backgroundColor: "black",
             ":hover": {
@@ -533,6 +561,11 @@ const FormBuilderContainer = () => {
           </Container>
         </DndProvider>
       </Box>
+      <FormDialog
+        open={formDialogOpen}
+        onClose={() => setFormDialogOpen(false)}
+        onSave={handleFormSave}
+      />
     </Box>
   );
 };
