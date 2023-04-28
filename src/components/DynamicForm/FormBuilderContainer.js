@@ -134,10 +134,16 @@ const FormBuilderContainer = () => {
   };
 
   const saveFormDataToAPI = async (formData) => {
+    const token = localStorage.getItem("token");
     try {
       const response = await axios.post(
         "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/dynamicforms",
-        formData
+        formData,
+        {
+          headers: {
+            "x-auth-token": token,
+          },
+        }
       );
       console.log("Form saved successfully:", response.data);
     } catch (error) {

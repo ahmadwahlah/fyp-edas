@@ -51,10 +51,21 @@ export default function SignIn() {
     switch (enteredRole) {
       case "admin":
         try {
-          const response = await axios.post("/api/auth/admin", {
-            email: enteredEmail,
-            password: enteredPassword,
-          });
+          //const token = localStorage.getItem("token");
+
+          const response = await axios.post(
+            "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/auth/admin",
+            {
+              email: enteredEmail,
+              password: enteredPassword,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                //  "x-auth-token": token,
+              },
+            }
+          );
           console.log(response);
           if (response.status === 200) {
             const token = response.data.token;
@@ -66,7 +77,7 @@ export default function SignIn() {
           }
         } catch (error) {
           console.error(error);
-          if (error.response && error.response.status === 401) {
+          if (error.response && error.response.status === 400) {
             console.error("Incorrect email or password. Please try again.");
             window.alert("Incorrect email or password. Please try again.");
           } else {
@@ -77,21 +88,39 @@ export default function SignIn() {
 
       case "faculty":
         try {
-          const response = await axios.post("/api/faculty/login", {
-            email: enteredEmail,
-            password: enteredPassword,
-          });
+          const response = await axios.post(
+            "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/auth/faculty",
+            {
+              email: enteredEmail,
+              password: enteredPassword,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
           console.log(response);
           if (response.status === 200) {
+            const token = response.data.token;
+            console.log(token);
+            localStorage.setItem("token", token);
             navigate("/facultyhome");
           } else {
             console.error("An error occurred. Please try again later.");
           }
         } catch (error) {
           console.error(error);
-          if (error.response && error.response.status === 401) {
+          if (error.response && error.response.status === 400) {
             console.error("Incorrect email or password. Please try again.");
             window.alert("Incorrect email or password. Please try again.");
+          } else if (error.response && error.response.status === 401) {
+            console.error(
+              "Attention: Your request is currently pending approval. Please be patient as we review and process your submission. Thank you for your understanding!"
+            );
+            window.alert(
+              "Attention: Your request is currently pending approval. Please be patient as we review and process your submission.\nThank you for your understanding!"
+            );
           } else {
             console.error("An error occurred. Please try again later.");
           }
@@ -100,21 +129,39 @@ export default function SignIn() {
 
       case "student":
         try {
-          const response = await axios.post("/api/student/login", {
-            email: enteredEmail,
-            password: enteredPassword,
-          });
+          const response = await axios.post(
+            "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/auth/student",
+            {
+              email: enteredEmail,
+              password: enteredPassword,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
           console.log(response);
           if (response.status === 200) {
+            const token = response.data.token;
+            console.log(token);
+            localStorage.setItem("token", token);
             navigate("/studenthome");
           } else {
             console.error("An error occurred. Please try again later.");
           }
         } catch (error) {
           console.error(error);
-          if (error.response && error.response.status === 401) {
+          if (error.response && error.response.status === 400) {
             console.error("Incorrect email or password. Please try again.");
             window.alert("Incorrect email or password. Please try again.");
+          } else if (error.response && error.response.status === 401) {
+            console.error(
+              "Attention: Your request is currently pending approval. Please be patient as we review and process your submission. Thank you for your understanding!"
+            );
+            window.alert(
+              "Attention: Your request is currently pending approval. Please be patient as we review and process your submission.\nThank you for your understanding!"
+            );
           } else {
             console.error("An error occurred. Please try again later.");
           }

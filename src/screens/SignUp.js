@@ -89,17 +89,20 @@ export default function SignUp() {
         batch
       ) {
         try {
-          const response = await axios.post("/api/student/signup", {
-            firstname,
-            lastname,
-            email,
-            password,
-            phoneNumber,
-            role,
-            faculty,
-            regnum,
-            batch,
-          });
+          const response = await axios.post(
+            "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/student",
+            {
+              firstname,
+              lastname,
+              email,
+              password,
+              phoneNumber,
+              role,
+              faculty,
+              regnum,
+              batch,
+            }
+          );
 
           console.log("Form submitted successfully");
           navigate("/");
@@ -123,16 +126,19 @@ export default function SignUp() {
         subrole
       ) {
         try {
-          const response = await axios.post("/api/faculty/signup", {
-            firstname,
-            lastname,
-            email,
-            password,
-            phoneNumber,
-            role,
-            department,
-            subrole,
-          });
+          const response = await axios.post(
+            "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/faculty",
+            {
+              firstname,
+              lastname,
+              email,
+              password,
+              phoneNumber,
+              role,
+              department,
+              subrole,
+            }
+          );
 
           console.log("Form submitted successfully");
           navigate("/");
@@ -421,12 +427,17 @@ export default function SignUp() {
                       onChange={handleRoleChange}
                       name="subrole"
                       options={[
-                        { value: "dean", label: "Dean" },
-                        { value: "advisor", label: "Advisor" },
+                        { value: "Professor", label: "Professor" },
                         {
-                          value: "committeconvener",
-                          label: "Committee Convener",
+                          value: "Associate Professor",
+                          label: "Associate Professor",
                         },
+                        {
+                          value: "Assistant Professor",
+                          label: "Assistant Professor",
+                        },
+                        { value: "Lecturer", label: "Lecturer" },
+                        { value: "Lab Instructor", label: "Lab Instructor" },
                       ]}
                     />
                   </Stack>

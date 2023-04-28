@@ -181,19 +181,6 @@ const FormEditor = ({ fields, onAddField, onRemoveField }) => {
                   fieldData={field}
                 />
               );
-            case "fileUpload":
-              return (
-                <FileUploadField
-                  key={field.id}
-                  id={field.id}
-                  name={field.name}
-                  heading={field.heading}
-                  required={field.required}
-                  onRemove={onRemoveField}
-                  onEdit={(fieldData) => onAddField(fieldData, true)}
-                  fieldData={field}
-                />
-              );
 
             default:
               return null;

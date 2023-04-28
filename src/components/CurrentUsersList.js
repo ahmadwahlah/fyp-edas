@@ -30,15 +30,31 @@ const defaultUsers = [
 
 const CurrentUsersList = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentUsers, setCurrentUsers] = useState(defaultUsers);
-  const [filteredUsers, setFilteredUsers] = useState(defaultUsers);
-  //const [currentUsers, setCurrentUsers] = useState([]);
-  //const [filteredUsers, setFilteredUsers] = useState([]);
+  //const [currentUsers, setCurrentUsers] = useState(defaultUsers);
+  //const [filteredUsers, setFilteredUsers] = useState(defaultUsers);
+  const [currentUsers, setCurrentUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+
     Promise.all([
-      axios.get("/api/admin/student/approved"),
-      axios.get("/api/admin/faculty/approved"),
+      axios.get(
+        "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/admin/student/approved",
+        {
+          headers: {
+            "x-auth-token": token,
+          },
+        }
+      ),
+      axios.get(
+        "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/admin/faculty/approve",
+        {
+          headers: {
+            "x-auth-token": token,
+          },
+        }
+      ),
     ])
       .then(([studentResponse, teacherResponse]) => {
         console.log(
@@ -61,11 +77,19 @@ const CurrentUsersList = () => {
 
   const handleDelete = (id, role) => {
     console.log(`Deleting users with id ${id}`);
+    const token = localStorage.getItem("token");
     axios
-      .delete(`/api/admin/${role}/${id}`)
+      .delete(
+        `http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/admin/${role}/${id}`,
+        {
+          headers: {
+            "x-auth-token": token,
+          },
+        }
+      )
       .then(() => {
         console.log("User deleted successfully");
-        const updatedUsers = currentUsers.filter((user) => user.id !== id);
+        const updatedUsers = currentUsers.filter((user) => user._id !== id);
         console.log("Updated users:", updatedUsers);
         setCurrentUsers(updatedUsers);
         setFilteredUsers(updatedUsers);
@@ -103,9 +127,9 @@ const CurrentUsersList = () => {
       </Box>
       <Divider />
       <List>
-        {filteredUsers.map((currentUser) => (
+        {filteredUsers.map((currentUser, index) => (
           <Box
-            key={currentUser.id}
+            key={currentUser._id || index}
             sx={{
               borderRadius: ".5rem",
               boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.25)",
@@ -134,9 +158,11 @@ const CurrentUsersList = () => {
                           color: "black",
                         }}
                       >
-                        {`${currentUser.firstname} ${
-                          currentUser.lastname
-                        } (${currentUser.role.toUpperCase()})`}
+                        {currentUser.firstname} {currentUser.lastname} (
+                        {currentUser.role === "faculty"
+                          ? currentUser.subrole.toUpperCase()
+                          : currentUser.role.toUpperCase()}
+                        )
                       </Typography>
                       <Typography
                         variant="subtitle1"
@@ -152,11 +178,14 @@ const CurrentUsersList = () => {
                   }
                 />
                 <IconButton aria-label="edit">
-                  <EditIcon fontSize="large" />
+                  <EditIcon fontSize="large" style={{ color: "#1976d2" }} />
                 </IconButton>
                 <IconButton
                   aria-label="delete"
-                  onClick={() => handleDelete(currentUser.id, currentUser.role)}
+                  style={{ color: "red" }}
+                  onClick={() =>
+                    handleDelete(currentUser._id, currentUser.role)
+                  }
                 >
                   <DeleteIcon fontSize="large" />
                 </IconButton>

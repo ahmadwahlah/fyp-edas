@@ -29,15 +29,31 @@ const NewRequestsList = () => {
     },
   ];
   const [searchQuery, setSearchQuery] = useState("");
-  const [newRequests, setNewRequests] = useState(defaultUsers);
-  const [filteredRequests, setFilteredRequests] = useState(defaultUsers);
-  //const [newRequests, setNewRequests] = useState([]);
-  //const [filteredRequests, setFilteredRequests] = useState([]);
+  //const [newRequests, setNewRequests] = useState(defaultUsers);
+  //const [filteredRequests, setFilteredRequests] = useState(defaultUsers);
+  const [newRequests, setNewRequests] = useState([]);
+  const [filteredRequests, setFilteredRequests] = useState([]);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+
     Promise.all([
-      axios.get("/api/admin/student/notapproved"),
-      axios.get("/api/admin/faculty/notapproved"),
+      axios.get(
+        "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/admin/student/notapproved",
+        {
+          headers: {
+            "x-auth-token": token,
+          },
+        }
+      ),
+      axios.get(
+        "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/admin/faculty/notapproved",
+        {
+          headers: {
+            "x-auth-token": token,
+          },
+        }
+      ),
     ])
       .then(([studentResponse, teacherResponse]) => {
         console.log(
@@ -58,13 +74,22 @@ const NewRequestsList = () => {
   }, []);
 
   const handleApprove = (id, role) => {
-    console.log(`Approving request with id ${id}`);
+    console.log(`Approving request with id ${id} ${role}`);
+    const token = localStorage.getItem("token");
     axios
-      .put(`/api/admin/${role}/${id}`, { accept: true })
+      .put(
+        `http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/admin/${role}/approval/${id}`,
+        { accept: true },
+        {
+          headers: {
+            "x-auth-token": token,
+          },
+        }
+      )
       .then(() => {
         console.log("Request approved successfully");
         const updatedRequests = newRequests.filter(
-          (request) => request.id !== id
+          (request) => request._id !== id
         );
         console.log("Updated requests:", updatedRequests);
         setNewRequests(updatedRequests);
@@ -77,12 +102,20 @@ const NewRequestsList = () => {
 
   const handleDisapprove = (id, role) => {
     console.log(`Disapproving request with id ${id}`);
+    const token = localStorage.getItem("token");
     axios
-      .delete(`/api/admin/${role}/${id}`)
+      .delete(
+        `http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/admin/${role}/${id}`,
+        {
+          headers: {
+            "x-auth-token": token,
+          },
+        }
+      )
       .then(() => {
         console.log("Request deleted successfully");
         const updatedRequests = newRequests.filter(
-          (request) => request.id !== id
+          (request) => request._id !== id
         );
         console.log("Updated requests:", updatedRequests);
         setNewRequests(updatedRequests);
@@ -122,9 +155,9 @@ const NewRequestsList = () => {
       </Box>
       <Divider />
       <List>
-        {filteredRequests.map((newRequest) => (
+        {filteredRequests.map((newRequest, index) => (
           <Box
-            key={newRequest.id}
+            key={newRequest._id || index}
             sx={{
               borderRadius: ".5rem",
               boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.25)",
@@ -153,9 +186,11 @@ const NewRequestsList = () => {
                           color: "black",
                         }}
                       >
-                        {`${newRequest.firstname} ${
-                          newRequest.lastname
-                        } (${newRequest.role.toUpperCase()})`}
+                        {newRequest.firstname} {newRequest.lastname} (
+                        {newRequest.role === "faculty"
+                          ? newRequest.subrole.toUpperCase()
+                          : newRequest.role.toUpperCase()}
+                        )
                       </Typography>
                       <Typography
                         variant="subtitle1"
@@ -172,7 +207,7 @@ const NewRequestsList = () => {
                 />
                 <IconButton
                   aria-label="approve"
-                  onClick={() => handleApprove(newRequest.id, newRequest.role)}
+                  onClick={() => handleApprove(newRequest._id, newRequest.role)}
                 >
                   <CheckCircleIcon
                     style={{ color: "green" }}
@@ -183,7 +218,7 @@ const NewRequestsList = () => {
                 <IconButton
                   aria-label="disapprove"
                   onClick={() =>
-                    handleDisapprove(newRequest.id, newRequest.role)
+                    handleDisapprove(newRequest._id, newRequest.role)
                   }
                 >
                   <CancelIcon style={{ color: "red" }} fontSize="large" />
