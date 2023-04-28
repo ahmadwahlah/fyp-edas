@@ -51,12 +51,15 @@ export default function SignIn() {
     switch (enteredRole) {
       case "admin":
         try {
-          const response = await axios.post("/api/admin/login", {
+          const response = await axios.post("/api/auth/admin", {
             email: enteredEmail,
             password: enteredPassword,
           });
           console.log(response);
           if (response.status === 200) {
+            const token = response.data.token;
+            console.log(token);
+            localStorage.setItem("token", token);
             navigate("/adminhome");
           } else {
             console.error("An error occurred. Please try again later.");

@@ -11,6 +11,7 @@ import {
   TextField,
   IconButton,
   Typography,
+  Divider,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -145,6 +146,7 @@ const FormDialog = ({ open, onClose, onSave }) => {
             label="Students"
           />
         </Box>
+        <Divider sx={{ marginTop: "1rem" }} />
         <Box sx={{ mt: 2 }}>
           <Typography variant="h6">Define Hierarchy</Typography>
           <Typography variant="body2" align="left" sx={{ mb: 1 }}>
@@ -194,7 +196,7 @@ const FormDialog = ({ open, onClose, onSave }) => {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={handleSubmit} color="primary">
+        <Button onClick={handleSubmit} variant="contained" color="primary">
           Save
         </Button>
       </DialogActions>

@@ -110,14 +110,24 @@ const FormHierarchy = () => {
     );
 
   const handleDeleteField = (index) => {
-    const updatedFields = fields.filter((_, i) => i !== index);
+    if (fields.length <= 1) {
+      return;
+    }
+
+    const updatedFields = fields
+      .filter((_, i) => i !== index)
+      .map((field, newIndex) => ({
+        ...field,
+        label: `Hierarchy ${newIndex + 1}`,
+        name: `hierarchy${newIndex + 1}`,
+      }));
+
     setFields(updatedFields);
 
     const updatedOptions = [...selectedOptions];
     updatedOptions.splice(index, 1);
     setSelectedOptions(updatedOptions);
   };
-
   return (
     <ThemeProvider theme={theme}>
       <LoggedInHeader />
@@ -173,7 +183,12 @@ const FormHierarchy = () => {
                   <IconButton
                     aria-label="delete field"
                     onClick={() => handleDeleteField(index)}
-                    sx={{ ml: 2 }}
+                    sx={{
+                      ml: 2,
+                      color:
+                        fields.length > 1 ? "error.main" : "action.disabled",
+                    }}
+                    disabled={fields.length <= 1}
                   >
                     <DeleteIcon />
                   </IconButton>

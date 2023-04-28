@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import moment from "moment";
 import { Box, Card, CardContent, Typography } from "@mui/material";
 import { CheckCircle, Error, HourglassEmpty } from "@mui/icons-material";
@@ -8,6 +8,7 @@ const FormHistoryCard = ({
   submissionDate,
   submissionTime,
   status,
+  onHierarchyClick,
 }) => {
   let statusIcon;
   let statusColor;
@@ -28,70 +29,84 @@ const FormHistoryCard = ({
 
   return (
     <Box sx={{ p: 2 }}>
-      <Card sx={{ minWidth: 275, backgroundColor: "#f5f5f5" }}>
-        <CardContent sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Box>
-            <Typography
-              variant="h5"
-              component="div"
-              sx={{ fontWeight: "bold" }}
-            >
-              {formName}
-            </Typography>
-            <Typography
-              variant="body2"
-              style={{
-                flex: 1,
-                fontFamily: "Arial, sans-serif",
-                color: "black",
-                fontWeight: "bold",
-                fontStyle: "italic",
-                marginTop: "0.5rem",
-              }}
-            >
-              {`Submission Date: ${formattedDate}`}
-            </Typography>
-            <Typography
-              variant="body2"
-              style={{
-                flex: 1,
-                fontFamily: "Arial, sans-serif",
-                color: "black",
-                fontWeight: "bold",
-                fontStyle: "italic",
-              }}
-            >
-              {`Submission Time: ${formattedTime}`}
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              width: "6rem",
-            }}
+      <div onClick={onHierarchyClick}>
+        <Card
+          sx={{
+            minWidth: 275,
+            backgroundColor: "#f5f5f5",
+            transition: "0.3s",
+            "&:hover": {
+              boxShadow: "0 2px 6px 0 rgba(0, 0, 0, 0.8)",
+              backgroundColor: "#e0e0e0",
+            },
+          }}
+        >
+          <CardContent
+            sx={{ display: "flex", justifyContent: "space-between" }}
           >
+            <Box>
+              <Typography
+                variant="h5"
+                component="div"
+                sx={{ fontWeight: "bold" }}
+              >
+                {formName}
+              </Typography>
+              <Typography
+                variant="body2"
+                style={{
+                  flex: 1,
+                  fontFamily: "Arial, sans-serif",
+                  color: "black",
+                  fontWeight: "bold",
+                  fontStyle: "italic",
+                  marginTop: "0.5rem",
+                }}
+              >
+                {`Submission Date: ${formattedDate}`}
+              </Typography>
+              <Typography
+                variant="body2"
+                style={{
+                  flex: 1,
+                  fontFamily: "Arial, sans-serif",
+                  color: "black",
+                  fontWeight: "bold",
+                  fontStyle: "italic",
+                }}
+              >
+                {`Submission Time: ${formattedTime}`}
+              </Typography>
+            </Box>
             <Box
               sx={{
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
+                width: "6rem",
               }}
             >
-              <span style={{ color: statusColor }}>{statusIcon}</span>
-              <Typography
-                variant="body2"
-                sx={{ color: statusColor, fontWeight: "bold" }}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
               >
-                {status}
-              </Typography>
+                <span style={{ color: statusColor }}>{statusIcon}</span>
+                <Typography
+                  variant="body2"
+                  sx={{ color: statusColor, fontWeight: "bold" }}
+                >
+                  {status}
+                </Typography>
+              </Box>
             </Box>
-          </Box>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      </div>
     </Box>
   );
 };

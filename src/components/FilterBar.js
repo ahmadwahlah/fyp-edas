@@ -58,7 +58,7 @@ export default function FilterBar() {
           value={timeFilter}
           label="Time"
           onChange={handleTimeChange}
-          margin="normal"
+          margin="dense"
         >
           <MenuItem value="all">All</MenuItem>
           <MenuItem value="lastWeek">Last Week</MenuItem>
@@ -70,7 +70,7 @@ export default function FilterBar() {
         <InputLabel id="department-filter-label">Department/Faculty</InputLabel>
         <Select
           labelId="department-filter-label"
-          margin="normal"
+          margin="dense"
           id="department-filter"
           value={departmentFilter}
           label="Department/Faculty"
@@ -87,7 +87,7 @@ export default function FilterBar() {
           labelId="form-filter-label"
           id="from-filter"
           value={formFilter}
-          margin="normal"
+          margin="dense"
           label="Form"
           onChange={handleFormChange}
         >
