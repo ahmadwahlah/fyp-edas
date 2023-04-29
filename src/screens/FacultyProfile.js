@@ -12,26 +12,60 @@ import Autocomplete from "@mui/material/Autocomplete";
 
 import LoggedInHeader from "../components/LoggedInHeader";
 
+function CustomSelect(props) {
+  const { label, options, ...rest } = props;
+  return (
+    <TextField
+      {...rest}
+      select
+      label={label}
+      fullWidth
+      margin="normal"
+      SelectProps={{
+        native: true,
+      }}
+      variant="outlined"
+    >
+      {options.map((option) => (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </TextField>
+  );
+}
+
 const StyledAvatar = styled(Avatar)(({ theme }) => ({
   width: theme.spacing(16),
   height: theme.spacing(16),
   marginBottom: theme.spacing(2),
 }));
 
-const Profile = () => {
+const FacultyProfile = () => {
   const [isEditable, setIsEditable] = useState(false);
   const [profileData, setProfileData] = useState({
     profilePicture: "",
-    role: "Student",
+    subrole: "Lecturer",
+    role: "Faculty",
     firstName: "John",
     lastName: "Doe",
-    faculty: "Computer Science",
-    regNo: "2021-12345",
-    batchNo: "2021",
+    department: "Computer Science",
     email: "johndoe@example.com",
     phoneNumber: "1234567890",
     password: "********",
-    courses: [],
+    courses: ["Course 1", "Course 2"],
+    externalrole: [
+      {
+        externalfaculty: "FCS",
+        role: "advisor",
+        batch: 29,
+      },
+      {
+        externalfaculty: "FCS",
+        role: "Dean",
+        batch: 29,
+      },
+    ],
   });
 
   const allCourses = [
@@ -72,10 +106,17 @@ const Profile = () => {
     });
   };
 
+  const handleRoleChange = (event) => {
+    setProfileData({
+      ...profileData,
+      [event.target.name]: event.target.value,
+    });
+  };
+
   return (
     <Container maxWidth="lg" sx={{ display: "flex" }}>
       <LoggedInHeader />
-      <Box sx={{ flexGrow: 1, mt: 12, mx: 4 }}>
+      <Box sx={{ flexGrow: 1, mt: 12, mx: 4, marginBottom: "1.5rem" }}>
         <Grid container spacing={4}>
           <Grid item xs={12} md={4}>
             <Card
@@ -168,31 +209,34 @@ const Profile = () => {
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
-                      label="Registration Number"
-                      name="regNo"
-                      value={profileData.regNo}
+                      label="Department"
+                      name="department"
+                      value={profileData.department}
                       fullWidth
                       margin="normal"
                       disabled
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Batch Number"
-                      name="batchNo"
-                      value={profileData.batchNo}
-                      fullWidth
-                      margin="normal"
-                      disabled
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Faculty"
-                      name="faculty"
-                      value={profileData.faculty}
-                      fullWidth
-                      margin="normal"
+                    <CustomSelect
+                      label="Sub Role"
+                      name="subrole"
+                      type="subrole"
+                      onChange={handleRoleChange}
+                      value={profileData.subrole}
+                      options={[
+                        { value: "Professor", label: "Professor" },
+                        {
+                          value: "Associate Professor",
+                          label: "Associate Professor",
+                        },
+                        {
+                          value: "Assistant Professor",
+                          label: "Assistant Professor",
+                        },
+                        { value: "Lecturer", label: "Lecturer" },
+                        { value: "Lab Instructor", label: "Lab Instructor" },
+                      ]}
                       disabled
                     />
                   </Grid>
@@ -230,6 +274,7 @@ const Profile = () => {
                       disabled={!isEditable}
                     />
                   </Grid>
+
                   <Grid item xs={12}>
                     <Autocomplete
                       multiple
@@ -248,6 +293,111 @@ const Profile = () => {
                       sx={{ mt: 2 }}
                     />
                   </Grid>
+                  <Grid item xs={12}>
+                    {profileData.externalrole.map((external, index) => (
+                      <Grid container spacing={2} key={index}>
+                        <Grid item xs={12} sm={4}>
+                          <CustomSelect
+                            label="External Faculty"
+                            name={`externalrole[${index}].externalfaculty`}
+                            value={external.externalfaculty}
+                            onChange={(event) => {
+                              const updatedExternalRole = [
+                                ...profileData.externalrole,
+                              ];
+                              updatedExternalRole[index].externalfaculty =
+                                event.target.value;
+                              setProfileData({
+                                ...profileData,
+                                externalrole: updatedExternalRole,
+                              });
+                            }}
+                            fullWidth
+                            options={[
+                              { value: "FAI", label: "FAI" },
+                              { value: "FCS", label: "FCS" },
+                              { value: "FCE", label: "FCE" },
+                              { value: "FDS", label: "FDS" },
+                            ]}
+                            disabled
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                          <CustomSelect
+                            label="Role"
+                            name={`externalrole[${index}].role`}
+                            value={external.role}
+                            onChange={(event) => {
+                              const updatedExternalRole = [
+                                ...profileData.externalrole,
+                              ];
+                              updatedExternalRole[index].role =
+                                event.target.value;
+                              setProfileData({
+                                ...profileData,
+                                externalrole: updatedExternalRole,
+                              });
+                            }}
+                            fullWidth
+                            options={[
+                              { value: "Advisor", label: "Advisor" },
+                              { value: "Dean", label: "Dean" },
+                              { value: "Instructor", label: "Instructor" },
+                            ]}
+                            disabled
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={4}>
+                          <CustomSelect
+                            label="Batch"
+                            name={`externalrole[${index}].batch`}
+                            value={external.batch}
+                            onChange={(event) => {
+                              const updatedExternalRole = [
+                                ...profileData.externalrole,
+                              ];
+                              updatedExternalRole[index].batch =
+                                event.target.value;
+                              setProfileData({
+                                ...profileData,
+                                externalrole: updatedExternalRole,
+                              });
+                            }}
+                            fullWidth
+                            options={[
+                              { value: "28", label: "28" },
+                              { value: "29", label: "29" },
+                              { value: "30", label: "30" },
+                              { value: "31", label: "31" },
+                              { value: "32", label: "32" },
+                            ]}
+                            disabled
+                          />
+                        </Grid>
+                      </Grid>
+                    ))}
+                    {/* {isEditable && (
+                      <Button
+                        onClick={() => {
+                          const updatedExternalRole = [
+                            ...profileData.externalrole,
+                            {
+                              externalfaculty: "",
+                              role: "",
+                              batch: "",
+                            },
+                          ];
+                          setProfileData({
+                            ...profileData,
+                            externalrole: updatedExternalRole,
+                          });
+                        }}
+                        sx={{ mt: 2 }}
+                      >
+                        Add External Role
+                      </Button>
+                    )} */}
+                  </Grid>
                 </Grid>
               </CardContent>
             </Card>
@@ -258,4 +408,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default FacultyProfile;

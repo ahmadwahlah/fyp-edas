@@ -7,10 +7,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
-
-import Profile from "../screens/Profile";
 
 import { useNavigate } from "react-router-dom";
 
@@ -76,7 +73,7 @@ export default function AccountButton() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={() => navigate("/profile")}>
+        <MenuItem onClick={() => navigate("/facultyprofile")}>
           <Avatar /> Profile
         </MenuItem>
         <Divider />

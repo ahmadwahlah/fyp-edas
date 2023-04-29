@@ -9,6 +9,7 @@ import AdminNavigation from "./screens/AdminNavigation";
 import FacultyNavigation from "./screens/FacultyNavigation";
 import StudentNavigation from "./screens/StudentNavigation";
 import Profile from "./screens/Profile";
+import FacultyProfile from "./screens/FacultyProfile";
 import Leave from "./components/Forms/Leave";
 import HallRequisition from "./components/Forms/HallRequisition";
 import Test from "./screens/test";
@@ -30,6 +31,7 @@ function App() {
           <Route path="/facultyhome" element={<FacultyNavigation />} />
           <Route path="/studenthome" element={<StudentNavigation />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/facultyprofile" element={<FacultyProfile />} />
           <Route path="/leave" element={<Leave />} />
           <Route path="/hallrequisition" element={<HallRequisition />} />
           <Route
