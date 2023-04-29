@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import SearchBar from "./SearchBar";
 import { Box, Card, CardContent, Divider, Typography } from "@mui/material";
 import { styled } from "@mui/system";
+import axios from "axios";
 
 const StyledCard = styled(Card)({
   display: "flex",
@@ -40,7 +41,8 @@ const forms = [
 
 export default function Forms() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredForms, setFilteredForms] = useState(forms);
+  const [filteredForms, setFilteredForms] = useState([]);
+  const [forms, setForms] = useState([]);
 
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
@@ -51,6 +53,35 @@ export default function Forms() {
     );
     setFilteredForms(filtered);
   };
+
+  useEffect(() => {
+    // Fetch form data from API and update state
+    const fetchForms = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/dynamicforms/student",
+          {
+            headers: {
+              "x-auth-token": token,
+            },
+          }
+        );
+        const data = response.data;
+        const mappedData = data.map((form) => ({
+          id: form._id,
+          name: form.formName,
+          route: `/form/${form._id}`,
+        }));
+        setForms(mappedData);
+        setFilteredForms(mappedData);
+      } catch (error) {
+        console.error("Error fetching form data:", error);
+      }
+    };
+
+    fetchForms();
+  }, []);
 
   return (
     <Box sx={{ width: "100%", left: 0, top: 0 }}>
@@ -87,8 +118,8 @@ export default function Forms() {
       </Box>
       <Divider />
       <Box sx={{ padding: "1rem" }}>
-        {filteredForms.map((form) => (
-          <StyledLink to={form.route} key={form.name}>
+        {filteredForms.map((form, index) => (
+          <StyledLink to={form.route} key={form._id || index}>
             <StyledCard>
               <CardContent>
                 <Typography
