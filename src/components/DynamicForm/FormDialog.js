@@ -14,6 +14,7 @@ import {
   Divider,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useNavigate } from "react-router-dom";
 
 const CustomSelect = ({ label, options, ...rest }) => (
   <TextField
@@ -41,8 +42,10 @@ const hierarchyOptions = [
 ];
 
 const FormDialog = ({ open, onClose, onSave }) => {
+  const navigate = useNavigate();
   const [facultyVisibility, setFacultyVisibility] = useState(false);
   const [studentVisibility, setStudentVisibility] = useState(false);
+  const [undertakingValues, setUndertakingValues] = useState([""]);
   const [fields, setFields] = useState([
     {
       label: "Hierarchy 1",
@@ -59,6 +62,7 @@ const FormDialog = ({ open, onClose, onSave }) => {
         facultyVisibility,
         studentVisibility,
         approvalHierarchy: selectedOptions.filter((option) => option !== ""),
+        undertaking: undertakingValues.filter((value) => value !== ""),
       });
       onClose();
     } else {
@@ -113,6 +117,46 @@ const FormDialog = ({ open, onClose, onSave }) => {
     setSelectedOptions(updatedOptions);
   };
 
+  // New state variable for undertaking fields
+  const [undertakingFields, setUndertakingFields] = useState([
+    {
+      label: "Undertaking 1",
+      name: "undertaking1",
+    },
+  ]);
+
+  // New function to add undertaking fields
+  const handleAddUndertakingField = () => {
+    setUndertakingFields([
+      ...undertakingFields,
+      {
+        label: `Undertaking ${undertakingFields.length + 1}`,
+        name: `undertaking${undertakingFields.length + 1}`,
+      },
+    ]);
+  };
+
+  // New function to delete undertaking fields
+  const handleDeleteUndertakingField = (index) => {
+    if (undertakingFields.length <= 1) {
+      return;
+    }
+
+    const updatedFields = undertakingFields
+      .filter((_, i) => i !== index)
+      .map((field, newIndex) => ({
+        ...field,
+        label: `Undertaking ${newIndex + 1}`,
+        name: `undertaking${newIndex + 1}`,
+      }));
+
+    setUndertakingFields(updatedFields);
+  };
+  const handleUndertakingChange = (event, index) => {
+    const updatedValues = [...undertakingValues];
+    updatedValues[index] = event.target.value;
+    setUndertakingValues(updatedValues);
+  };
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogContent>
@@ -190,7 +234,50 @@ const FormDialog = ({ open, onClose, onSave }) => {
             disabled={fields.length >= hierarchyOptions.length}
             sx={{ mt: 2, mb: 2 }}
           >
-            Add Field
+            Add Hierarchy Field
+          </Button>
+        </Box>
+        <Divider sx={{ marginTop: "1rem" }} />
+        <Box sx={{ mt: 2 }}>
+          <Typography variant="h6">Add Undertaking</Typography>{" "}
+          {undertakingFields.map((field, index) => (
+            <Box
+              key={index}
+              sx={{ display: "flex", alignItems: "center", mt: 1 }}
+            >
+              <TextField
+                margin="normal"
+                fullWidth
+                id={field.name}
+                label={field.label}
+                name={field.name}
+                variant="outlined"
+                value={undertakingValues[index]}
+                onChange={(event) => handleUndertakingChange(event, index)}
+              />
+              <IconButton
+                aria-label="delete field"
+                onClick={() => handleDeleteUndertakingField(index)}
+                sx={{
+                  ml: 2,
+                  color:
+                    undertakingFields.length > 1
+                      ? "error.main"
+                      : "action.disabled",
+                }}
+                disabled={undertakingFields.length <= 1}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Box>
+          ))}
+          <Button
+            fullWidth
+            variant="contained"
+            onClick={handleAddUndertakingField}
+            sx={{ mt: 2, mb: 2 }}
+          >
+            Add Undertaking Field
           </Button>
         </Box>
       </DialogContent>

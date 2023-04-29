@@ -174,7 +174,9 @@ const DynamicFormPreview = () => {
   const logFormData = () => {
     const token = localStorage.getItem("token");
     const decodedPayload = jwt_decode(token);
-    const id = decodedPayload.student || decodedPayload.faculty.id;
+    const id = decodedPayload.student.id || decodedPayload.faculty.id;
+    const faculty =
+      decodedPayload.student.faculty || decodedPayload.faculty.department;
     const responces = {
       inputValues,
       radioSelectedValue,
@@ -190,11 +192,14 @@ const DynamicFormPreview = () => {
     console.log(form[0].formName);
     console.log(form[0].approvalHierarchy);
     console.log(id);
+    console.log(faculty);
   };
   const postFormData = async () => {
     const token = localStorage.getItem("token");
     const decodedPayload = jwt_decode(token);
-    const id = decodedPayload.student || decodedPayload.faculty.id;
+    const id = decodedPayload.student.id || decodedPayload.faculty.id;
+    const faculty =
+      decodedPayload.student.faculty || decodedPayload.faculty.department;
     const responces = {
       inputValues,
       radioSelectedValue,
@@ -211,6 +216,7 @@ const DynamicFormPreview = () => {
       formName: form[0].formName,
       approvalHierarchy: form[0].approvalHierarchy,
       id,
+      faculty,
     };
 
     try {

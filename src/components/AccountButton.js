@@ -19,9 +19,13 @@ export default function AccountButton() {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
+    localStorage.removeItem("token");
+    navigate("/");
     setAnchorEl(null);
   };
+
   return (
     <React.Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
@@ -77,7 +81,7 @@ export default function AccountButton() {
           <Avatar /> Profile
         </MenuItem>
         <Divider />
-        <MenuItem onClick={(handleClose, () => navigate("/"))}>
+        <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>

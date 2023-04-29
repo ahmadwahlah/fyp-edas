@@ -121,6 +121,7 @@ const FormBuilderContainer = () => {
     facultyVisibility,
     studentVisibility,
     approvalHierarchy,
+    undertaking,
   }) => {
     const formData = {
       formName: formName,
@@ -128,8 +129,8 @@ const FormBuilderContainer = () => {
       facultyVisibility,
       studentVisibility,
       approvalHierarchy,
+      undertaking,
     };
-    console.log(formData);
     saveFormDataToAPI(formData);
   };
 
@@ -146,6 +147,8 @@ const FormBuilderContainer = () => {
         }
       );
       console.log("Form saved successfully:", response.data);
+      window.alert("Form saved successfully!");
+      window.location.reload();
     } catch (error) {
       console.error("Error saving form data:", error);
     }
