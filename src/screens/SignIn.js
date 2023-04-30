@@ -242,7 +242,7 @@ export default function SignIn() {
               name="role"
               autoFocus
               options={[
-                { value: "faculty", label: "Faculty" },
+                { value: "faculty", label: "Faculty/Staff" },
                 { value: "student", label: "Student" },
                 { value: "admin", label: "Administrator" },
               ]}

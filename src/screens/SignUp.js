@@ -303,7 +303,7 @@ export default function SignUp() {
                   onChange={handleRoleChange}
                   name="role"
                   options={[
-                    { value: "faculty", label: "Faculty" },
+                    { value: "faculty", label: "Faculty/Staff" },
                     { value: "student", label: "Student" },
                   ]}
                 />
@@ -454,6 +454,9 @@ export default function SignUp() {
                           label: "Software Engineering",
                         },
                         { value: "Cyber Security", label: "Cyber Security" },
+                        { value: "Admin", label: "Admin" },
+                        { value: "Transportation", label: "Transportation" },
+                        { value: "Security", label: "Security" },
                       ]}
                     />
                     <CustomSelect

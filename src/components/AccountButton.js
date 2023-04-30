@@ -27,6 +27,10 @@ export default function AccountButton() {
     setAnchorEl(null);
   };
 
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+
   const handleNavigation = () => {
     const token = localStorage.getItem("token");
 
@@ -64,6 +68,7 @@ export default function AccountButton() {
         anchorEl={anchorEl}
         id="account-menu"
         open={open}
+        onClose={handleCloseMenu}
         PaperProps={{
           elevation: 0,
           sx: {

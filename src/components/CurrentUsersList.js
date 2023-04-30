@@ -99,6 +99,30 @@ const CurrentUsersList = () => {
       });
   };
 
+  const handleEdit = (id, role) => {
+    console.log(`Editing users with id ${id}`);
+    const token = localStorage.getItem("token");
+    axios
+      .delete(
+        `http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/admin/${role}/${id}`,
+        {
+          headers: {
+            "x-auth-token": token,
+          },
+        }
+      )
+      .then(() => {
+        console.log("User deleted successfully");
+        const updatedUsers = currentUsers.filter((user) => user._id !== id);
+        console.log("Updated users:", updatedUsers);
+        setCurrentUsers(updatedUsers);
+        setFilteredUsers(updatedUsers);
+      })
+      .catch((error) => {
+        console.error("Error deleting request:", error);
+      });
+  };
+
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
     setSearchQuery(value);
@@ -177,7 +201,10 @@ const CurrentUsersList = () => {
                     </Box>
                   }
                 />
-                <IconButton aria-label="edit">
+                <IconButton
+                  aria-label="edit"
+                  onClick={() => handleEdit(currentUser._id, currentUser.role)}
+                >
                   <EditIcon fontSize="large" style={{ color: "#1976d2" }} />
                 </IconButton>
                 <IconButton
