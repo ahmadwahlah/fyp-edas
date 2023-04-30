@@ -48,10 +48,10 @@ const FacultyProfile = () => {
     profilePicture: "",
     subrole: "Lecturer",
     role: "Faculty",
-    firstName: "John",
-    lastName: "Doe",
-    department: "Computer Science",
-    email: "johndoe@example.com",
+    firstName: "XXX",
+    lastName: "XXXXX",
+    department: "XXX XXXXXX",
+    email: "XXXXX@example.com",
     phoneNumber: "1234567890",
     password: "********",
     courses: ["Course 1", "Course 2"],
@@ -77,7 +77,10 @@ const FacultyProfile = () => {
     "Course 5",
   ];
 
-  const handleEditClick = () => {
+  const handleEditClick = async () => {
+    if (isEditable) {
+      await updateProfileData();
+    }
     setIsEditable(!isEditable);
   };
 
@@ -153,6 +156,57 @@ const FacultyProfile = () => {
     };
 
     fetchProfileData();
+  }, []);
+
+  const updateProfileData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.put(
+        "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/faculty/update",
+        {
+          phoneNumber: profileData.phoneNumber,
+          // password: profileData.password,
+          courses: profileData.courses,
+        },
+        {
+          headers: {
+            "x-auth-token": token,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Profile updated successfully");
+      } else {
+        console.error("Error updating profile data");
+      }
+    } catch (error) {
+      console.error("Error updating profile data:", error);
+    }
+  };
+
+  const [coursesList, setCoursesList] = useState([]);
+
+  const fetchCourses = async () => {
+    try {
+      const response = await axios.get(
+        "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/admin/course"
+      );
+
+      if (response.status === 200) {
+        console.log(response.data[0].courses.map((course) => course.name));
+
+        const courses = response.data[0].courses.map((course) => course.name);
+        setCoursesList(courses);
+      }
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCourses();
   }, []);
 
   return (
@@ -319,7 +373,7 @@ const FacultyProfile = () => {
                       onChange={handleInputChange}
                       fullWidth
                       margin="normal"
-                      disabled={!isEditable}
+                      disabled
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -342,14 +396,14 @@ const FacultyProfile = () => {
                       onChange={handleInputChange}
                       fullWidth
                       margin="normal"
-                      disabled={!isEditable}
+                      disabled
                     />
                   </Grid>
 
                   <Grid item xs={12}>
                     <Autocomplete
                       multiple
-                      options={allCourses}
+                      options={coursesList}
                       value={profileData.courses}
                       onChange={handleCoursesChange}
                       disabled={!isEditable}

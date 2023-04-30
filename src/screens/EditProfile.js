@@ -15,6 +15,7 @@ import LoggedInHeader from "../components/LoggedInHeader";
 
 function CustomSelect(props) {
   const { label, options, ...rest } = props;
+
   return (
     <TextField
       {...rest}
@@ -46,10 +47,10 @@ const Profile = () => {
     profilePicture: "",
     role: "Student",
     firstName: "test",
-    lastName: "Wahlah",
+    lastName: "XXXXX",
     faculty: "Computer Science",
-    regNo: "2019044",
-    batchNo: "29",
+    regNo: "XXXXXXX",
+    batchNo: "XX",
     email: "ahmad@example.com",
     phoneNumber: "1234567890",
     password: "********",
@@ -58,7 +59,10 @@ const Profile = () => {
 
   const allCourses = ["HM-321", "CS-424", "Course 3", "Course 4", "Course 5"];
 
-  const handleEditClick = () => {
+  const handleEditClick = async () => {
+    if (isEditable) {
+      await updateProfileData();
+    }
     setIsEditable(!isEditable);
   };
 
@@ -127,6 +131,56 @@ const Profile = () => {
     };
 
     fetchProfileData();
+  }, []);
+
+  const updateProfileData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.put(
+        "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/student/",
+        {
+          phoneNumber: profileData.phoneNumber,
+          //password: profileData.password,
+          courses: profileData.courses,
+        },
+        {
+          headers: {
+            "x-auth-token": token,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("Profile updated successfully");
+      } else {
+        console.error("Error updating profile data");
+      }
+    } catch (error) {
+      console.error("Error updating profile data:", error);
+    }
+  };
+  const [coursesList, setCoursesList] = useState([]);
+
+  const fetchCourses = async () => {
+    try {
+      const response = await axios.get(
+        "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/admin/course"
+      );
+
+      if (response.status === 200) {
+        console.log(response.data[0].courses.map((course) => course.name));
+
+        const courses = response.data[0].courses.map((course) => course.name);
+        setCoursesList(courses);
+      }
+    } catch (error) {
+      console.error("Error fetching courses:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCourses();
   }, []);
 
   return (
@@ -317,7 +371,7 @@ const Profile = () => {
                       onChange={handleInputChange}
                       fullWidth
                       margin="normal"
-                      disabled={!isEditable}
+                      disabled
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -340,13 +394,13 @@ const Profile = () => {
                       onChange={handleInputChange}
                       fullWidth
                       margin="normal"
-                      disabled={!isEditable}
+                      disabled
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <Autocomplete
                       multiple
-                      options={allCourses}
+                      options={coursesList}
                       value={profileData.courses}
                       onChange={handleCoursesChange}
                       disabled={!isEditable}
