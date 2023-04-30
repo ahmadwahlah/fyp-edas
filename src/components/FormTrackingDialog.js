@@ -6,7 +6,6 @@ import {
   Stepper,
   Step,
   StepLabel,
-  StepContent,
   Typography,
   DialogActions,
   Button,

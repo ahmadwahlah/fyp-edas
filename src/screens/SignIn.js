@@ -242,9 +242,9 @@ export default function SignIn() {
               name="role"
               autoFocus
               options={[
-                { value: "admin", label: "Administrator" },
-                { value: "faculty", label: "Faculty/Staff" },
+                { value: "faculty", label: "Faculty" },
                 { value: "student", label: "Student" },
+                { value: "admin", label: "Administrator" },
               ]}
             />
             <TextField

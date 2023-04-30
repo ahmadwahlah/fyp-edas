@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import moment from "moment";
 import { Box, Card, CardContent, Typography } from "@mui/material";
 import { CheckCircle, Error, HourglassEmpty } from "@mui/icons-material";
@@ -6,7 +6,6 @@ import { CheckCircle, Error, HourglassEmpty } from "@mui/icons-material";
 const FormHistoryCard = ({
   formName,
   submissionDate,
-  submissionTime,
   status,
   onHierarchyClick,
 }) => {
@@ -25,7 +24,7 @@ const FormHistoryCard = ({
   }
 
   const formattedDate = moment(submissionDate).format("DD-MM-YYYY");
-  const formattedTime = moment(submissionTime).format("HH:mm:ss");
+  const formattedTime = moment(submissionDate).format("HH:mm:ss");
 
   return (
     <Box sx={{ p: 2 }}>

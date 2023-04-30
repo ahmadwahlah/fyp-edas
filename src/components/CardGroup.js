@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Box } from "@mui/material";
 import DashboardCard from "./DashboardCard";
 
@@ -10,20 +11,51 @@ export default function CardGroup() {
   const [apiError, setApiError] = useState(false);
 
   useEffect(() => {
-    // Fetch the data from the backend API
-    fetch("/api/dashboard")
-      .then((response) => response.json())
-      .then((data) => {
-        setFormSubmitted(data.formSubmitted);
-        setFormApproved(data.formApproved);
-        setFormRejected(data.formRejected);
-        setPendingForms(data.pendingForms);
-        setApiError(false);
-      })
-      .catch((error) => {
-        console.error(error);
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const submitted = await axios.get(
+          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/student/submittedforms",
+          {
+            headers: {
+              "x-auth-token": token,
+            },
+          }
+        );
+        const approved = await axios.get(
+          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/student/approvedforms",
+          {
+            headers: {
+              "x-auth-token": token,
+            },
+          }
+        );
+        const rejected = await axios.get(
+          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/student/disapprovedforms",
+          {
+            headers: {
+              "x-auth-token": token,
+            },
+          }
+        );
+
+        setFormSubmitted(submitted.data.submittedFormValue);
+        const submit = submitted.data.submittedFormValue;
+
+        setFormApproved(approved.data.approvedFormCount);
+        const approve = approved.data.approvedFormCount;
+
+        setFormRejected(rejected.data.disapprovedFormCount);
+        const reject = rejected.data.disapprovedFormCount;
+
+        const pending = submit - approve - reject;
+        setPendingForms(pending);
+      } catch (error) {
         setApiError(true);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
 
   return (

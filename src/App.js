@@ -16,7 +16,6 @@ import Test from "./screens/test";
 import FormHierarchy from "./components/FormHierarchy";
 import CourseRegistrationForm from "./components/Forms/CourseRegistrationForm";
 import FormBuilderContainer from "./components/DynamicForm/FormBuilderContainer";
-import StudentForms from "./components/StudentForms";
 import DynamicFormPreview from "./screens/DynamicFormPreview";
 
 function App() {

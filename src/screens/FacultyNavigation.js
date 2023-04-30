@@ -15,7 +15,7 @@ import DescriptionIcon from "@mui/icons-material/Description";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 
 import LoggedInHeader from "../components/LoggedInHeader";
-import StudentDashboard from "../components/StudentDashboard";
+import FacultyDashboard from "../components/FacultyDashboard";
 import FacultyForms from "../components/FacultyForms";
 import PendingForms from "../components/PendingForms";
 
@@ -39,7 +39,7 @@ export default function StudentNavigation() {
   const getContent = () => {
     switch (content) {
       case "dashboard":
-        return <StudentDashboard />;
+        return <FacultyDashboard />;
       case "forms":
         return <FacultyForms />;
       case "pendingforms":

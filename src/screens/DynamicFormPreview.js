@@ -165,6 +165,7 @@ const DynamicFormPreview = () => {
     if (validateForm()) {
       logFormData();
       postFormData();
+      window.alert("Form submitted successfully!");
       navigate("/studenthome");
     } else {
       alert("Please fill all required fields");
@@ -374,7 +375,7 @@ const DynamicFormPreview = () => {
                               : null
                           }
                           onChange={(event) =>
-                            handleChange(event, field.id, field.heading)
+                            handleChange(event, field.id, field.name)
                           }
                         />
                       );
@@ -412,7 +413,7 @@ const DynamicFormPreview = () => {
                                 : undefined,
                           }}
                           onChange={(event) =>
-                            handleChange(event, field.id, field.heading)
+                            handleChange(event, field.id, field.name)
                           }
                         />
                       );
@@ -733,6 +734,23 @@ const DynamicFormPreview = () => {
                       return null;
                   }
                 })}
+              <Box sx={{ marginBottom: "1rem", marginTop: "2rem" }}>
+                <Divider />
+              </Box>
+              <Box sx={{ marginBottom: "1rem", marginTop: "1rem" }}>
+                {form[0].undertaking.map((item, index) => (
+                  <Typography
+                    key={index}
+                    sx={{ fontWeight: "bold", fontFamily: "sans-serif" }}
+                  >
+                    {item}
+                  </Typography>
+                ))}
+              </Box>
+              <Box sx={{ marginBottom: "1rem", marginTop: "1rem" }}>
+                <Divider />
+              </Box>
+
               <Box
                 sx={{
                   display: "flex",

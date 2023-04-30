@@ -108,7 +108,11 @@ export default function SignUp() {
           navigate("/");
           alert("Signup request sent successfully");
         } catch (error) {
-          console.error("An error occurred while submitting the form", error);
+          console.error(
+            "An error occurred while submitting the form",
+            error,
+            error.message
+          );
           // Add code here to handle error
         }
       } else {
@@ -249,23 +253,6 @@ export default function SignUp() {
     }
   };
 
-  const [batchNo, setBatchNo] = useState("");
-  const [batchNoError, setBatchNoError] = useState(false);
-  const [helperTextBatch, setHelperTextBatch] = useState("");
-
-  const handleBatchNoChange = (event) => {
-    const batchNoValue = event.target.value;
-    setBatchNo(batchNoValue);
-
-    if (!batchNoValue) {
-      setBatchNoError(true);
-      setHelperTextBatch("Batch No is required");
-    } else {
-      setBatchNoError(false);
-      setHelperTextBatch("");
-    }
-  };
-
   const [regNo, setRegNo] = useState("");
   const [regNoError, setRegNoError] = useState(false);
   const [helperTextReg, setHelperTextReg] = useState("");
@@ -316,7 +303,7 @@ export default function SignUp() {
                   onChange={handleRoleChange}
                   name="role"
                   options={[
-                    { value: "faculty", label: "Faculty/Staff" },
+                    { value: "faculty", label: "Faculty" },
                     { value: "student", label: "Student" },
                   ]}
                 />
@@ -359,9 +346,24 @@ export default function SignUp() {
                       label="Faculty"
                       name="faculty"
                       options={[
-                        { value: "FME", label: "FME" },
-                        { value: "FCSE", label: "FCSE" },
-                        { value: "FES", label: "FES" },
+                        {
+                          value: "Computer Science",
+                          label: "Computer Science",
+                        },
+                        {
+                          value: "Computer Engineering",
+                          label: "Computer Engineering",
+                        },
+                        {
+                          value: "Artificial Intelligence",
+                          label: "Artificial Intelligence",
+                        },
+                        { value: "Data Science", label: "Data Science" },
+                        {
+                          value: "Software Engineering",
+                          label: "Software Engineering",
+                        },
+                        { value: "Cyber Security", label: "Cyber Security" },
                       ]}
                     />
                     <Box
@@ -374,16 +376,39 @@ export default function SignUp() {
                     >
                       <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
-                          <TextField
+                          <CustomSelect
                             name="batchNo"
                             required
                             fullWidth
                             id="batchNo"
                             label="Batch No."
-                            error={batchNoError}
-                            helperText={helperTextBatch}
-                            value={batchNo}
-                            onChange={handleBatchNoChange}
+                            options={[
+                              {
+                                value: "27",
+                                label: "27",
+                              },
+                              {
+                                value: "28",
+                                label: "28",
+                              },
+                              {
+                                value: "29",
+                                label: "29",
+                              },
+                              { value: "30", label: "30" },
+                              {
+                                value: "31",
+                                label: "31",
+                              },
+                              {
+                                value: "32",
+                                label: "32",
+                              },
+                              {
+                                value: "33",
+                                label: "33",
+                              },
+                            ]}
                           />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -411,11 +436,24 @@ export default function SignUp() {
                       label="Department"
                       name="department"
                       options={[
-                        { value: "FME", label: "FME" },
-                        { value: "FCSE", label: "FCSE" },
-                        { value: "FES", label: "FES" },
-                        { value: "Procurement", label: "Procurement" },
-                        { value: "Finance", label: "Finance" },
+                        {
+                          value: "Computer Science",
+                          label: "Computer Science",
+                        },
+                        {
+                          value: "Computer Engineering",
+                          label: "Computer Engineering",
+                        },
+                        {
+                          value: "Artificial Intelligence",
+                          label: "Artificial Intelligence",
+                        },
+                        { value: "Data Science", label: "Data Science" },
+                        {
+                          value: "Software Engineering",
+                          label: "Software Engineering",
+                        },
+                        { value: "Cyber Security", label: "Cyber Security" },
                       ]}
                     />
                     <CustomSelect
