@@ -8,6 +8,7 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Logout from "@mui/icons-material/Logout";
+import jwt_decode from "jwt-decode";
 
 import { useNavigate } from "react-router-dom";
 
@@ -24,6 +25,23 @@ export default function AccountButton() {
     localStorage.removeItem("token");
     navigate("/");
     setAnchorEl(null);
+  };
+
+  const handleNavigation = () => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      const decodedToken = jwt_decode(token);
+      console.log(decodedToken);
+      const userRole =
+        decodedToken?.faculty?.role || decodedToken?.student?.role;
+
+      if (userRole === "faculty") {
+        navigate("/facultyprofile");
+      } else {
+        navigate("/profile");
+      }
+    }
   };
 
   return (
@@ -75,7 +93,7 @@ export default function AccountButton() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem onClick={() => navigate("/facultyprofile")}>
+        <MenuItem onClick={handleNavigation}>
           <Avatar /> Profile
         </MenuItem>
         <Divider />
