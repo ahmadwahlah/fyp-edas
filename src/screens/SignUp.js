@@ -12,6 +12,8 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
 import { Stack } from "@mui/system";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -39,6 +41,10 @@ function CustomSelect(props) {
   );
 }
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 export default function SignUp() {
   const navigate = useNavigate();
 
@@ -46,6 +52,17 @@ export default function SignUp() {
 
   const handleRoleChange = (event) => {
     setRole(event.target.value);
+  };
+
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("This is a success message!");
+  const [severity, setSeverity] = useState("success");
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
   };
 
   const handleSubmit = async (event) => {
@@ -105,18 +122,27 @@ export default function SignUp() {
           );
 
           console.log("Form submitted successfully");
-          navigate("/");
-          alert("Signup request sent successfully");
+          setMessage("Signup request sent successfully!");
+          setSeverity("success");
+          setOpen(true);
+          const timer = setTimeout(() => {
+            navigate("/");
+          }, 2500);
         } catch (error) {
           console.error(
             "An error occurred while submitting the form",
             error,
             error.message
           );
+          setMessage("An error occurred while submitting the form!");
+          setSeverity("error");
+          setOpen(true);
           // Add code here to handle error
         }
       } else {
-        alert("Please fill all fields before submitting the form");
+        setMessage("Please fill all fields before submitting the form!");
+        setSeverity("warning");
+        setOpen(true);
       }
     } else if (role === "faculty") {
       if (
@@ -145,14 +171,23 @@ export default function SignUp() {
           );
 
           console.log("Form submitted successfully");
-          navigate("/");
-          alert("Signup request sent successfully");
+          setMessage("Signup request sent successfully!");
+          setSeverity("success");
+          setOpen(true);
+          const timer = setTimeout(() => {
+            navigate("/");
+          }, 2500);
         } catch (error) {
           console.error("An error occurred while submitting the form", error);
+          setMessage("An error occurred while submitting the form!");
+          setSeverity("error");
+          setOpen(true);
           // Add code here to handle error
         }
       } else {
-        alert("Please fill all fields before submitting the form");
+        setMessage("Please fill all fields before submitting the form!");
+        setSeverity("warning");
+        setOpen(true);
       }
     }
   };
@@ -546,6 +581,15 @@ export default function SignUp() {
             </Grid>
           </Box>
         </Box>
+        <Snackbar open={open} autoHideDuration={2500} onClose={handleClose}>
+          <Alert
+            onClose={handleClose}
+            severity={severity}
+            sx={{ width: "100%" }}
+          >
+            {message}
+          </Alert>
+        </Snackbar>
       </Container>
       <Footer />
     </ThemeProvider>

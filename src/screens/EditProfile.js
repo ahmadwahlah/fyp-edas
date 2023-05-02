@@ -10,6 +10,7 @@ import { styled } from "@mui/system";
 import { Grid, Card, CardContent } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 import LoggedInHeader from "../components/LoggedInHeader";
 
@@ -41,7 +42,13 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
   marginBottom: theme.spacing(2),
 }));
 
-const Profile = () => {
+const EditProfile = () => {
+  const location = useLocation(); // Use the useLocation hook
+  const userId = location.state?.userId;
+  const userRole = location.state?.userRole;
+
+  console.log("User ID:", userId);
+  console.log("User Role:", userRole);
   const [isEditable, setIsEditable] = useState(false);
   const [profileData, setProfileData] = useState({
     profilePicture: "",
@@ -98,7 +105,7 @@ const Profile = () => {
         const token = localStorage.getItem("token");
 
         const response = await axios.get(
-          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/student",
+          `http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/admin/student/data/${userId}`,
           {
             headers: {
               "x-auth-token": token,
@@ -138,11 +145,15 @@ const Profile = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.put(
-        "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/student/",
+        `http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/admin/student/data/${userId}`,
         {
           phoneNumber: profileData.phoneNumber,
-          //password: profileData.password,
           courses: profileData.courses,
+          firstname: profileData.firstName,
+          lastname: profileData.lastName,
+          faculty: profileData.faculty,
+          regnum: profileData.regNo,
+          batch: profileData.batchNo,
         },
         {
           headers: {
@@ -264,7 +275,8 @@ const Profile = () => {
                       value={profileData.firstName}
                       fullWidth
                       margin="normal"
-                      disabled
+                      onChange={handleInputChange}
+                      disabled={!isEditable}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -274,7 +286,8 @@ const Profile = () => {
                       value={profileData.lastName}
                       fullWidth
                       margin="normal"
-                      disabled
+                      onChange={handleInputChange}
+                      disabled={!isEditable}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -284,7 +297,8 @@ const Profile = () => {
                       value={profileData.regNo}
                       fullWidth
                       margin="normal"
-                      disabled
+                      onChange={handleInputChange}
+                      disabled={!isEditable}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -294,7 +308,8 @@ const Profile = () => {
                       value={profileData.batchNo}
                       fullWidth
                       margin="normal"
-                      disabled
+                      onChange={handleInputChange}
+                      disabled={!isEditable}
                       options={[
                         {
                           value: "27",
@@ -334,7 +349,8 @@ const Profile = () => {
                       value={profileData.faculty}
                       fullWidth
                       margin="normal"
-                      disabled
+                      onChange={handleInputChange}
+                      disabled={!isEditable}
                       options={[
                         {
                           value: "Computer Science",
@@ -425,4 +441,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default EditProfile;

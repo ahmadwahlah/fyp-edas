@@ -10,6 +10,9 @@ import { styled } from "@mui/system";
 import { Grid, Card, CardContent } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import LoggedInHeader from "../components/LoggedInHeader";
 
@@ -42,7 +45,13 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
   marginBottom: theme.spacing(2),
 }));
 
-const FacultyProfile = () => {
+const EditFacultyProfile = () => {
+  const location = useLocation(); // Use the useLocation hook
+  const userId = location.state?.userId;
+  const userRole = location.state?.userRole;
+
+  console.log("User ID:", userId);
+  console.log("User Role:", userRole);
   const [isEditable, setIsEditable] = useState(false);
   const [profileData, setProfileData] = useState({
     profilePicture: "",
@@ -123,7 +132,7 @@ const FacultyProfile = () => {
         const token = localStorage.getItem("token");
 
         const response = await axios.get(
-          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/faculty",
+          `http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/admin/faculty/data/${userId}`,
           {
             headers: {
               "x-auth-token": token,
@@ -163,11 +172,15 @@ const FacultyProfile = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.put(
-        "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/faculty/update",
+        `http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/admin/faculty/data/${userId}`,
         {
           phoneNumber: profileData.phoneNumber,
-          // password: profileData.password,
           courses: profileData.courses,
+          firstname: profileData.firstName,
+          lastname: profileData.lastName,
+          department: profileData.department,
+          subrole: profileData.subrole,
+          externalRoles: profileData.externalrole,
         },
         {
           headers: {
@@ -290,7 +303,8 @@ const FacultyProfile = () => {
                       value={profileData.firstName}
                       fullWidth
                       margin="normal"
-                      disabled
+                      onChange={handleInputChange}
+                      disabled={!isEditable}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -300,7 +314,8 @@ const FacultyProfile = () => {
                       value={profileData.lastName}
                       fullWidth
                       margin="normal"
-                      disabled
+                      onChange={handleInputChange}
+                      disabled={!isEditable}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -310,7 +325,8 @@ const FacultyProfile = () => {
                       value={profileData.department}
                       fullWidth
                       margin="normal"
-                      disabled
+                      onChange={handleInputChange}
+                      disabled={!isEditable}
                       options={[
                         {
                           value: "Computer Science",
@@ -348,6 +364,7 @@ const FacultyProfile = () => {
                       name="subrole"
                       type="subrole"
                       onChange={handleRoleChange}
+                      disabled={!isEditable}
                       value={profileData.subrole}
                       options={[
                         { value: "Professor", label: "Professor" },
@@ -362,7 +379,6 @@ const FacultyProfile = () => {
                         { value: "Lecturer", label: "Lecturer" },
                         { value: "Lab Instructor", label: "Lab Instructor" },
                       ]}
-                      disabled
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -421,7 +437,7 @@ const FacultyProfile = () => {
                   <Grid item xs={12}>
                     {profileData.externalrole.map((external, index) => (
                       <Grid container spacing={2} key={index}>
-                        <Grid item xs={12} sm={4}>
+                        <Grid item xs={12} sm={4.5}>
                           <CustomSelect
                             label="External Faculty"
                             name={`externalrole[${index}].externalfaculty`}
@@ -464,7 +480,7 @@ const FacultyProfile = () => {
                                 label: "Cyber Security",
                               },
                             ]}
-                            disabled
+                            disabled={!isEditable}
                           />
                         </Grid>
                         <Grid item xs={12} sm={4}>
@@ -489,10 +505,10 @@ const FacultyProfile = () => {
                               { value: "Dean", label: "Dean" },
                               { value: "Instructor", label: "Instructor" },
                             ]}
-                            disabled
+                            disabled={!isEditable}
                           />
                         </Grid>
-                        <Grid item xs={12} sm={4}>
+                        <Grid item xs={12} sm={2}>
                           <CustomSelect
                             label="Batch"
                             name={`externalrole[${index}].batch`}
@@ -539,12 +555,42 @@ const FacultyProfile = () => {
                                 label: "33",
                               },
                             ]}
-                            disabled
+                            disabled={!isEditable}
                           />
                         </Grid>
+                        {isEditable && (
+                          <Grid
+                            item
+                            xs={12}
+                            sm={1.5}
+                            sx={{
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            <IconButton
+                              onClick={() => {
+                                const updatedExternalRole = [
+                                  ...profileData.externalrole,
+                                ];
+                                updatedExternalRole.splice(index, 1);
+                                setProfileData({
+                                  ...profileData,
+                                  externalrole: updatedExternalRole,
+                                });
+                              }}
+                            >
+                              <DeleteIcon
+                                fontSize="large"
+                                sx={{ color: "red" }}
+                              />
+                            </IconButton>
+                          </Grid>
+                        )}
                       </Grid>
                     ))}
-                    {/* {isEditable && (
+                    {isEditable && (
                       <Button
                         onClick={() => {
                           const updatedExternalRole = [
@@ -564,7 +610,7 @@ const FacultyProfile = () => {
                       >
                         Add External Role
                       </Button>
-                    )} */}
+                    )}
                   </Grid>
                 </Grid>
               </CardContent>
@@ -576,4 +622,4 @@ const FacultyProfile = () => {
   );
 };
 
-export default FacultyProfile;
+export default EditFacultyProfile;

@@ -55,7 +55,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
   marginTop: theme.spacing(2),
 }));
 
-const DynamicFormPreview = () => {
+const DynamicFormPreviewFaculty = () => {
   const navigate = useNavigate();
   const { formId } = useParams();
   const [form, setForm] = useState(null);
@@ -75,7 +75,7 @@ const DynamicFormPreview = () => {
         console.log(formId);
 
         const response = await axios.get(
-          `http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/dynamicforms/student/${formId}`,
+          `http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/dynamicforms/faculty/${formId}`,
           {
             headers: {
               "x-auth-token": token,
@@ -776,4 +776,4 @@ const DynamicFormPreview = () => {
   );
 };
 
-export default DynamicFormPreview;
+export default DynamicFormPreviewFaculty;

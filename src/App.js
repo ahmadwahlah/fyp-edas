@@ -17,6 +17,9 @@ import FormHierarchy from "./components/FormHierarchy";
 import CourseRegistrationForm from "./components/Forms/CourseRegistrationForm";
 import FormBuilderContainer from "./components/DynamicForm/FormBuilderContainer";
 import DynamicFormPreview from "./screens/DynamicFormPreview";
+import DynamicFormPreviewFaculty from "./screens/DynamicFormPreviewFaculty";
+import EditProfile from "./screens/EditProfile";
+import EditFacultyProfile from "./screens/EditFacultyProfile";
 
 function App() {
   return (
@@ -31,6 +34,8 @@ function App() {
           <Route path="/studenthome" element={<StudentNavigation />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/facultyprofile" element={<FacultyProfile />} />
+          <Route path="/editprofile" element={<EditProfile />} />
+          <Route path="/editfacultyprofile" element={<EditFacultyProfile />} />
           <Route path="/leave" element={<Leave />} />
           <Route path="/hallrequisition" element={<HallRequisition />} />
           <Route
@@ -40,6 +45,11 @@ function App() {
           <Route path="/formbuilder" element={<FormBuilderContainer />} />
           <Route path="/formhierarchy" element={<FormHierarchy />} />
           <Route path="/form/:formId" exact element={<DynamicFormPreview />} />
+          <Route
+            path="/facultyform/:formId"
+            exact
+            element={<DynamicFormPreviewFaculty />}
+          />
           <Route path="/test" element={<Test />} />
         </Routes>
       </div>

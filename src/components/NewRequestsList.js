@@ -1,3 +1,4 @@
+import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import List from "@mui/material/List";
@@ -10,6 +11,19 @@ import UserSearchBar from "./UserSearchBar";
 import { Divider } from "@mui/material";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+import Button from "@mui/material/Button";
+
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const NewRequestsList = () => {
   const defaultUsers = [
@@ -33,6 +47,34 @@ const NewRequestsList = () => {
   //const [filteredRequests, setFilteredRequests] = useState(defaultUsers);
   const [newRequests, setNewRequests] = useState([]);
   const [filteredRequests, setFilteredRequests] = useState([]);
+
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("This is a success message!");
+  const [severity, setSeverity] = useState("success");
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  const [openDialog, setOpenDialog] = useState(false);
+  const [disapproveUser, setDisapproveUser] = useState({});
+
+  const handleOpenDialog = (id, role) => {
+    setDisapproveUser({ id, role });
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const handleDisapproveConfirmation = () => {
+    handleDisapprove(disapproveUser.id, disapproveUser.role);
+    setOpenDialog(false);
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -88,6 +130,9 @@ const NewRequestsList = () => {
       )
       .then(() => {
         console.log("Request approved successfully");
+        setMessage("Request approved successfully!");
+        setSeverity("success");
+        setOpen(true);
         const updatedRequests = newRequests.filter(
           (request) => request._id !== id
         );
@@ -97,6 +142,9 @@ const NewRequestsList = () => {
       })
       .catch((error) => {
         console.error("Error approving request:", error);
+        setMessage("Error approving request!");
+        setSeverity("error");
+        setOpen(true);
       });
   };
 
@@ -114,6 +162,9 @@ const NewRequestsList = () => {
       )
       .then(() => {
         console.log("Request deleted successfully");
+        setMessage("Request deleted successfully!");
+        setSeverity("success");
+        setOpen(true);
         const updatedRequests = newRequests.filter(
           (request) => request._id !== id
         );
@@ -123,6 +174,9 @@ const NewRequestsList = () => {
       })
       .catch((error) => {
         console.error("Error deleting request:", error);
+        setMessage("Error deleting request!");
+        setSeverity("error");
+        setOpen(true);
       });
   };
 
@@ -218,7 +272,7 @@ const NewRequestsList = () => {
                 <IconButton
                   aria-label="disapprove"
                   onClick={() =>
-                    handleDisapprove(newRequest._id, newRequest.role)
+                    handleOpenDialog(newRequest._id, newRequest.role)
                   }
                 >
                   <CancelIcon style={{ color: "red" }} fontSize="large" />
@@ -228,6 +282,39 @@ const NewRequestsList = () => {
           </Box>
         ))}
       </List>
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Disapprove User Confirmation"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to disapprove this request?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Cancel
+          </Button>
+          <Button
+            onClick={handleDisapproveConfirmation}
+            color="primary"
+            autoFocus
+            variant="contained"
+          >
+            Disapprove
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Snackbar open={open} autoHideDuration={2500} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={severity} sx={{ width: "100%" }}>
+          {message}
+        </Alert>
+      </Snackbar>
     </>
   );
 };

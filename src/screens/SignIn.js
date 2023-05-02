@@ -10,6 +10,8 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -35,10 +37,23 @@ function CustomSelect(props) {
   );
 }
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 const theme = createTheme();
 
 export default function SignIn() {
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("This is a success message!");
+  const [severity, setSeverity] = useState("success");
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -73,15 +88,23 @@ export default function SignIn() {
             localStorage.setItem("token", token);
             navigate("/adminhome");
           } else {
+            setMessage("An error occurred. Please try again later!");
+            setSeverity("error");
+            setOpen(true);
             console.error("An error occurred. Please try again later.");
           }
         } catch (error) {
           console.error(error);
           if (error.response && error.response.status === 400) {
             console.error("Incorrect email or password. Please try again.");
-            window.alert("Incorrect email or password. Please try again.");
+            setMessage("Incorrect email or password. Please try again!");
+            setSeverity("warning");
+            setOpen(true);
           } else {
             console.error("An error occurred. Please try again later.");
+            setMessage("An error occurred. Please try again later!");
+            setSeverity("error");
+            setOpen(true);
           }
         }
         break;
@@ -108,21 +131,31 @@ export default function SignIn() {
             navigate("/facultyhome");
           } else {
             console.error("An error occurred. Please try again later.");
+            setMessage("An error occurred. Please try again later!");
+            setSeverity("error");
+            setOpen(true);
           }
         } catch (error) {
           console.error(error);
           if (error.response && error.response.status === 400) {
             console.error("Incorrect email or password. Please try again.");
-            window.alert("Incorrect email or password. Please try again.");
+            setMessage("Incorrect email or password. Please try again!");
+            setSeverity("warning");
+            setOpen(true);
           } else if (error.response && error.response.status === 401) {
             console.error(
               "Attention: Your request is currently pending approval. Please be patient as we review and process your submission. Thank you for your understanding!"
             );
-            window.alert(
-              "Attention: Your request is currently pending approval. Please be patient as we review and process your submission.\nThank you for your understanding!"
+            setMessage(
+              "Attention: Your request is currently pending approval. Please be patient as we review and process your submission. Thank you for your understanding!"
             );
+            setSeverity("warning");
+            setOpen(true);
           } else {
             console.error("An error occurred. Please try again later.");
+            setMessage("An error occurred. Please try again later!");
+            setSeverity("error");
+            setOpen(true);
           }
         }
         break;
@@ -149,21 +182,31 @@ export default function SignIn() {
             navigate("/studenthome");
           } else {
             console.error("An error occurred. Please try again later.");
+            setMessage("An error occurred. Please try again later!");
+            setSeverity("error");
+            setOpen(true);
           }
         } catch (error) {
           console.error(error);
           if (error.response && error.response.status === 400) {
             console.error("Incorrect email or password. Please try again.");
-            window.alert("Incorrect email or password. Please try again.");
+            setMessage("Incorrect email or password. Please try again!");
+            setSeverity("warning");
+            setOpen(true);
           } else if (error.response && error.response.status === 401) {
             console.error(
               "Attention: Your request is currently pending approval. Please be patient as we review and process your submission. Thank you for your understanding!"
             );
-            window.alert(
-              "Attention: Your request is currently pending approval. Please be patient as we review and process your submission.\nThank you for your understanding!"
+            setMessage(
+              "Attention: Your request is currently pending approval. Please be patient as we review and process your submission. Thank you for your understanding!"
             );
+            setSeverity("warning");
+            setOpen(true);
           } else {
             console.error("An error occurred. Please try again later.");
+            setMessage("An error occurred. Please try again later!");
+            setSeverity("error");
+            setOpen(true);
           }
         }
         break;
@@ -305,6 +348,15 @@ export default function SignIn() {
             </Grid>
           </Box>
         </Box>
+        <Snackbar open={open} autoHideDuration={2500} onClose={handleClose}>
+          <Alert
+            onClose={handleClose}
+            severity={severity}
+            sx={{ width: "100%" }}
+          >
+            {message}
+          </Alert>
+        </Snackbar>
       </Container>
       <Footer />
     </ThemeProvider>

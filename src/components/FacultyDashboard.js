@@ -1,83 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Divider } from "@mui/material";
 import Box from "@mui/material/Box";
-import CardGroup from "./CardGroup";
+import CardGroupFaculty from "./CardGroupFaculty";
 import SearchBar from "./SearchBar";
 import Typography from "@mui/material/Typography";
 import FormHistoryCard from "./FormHistoryCard";
 import FormTrackingDialog from "./FormTrackingDialog";
+import axios from "axios";
 
-const forms = [
-  {
-    formName: "Hall Requisition",
-    submissionDate: "2022-09-01",
-    submissionTime: "09:30:00",
-    status: "Approved",
-    hierarchy: [
-      {
-        title: "Dean",
-        status: "Approved",
-      },
-      {
-        title: "Committee Convener",
-        status: "Approved",
-      },
-      {
-        title: "Advisor",
-        status: "Approved",
-      },
-    ],
-  },
-  {
-    formName: "Leave Application",
-    submissionDate: "2022-08-15",
-    submissionTime: "13:45:00",
-    status: "Pending",
-    hierarchy: [
-      {
-        title: "Dean",
-        status: "Pending",
-      },
-      {
-        title: "Committee Convener",
-        status: "Pending",
-      },
-      {
-        title: "Advisor",
-        status: "Pending",
-      },
-    ],
-  },
-  {
-    formName: "Expense Reimbursement",
-    submissionDate: "2022-10-03",
-    submissionTime: "11:15:00",
-    status: "Disapproved",
-    hierarchy: [
-      {
-        title: "Dean",
-        status: "Approved",
-      },
-      {
-        title: "Committee Convener",
-        status: "Disapproved",
-      },
-      {
-        title: "Advisor",
-        status: "Pending",
-      },
-    ],
-  },
-];
-
-export default function StudentDashboard() {
+export default function FacultyDashboard() {
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredForms, setFilteredForms] = useState(forms);
+  const [filteredForms, setFilteredForms] = useState([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [currentHierarchy, setCurrentHierarchy] = useState([]);
   const [currentFormName, setCurrentFormName] = useState("");
 
   const [activeStep, setActiveStep] = useState(0);
+  const [allForms, setAllForms] = useState([]);
+
+  useEffect(() => {
+    const fetchForms = async () => {
+      const token = localStorage.getItem("token");
+
+      try {
+        const response = await axios.get(
+          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/forms",
+          {
+            headers: {
+              "x-auth-token": token,
+            },
+          }
+        );
+        setFilteredForms(response.data);
+        setAllForms(response.data); // store fetched forms in the state
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching forms:", error);
+      }
+    };
+
+    fetchForms();
+  }, []);
 
   const handleDialogClose = () => {
     setDialogOpen(false);
@@ -94,26 +57,60 @@ export default function StudentDashboard() {
     return lastApprovedOrDisapprovedIndex;
   };
 
-  const handleHierarchyClick = (hierarchy, formName) => {
+  // ... (previous imports and code)
+
+  const handleHierarchyClick = (approvers, formName) => {
+    const hierarchy = approvers.map((approver) => ({
+      title: approver.role,
+      status: approver.disapproved
+        ? "Disapproved"
+        : approver.approved
+        ? "Approved"
+        : "Pending",
+    }));
+
     setCurrentHierarchy(hierarchy);
     setActiveStep(setActiveStepIndex(hierarchy));
     setCurrentFormName(formName);
     setDialogOpen(true);
   };
 
+  // ... (the rest of the code for StudentDashboard)
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
     setSearchQuery(value);
 
-    const filtered = forms.filter((form) =>
+    const filtered = allForms.filter((form) =>
       form.formName.trim().replace(/\s/g, " ").toLowerCase().includes(value)
     );
     setFilteredForms(filtered);
   };
 
+  const getFormStatus = (approvers) => {
+    let isAnyDisapproved = false;
+    let isAllApproved = true;
+
+    approvers.forEach((approver) => {
+      if (approver.disapproved) {
+        isAnyDisapproved = true;
+      }
+      if (!approver.approved) {
+        isAllApproved = false;
+      }
+    });
+
+    if (isAnyDisapproved) {
+      return "Disapproved";
+    } else if (isAllApproved) {
+      return "Approved";
+    } else {
+      return "Pending";
+    }
+  };
+
   return (
     <Box sx={{ width: "100%", left: 0, top: 0 }}>
-      <CardGroup />
+      <CardGroupFaculty />
       <Divider />
       <Box
         sx={{
@@ -151,11 +148,10 @@ export default function StudentDashboard() {
           <FormHistoryCard
             key={index}
             formName={data.formName}
-            submissionDate={data.submissionDate}
-            department={data.submissionTime}
-            status={data.status}
+            submissionDate={data.date}
+            status={getFormStatus(data.approvers)}
             onHierarchyClick={() =>
-              handleHierarchyClick(data.hierarchy, data.formName)
+              handleHierarchyClick(data.approvers, data.formName)
             }
           />
         ))}
