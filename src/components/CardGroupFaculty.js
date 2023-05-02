@@ -15,7 +15,7 @@ export default function CardGroupFaculty() {
       try {
         const token = localStorage.getItem("token");
         const submitted = await axios.get(
-          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/student/submittedforms",
+          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/faculty/submittedforms",
           {
             headers: {
               "x-auth-token": token,
@@ -23,7 +23,7 @@ export default function CardGroupFaculty() {
           }
         );
         const approved = await axios.get(
-          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/student/approvedforms",
+          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/faculty/approvedforms",
           {
             headers: {
               "x-auth-token": token,
@@ -31,7 +31,7 @@ export default function CardGroupFaculty() {
           }
         );
         const rejected = await axios.get(
-          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/student/disapprovedforms",
+          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/faculty/disapprovedforms",
           {
             headers: {
               "x-auth-token": token,

@@ -167,7 +167,7 @@ const DynamicFormPreviewFaculty = () => {
       logFormData();
       postFormData();
       window.alert("Form submitted successfully!");
-      navigate("/studenthome");
+      navigate("/facultyhome");
     } else {
       alert("Please fill all required fields");
     }
@@ -176,9 +176,7 @@ const DynamicFormPreviewFaculty = () => {
   const logFormData = () => {
     const token = localStorage.getItem("token");
     const decodedPayload = jwt_decode(token);
-    const id = decodedPayload.student.id || decodedPayload.faculty.id;
-    const faculty =
-      decodedPayload.student.faculty || decodedPayload.faculty.department;
+    const department = decodedPayload.faculty.department;
     const responces = {
       inputValues,
       radioSelectedValue,
@@ -193,15 +191,12 @@ const DynamicFormPreviewFaculty = () => {
     console.log(responces);
     console.log(form[0].formName);
     console.log(form[0].approvalHierarchy);
-    console.log(id);
-    console.log(faculty);
+    console.log(department);
   };
   const postFormData = async () => {
     const token = localStorage.getItem("token");
     const decodedPayload = jwt_decode(token);
-    const id = decodedPayload.student.id || decodedPayload.faculty.id;
-    const faculty =
-      decodedPayload.student.faculty || decodedPayload.faculty.department;
+    const department = decodedPayload.faculty.department;
     const responces = {
       inputValues,
       radioSelectedValue,
@@ -217,13 +212,12 @@ const DynamicFormPreviewFaculty = () => {
       responces,
       formName: form[0].formName,
       approvalHierarchy: form[0].approvalHierarchy,
-      id,
-      faculty,
+      department,
     };
 
     try {
       const response = await axios.post(
-        "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/forms/",
+        "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/forms/faculty",
         payload,
         {
           headers: {

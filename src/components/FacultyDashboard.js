@@ -24,7 +24,7 @@ export default function FacultyDashboard() {
 
       try {
         const response = await axios.get(
-          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/forms",
+          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/forms/faculty",
           {
             headers: {
               "x-auth-token": token,
@@ -75,7 +75,6 @@ export default function FacultyDashboard() {
     setDialogOpen(true);
   };
 
-  // ... (the rest of the code for StudentDashboard)
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
     setSearchQuery(value);
