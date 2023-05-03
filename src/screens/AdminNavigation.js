@@ -4,7 +4,6 @@ import Drawer from "@mui/material/Drawer";
 import CssBaseline from "@mui/material/CssBaseline";
 import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
-import Typography from "@mui/material/Typography";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -12,13 +11,12 @@ import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import ListItemText from "@mui/material/ListItemText";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
-import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
+import DescriptionIcon from "@mui/icons-material/Description";
 
 import LoggedInHeader from "../components/LoggedInHeader";
 import AdminDashboard from "../components/AdminDashboard";
 import AdminUserManagement from "../components/AdminUserManagement";
-import DefineHierarchy from "../components/DefineHierarchy";
-import FormBuilder from "../components/DynamicForm/FormBuilderContainer";
+import AllForms from "../components/AllForms";
 import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
@@ -43,8 +41,8 @@ export default function AdminNavigation() {
         return <AdminDashboard />;
       case "userManagement":
         return <AdminUserManagement />;
-      case "formHierarchy":
-        return <DefineHierarchy />;
+      case "forms":
+        return <AllForms />;
       default:
         return <AdminDashboard />;
     }
@@ -104,19 +102,19 @@ export default function AdminNavigation() {
                 <ListItemIcon sx={{ color: "#000000" }}>
                   <NoteAddIcon />
                 </ListItemIcon>
-                <ListItemText primary="Create Forms" />
+                <ListItemText primary="Create Form" />
               </ListItemButton>
             </ListItem>
             <ListItem
               disablePadding
-              onClick={(event) => handleListItemClick(event, "formHierarchy")}
+              onClick={(event) => handleListItemClick(event, "forms")}
               sx={{ cursor: "pointer" }}
             >
               <ListItemButton>
                 <ListItemIcon sx={{ color: "#000000" }}>
-                  <FormatListNumberedIcon />
+                  <DescriptionIcon />
                 </ListItemIcon>
-                <ListItemText primary="Form Hierarchy" />
+                <ListItemText primary="Forms" />
               </ListItemButton>
             </ListItem>
           </List>

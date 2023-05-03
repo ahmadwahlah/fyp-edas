@@ -32,6 +32,9 @@ import {
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { Divider } from "@mui/material";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 import LoggedInHeader from "../components/LoggedInHeader";
 
@@ -56,10 +59,25 @@ const StyledButton = styled(Button)(({ theme }) => ({
   marginTop: theme.spacing(2),
 }));
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 const DynamicFormPreviewFaculty = () => {
   const navigate = useNavigate();
   const { formId } = useParams();
   const [form, setForm] = useState(null);
+
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("This is a success message!");
+  const [severity, setSeverity] = useState("success");
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   useEffect(() => {
     const fetchFormData = async () => {
@@ -167,8 +185,6 @@ const DynamicFormPreviewFaculty = () => {
     if (validateForm()) {
       logFormData();
       postFormData();
-      window.alert("Form submitted successfully!");
-      navigate("/facultyhome");
     } else {
       alert("Please fill all required fields");
     }
@@ -256,8 +272,17 @@ const DynamicFormPreviewFaculty = () => {
       );
 
       console.log("Form submitted successfully:", response.data);
+      setMessage("Form submitted successfully!");
+      setSeverity("success");
+      setOpen(true);
+      setTimeout(() => {
+        navigate("/facultyhome");
+      }, 2500);
     } catch (error) {
       console.error("Error submitting form data:", error, error.response.data);
+      setMessage("An error occurred while submitting the form!");
+      setSeverity("error");
+      setOpen(true);
     }
   };
 
@@ -324,337 +349,412 @@ const DynamicFormPreviewFaculty = () => {
     return <div>Loading...</div>;
   }
 
+  const handleBackClick = () => {
+    navigate(-1); // Navigate back to the previous page
+  };
+
   return (
-    <Box sx={{ marginTop: "7rem" }}>
+    <Box sx={{ marginTop: "5rem" }}>
       <LoggedInHeader />
       <CssBaseline />
-      <StyledContainer maxWidth="md">
-        <StyledPaper sx={{ backgroundColor: "#f5f5f5" }}>
-          <div className="formPreview">
-            <Typography
-              variant="h5"
-              sx={{
-                fontFamily: "Arial, sans-serif",
-                fontWeight: "bold",
-                color: "black",
-                textTransform: "uppercase",
-                textAlign: "center",
-                marginBottom: "1rem",
-              }}
-            >
-              {form[0].formName || "Untitled Form"}
-            </Typography>
-            <Divider />
-            <Box sx={{ marginTop: "1.5rem" }}>
-              {form[0].fields &&
-                form[0].fields.map((field) => {
-                  const handleDatePickerChange = (newValue, id, heading) => {
-                    setDateValues({
-                      ...dateValues,
-                      [id]: {
-                        heading: heading || "Date Picker",
-                        value: newValue,
-                      },
-                    });
-                    if (field.required && !newValue) {
-                      setDatePickerError({
-                        ...datePickerError,
-                        [id]: "Date is required",
-                      });
-                    } else if (
-                      !field.allowBeforeToday &&
-                      (!newValue || newValue.isBefore(dayjs().startOf("day")))
-                    ) {
-                      setDatePickerError({
-                        ...datePickerError,
-                        [id]: "Date cannot be before today",
-                      });
-                    } else {
-                      setDatePickerError({ ...datePickerError, [id]: null });
-                    }
-                  };
+      <Box sx={{ display: "flex", flexDirection: "row" }}>
+        <Button
+          onClick={handleBackClick}
+          startIcon={<ArrowBackIosNewIcon />}
+          color="primary"
+          sx={{
+            color: "black",
+            position: "absolute", // Add this line
+            top: 80, // Add this line
+            left: 20, // Add this line
+          }}
+        >
+          Back
+        </Button>
 
-                  switch (field.type) {
-                    case "inputField":
-                      return (
-                        <TextField
-                          key={field.id}
-                          type="text"
-                          name={field.name}
-                          label={field.placeholder || "Enter text"}
-                          variant="outlined"
-                          sx={{ marginBottom: 2 }}
-                          required={field.required}
-                          fullWidth
-                          error={
-                            field.required &&
-                            (!inputValues[field.id] ||
-                              !inputValues[field.id].value)
-                          }
-                          helperText={
-                            field.required &&
-                            (!inputValues[field.id] ||
-                              !inputValues[field.id].value)
-                              ? "This field is required"
-                              : null
-                          }
-                          onChange={(event) =>
-                            handleChange(event, field.id, field.name)
-                          }
-                        />
-                      );
-                    case "multiTextArea":
-                      return (
-                        <TextareaAutosize
-                          key={field.id}
-                          aria-label="minimum height"
-                          minRows={3}
-                          name={field.name}
-                          placeholder={field.placeholder || "Type here..."}
-                          required={field.required}
-                          style={{
-                            width: "100%",
-                            padding: "8px",
-                            marginBottom: "16px",
-                            resize: "vertical",
-                            borderColor:
-                              field.required &&
-                              (!inputValues[field.id] ||
-                                !inputValues[field.id].value)
-                                ? "red"
-                                : undefined,
-                            borderWidth:
-                              field.required &&
-                              (!inputValues[field.id] ||
-                                !inputValues[field.id].value)
-                                ? "1.5px"
-                                : undefined,
-                            borderStyle:
-                              field.required &&
-                              (!inputValues[field.id] ||
-                                !inputValues[field.id].value)
-                                ? "solid"
-                                : undefined,
-                          }}
-                          onChange={(event) =>
-                            handleChange(event, field.id, field.name)
-                          }
-                        />
-                      );
-                    case "radioButton":
-                      return (
-                        <FormControl
-                          key={field.id}
-                          component="fieldset"
-                          sx={{ marginBottom: 2, display: "block" }}
-                          error={!!formErrors[field.id]}
-                        >
-                          <FormLabel component="legend">
-                            <Typography
-                              variant="h6"
-                              sx={{ fontWeight: "bold", color: "black" }}
-                            >
-                              {field.heading || "Radio Button Group"}
-                              {field.required && "*"}
-                            </Typography>
-                          </FormLabel>
-                          <RadioGroup
+        <StyledContainer maxWidth="md">
+          <StyledPaper sx={{ backgroundColor: "#f5f5f5" }}>
+            <div className="formPreview">
+              <Typography
+                variant="h5"
+                sx={{
+                  fontFamily: "Arial, sans-serif",
+                  fontWeight: "bold",
+                  color: "black",
+                  textTransform: "uppercase",
+                  textAlign: "center",
+                  marginBottom: "1rem",
+                }}
+              >
+                {form[0].formName || "Untitled Form"}
+              </Typography>
+              <Divider />
+              <Box sx={{ marginTop: "1.5rem" }}>
+                {form[0].fields &&
+                  form[0].fields.map((field) => {
+                    const handleDatePickerChange = (newValue, id, heading) => {
+                      setDateValues({
+                        ...dateValues,
+                        [id]: {
+                          heading: heading || "Date Picker",
+                          value: newValue,
+                        },
+                      });
+                      if (field.required && !newValue) {
+                        setDatePickerError({
+                          ...datePickerError,
+                          [id]: "Date is required",
+                        });
+                      } else if (
+                        !field.allowBeforeToday &&
+                        (!newValue || newValue.isBefore(dayjs().startOf("day")))
+                      ) {
+                        setDatePickerError({
+                          ...datePickerError,
+                          [id]: "Date cannot be before today",
+                        });
+                      } else {
+                        setDatePickerError({ ...datePickerError, [id]: null });
+                      }
+                    };
+
+                    switch (field.type) {
+                      case "inputField":
+                        return (
+                          <TextField
+                            key={field.id}
+                            type="text"
                             name={field.name}
-                            defaultValue={field.options[0].value}
-                            onChange={(event) =>
-                              setRadioSelectedValue({
-                                [field.id]: {
-                                  heading: field.heading,
-                                  value: event.target.value,
-                                },
-                              })
+                            label={field.placeholder || "Enter text"}
+                            variant="outlined"
+                            sx={{ marginBottom: 2 }}
+                            required={field.required}
+                            fullWidth
+                            error={
+                              field.required &&
+                              (!inputValues[field.id] ||
+                                !inputValues[field.id].value)
                             }
+                            helperText={
+                              field.required &&
+                              (!inputValues[field.id] ||
+                                !inputValues[field.id].value)
+                                ? "This field is required"
+                                : null
+                            }
+                            onChange={(event) =>
+                              handleChange(event, field.id, field.name)
+                            }
+                          />
+                        );
+                      case "multiTextArea":
+                        return (
+                          <TextareaAutosize
+                            key={field.id}
+                            aria-label="minimum height"
+                            minRows={3}
+                            name={field.name}
+                            placeholder={field.placeholder || "Type here..."}
+                            required={field.required}
+                            style={{
+                              width: "100%",
+                              padding: "8px",
+                              marginBottom: "16px",
+                              resize: "vertical",
+                              borderColor:
+                                field.required &&
+                                (!inputValues[field.id] ||
+                                  !inputValues[field.id].value)
+                                  ? "red"
+                                  : undefined,
+                              borderWidth:
+                                field.required &&
+                                (!inputValues[field.id] ||
+                                  !inputValues[field.id].value)
+                                  ? "1.5px"
+                                  : undefined,
+                              borderStyle:
+                                field.required &&
+                                (!inputValues[field.id] ||
+                                  !inputValues[field.id].value)
+                                  ? "solid"
+                                  : undefined,
+                            }}
+                            onChange={(event) =>
+                              handleChange(event, field.id, field.name)
+                            }
+                          />
+                        );
+                      case "radioButton":
+                        return (
+                          <FormControl
+                            key={field.id}
+                            component="fieldset"
+                            sx={{ marginBottom: 2, display: "block" }}
+                            error={!!formErrors[field.id]}
                           >
-                            {field.options.map((option, index) => (
-                              <FormControlLabel
-                                key={index}
-                                value={option}
-                                control={<Radio required={field.required} />}
-                                label={option}
-                              />
-                            ))}
-                          </RadioGroup>
-                          <FormHelperText>
-                            {formErrors[field.id]}
-                          </FormHelperText>
-                        </FormControl>
-                      );
-                    case "checkboxGroup":
-                      return (
-                        <FormControl
-                          key={field.id}
-                          component="fieldset"
-                          sx={{ marginBottom: 2, display: "block" }}
-                          error={!!formErrors[field.id]}
-                        >
-                          <FormLabel component="legend">
+                            <FormLabel component="legend">
+                              <Typography
+                                variant="h6"
+                                sx={{ fontWeight: "bold", color: "black" }}
+                              >
+                                {field.heading || "Radio Button Group"}
+                                {field.required && "*"}
+                              </Typography>
+                            </FormLabel>
+                            <RadioGroup
+                              name={field.name}
+                              defaultValue={field.options[0].value}
+                              onChange={(event) =>
+                                setRadioSelectedValue({
+                                  [field.id]: {
+                                    heading: field.heading,
+                                    value: event.target.value,
+                                  },
+                                })
+                              }
+                            >
+                              {field.options.map((option, index) => (
+                                <FormControlLabel
+                                  key={index}
+                                  value={option}
+                                  control={<Radio required={field.required} />}
+                                  label={option}
+                                />
+                              ))}
+                            </RadioGroup>
+                            <FormHelperText>
+                              {formErrors[field.id]}
+                            </FormHelperText>
+                          </FormControl>
+                        );
+                      case "checkboxGroup":
+                        return (
+                          <FormControl
+                            key={field.id}
+                            component="fieldset"
+                            sx={{ marginBottom: 2, display: "block" }}
+                            error={!!formErrors[field.id]}
+                          >
+                            <FormLabel component="legend">
+                              <Typography
+                                variant="h6"
+                                sx={{ fontWeight: "bold", color: "black" }}
+                              >
+                                {field.heading || "Checkbox Group"}
+                                {field.required && "*"}
+                              </Typography>
+                            </FormLabel>
+                            <FormGroup>
+                              {field.options.map((option, index) => (
+                                <FormControlLabel
+                                  key={index}
+                                  control={
+                                    <Checkbox
+                                      required={field.required}
+                                      onChange={(event) => {
+                                        if (event.target.checked) {
+                                          setCheckboxSelectedValues({
+                                            ...checkboxSelectedValues,
+                                            [field.id]: {
+                                              heading:
+                                                field.heading ||
+                                                "Checkbox Group",
+                                              values: [
+                                                ...(checkboxSelectedValues[
+                                                  field.id
+                                                ]?.values || []),
+                                                option,
+                                              ],
+                                            },
+                                          });
+                                        } else {
+                                          setCheckboxSelectedValues({
+                                            ...checkboxSelectedValues,
+                                            [field.id]: {
+                                              heading:
+                                                field.heading ||
+                                                "Checkbox Group",
+                                              values: (
+                                                checkboxSelectedValues[field.id]
+                                                  ?.values || []
+                                              ).filter(
+                                                (selectedOption) =>
+                                                  selectedOption !== option
+                                              ),
+                                            },
+                                          });
+                                        }
+                                      }}
+                                    />
+                                  }
+                                  label={option}
+                                />
+                              ))}
+                            </FormGroup>
+                            <FormHelperText>
+                              {formErrors[field.id]}
+                            </FormHelperText>
+                          </FormControl>
+                        );
+
+                      case "dropdownSelect":
+                        return (
+                          <FormControl
+                            key={field.id}
+                            sx={{ marginBottom: 2, display: "block" }}
+                            error={!!formErrors[field.id]}
+                          >
                             <Typography
                               variant="h6"
-                              sx={{ fontWeight: "bold", color: "black" }}
+                              sx={{ fontWeight: "bold" }}
                             >
-                              {field.heading || "Checkbox Group"}
+                              {field.heading || "Dropdown Select"}
                               {field.required && "*"}
                             </Typography>
-                          </FormLabel>
-                          <FormGroup>
-                            {field.options.map((option, index) => (
-                              <FormControlLabel
-                                key={index}
-                                control={
+                            <Select
+                              labelId={field.id}
+                              id={field.id}
+                              value={selectedValue[field.id]?.value || ""}
+                              onChange={(event) =>
+                                handleSelectChange(
+                                  event,
+                                  field.id,
+                                  field.heading
+                                )
+                              }
+                              fullWidth
+                              required={field.required}
+                            >
+                              <FormHelperText>
+                                {formErrors[field.id]}
+                              </FormHelperText>
+
+                              {field.options.map((option, index) => (
+                                <MenuItem key={index} value={option}>
+                                  {option}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        );
+                      case "dropdownMultiSelect":
+                        return (
+                          <FormControl
+                            key={field.id}
+                            sx={{ marginBottom: 2, display: "block" }}
+                            error={!!formErrors[field.id]}
+                          >
+                            <Typography
+                              variant="h6"
+                              sx={{ fontWeight: "bold" }}
+                            >
+                              {field.heading || "Dropdown Multi-Select"}
+                              {field.required && "*"}
+                            </Typography>
+                            <Select
+                              labelId={field.id}
+                              id={field.id}
+                              multiple
+                              value={
+                                multiSelectedValues[field.id]?.values || []
+                              }
+                              onChange={(event) =>
+                                handleMultiSelectChange(
+                                  event,
+                                  field.id,
+                                  field.heading
+                                )
+                              }
+                              fullWidth
+                              renderValue={(selected) => selected.join(", ")}
+                              required={field.required}
+                            >
+                              <FormHelperText>
+                                {formErrors[field.id]}
+                              </FormHelperText>
+
+                              {field.options.map((option, index) => (
+                                <MenuItem key={index} value={option}>
                                   <Checkbox
-                                    required={field.required}
-                                    onChange={(event) => {
-                                      if (event.target.checked) {
-                                        setCheckboxSelectedValues({
-                                          ...checkboxSelectedValues,
-                                          [field.id]: {
-                                            heading:
-                                              field.heading || "Checkbox Group",
-                                            values: [
-                                              ...(checkboxSelectedValues[
-                                                field.id
-                                              ]?.values || []),
-                                              option,
-                                            ],
-                                          },
-                                        });
-                                      } else {
-                                        setCheckboxSelectedValues({
-                                          ...checkboxSelectedValues,
-                                          [field.id]: {
-                                            heading:
-                                              field.heading || "Checkbox Group",
-                                            values: (
-                                              checkboxSelectedValues[field.id]
-                                                ?.values || []
-                                            ).filter(
-                                              (selectedOption) =>
-                                                selectedOption !== option
-                                            ),
-                                          },
-                                        });
-                                      }
-                                    }}
+                                    checked={
+                                      (
+                                        multiSelectedValues[field.id]?.values ||
+                                        []
+                                      ).indexOf(option) > -1
+                                    }
                                   />
-                                }
-                                label={option}
-                              />
-                            ))}
-                          </FormGroup>
-                          <FormHelperText>
-                            {formErrors[field.id]}
-                          </FormHelperText>
-                        </FormControl>
-                      );
+                                  <ListItemText primary={option} />
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        );
 
-                    case "dropdownSelect":
-                      return (
-                        <FormControl
-                          key={field.id}
-                          sx={{ marginBottom: 2, display: "block" }}
-                          error={!!formErrors[field.id]}
-                        >
-                          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                            {field.heading || "Dropdown Select"}
-                            {field.required && "*"}
-                          </Typography>
-                          <Select
-                            labelId={field.id}
-                            id={field.id}
-                            value={selectedValue[field.id]?.value || ""}
-                            onChange={(event) =>
-                              handleSelectChange(event, field.id, field.heading)
-                            }
-                            fullWidth
-                            required={field.required}
+                      case "datePicker":
+                        return (
+                          <FormControl
+                            key={field.id}
+                            sx={{ marginBottom: 2, display: "block" }}
                           >
-                            <FormHelperText>
-                              {formErrors[field.id]}
-                            </FormHelperText>
-
-                            {field.options.map((option, index) => (
-                              <MenuItem key={index} value={option}>
-                                {option}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                      );
-                    case "dropdownMultiSelect":
-                      return (
-                        <FormControl
-                          key={field.id}
-                          sx={{ marginBottom: 2, display: "block" }}
-                          error={!!formErrors[field.id]}
-                        >
-                          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                            {field.heading || "Dropdown Multi-Select"}
-                            {field.required && "*"}
-                          </Typography>
-                          <Select
-                            labelId={field.id}
-                            id={field.id}
-                            multiple
-                            value={multiSelectedValues[field.id]?.values || []}
-                            onChange={(event) =>
-                              handleMultiSelectChange(
-                                event,
-                                field.id,
-                                field.heading
-                              )
-                            }
-                            fullWidth
-                            renderValue={(selected) => selected.join(", ")}
-                            required={field.required}
-                          >
-                            <FormHelperText>
-                              {formErrors[field.id]}
-                            </FormHelperText>
-
-                            {field.options.map((option, index) => (
-                              <MenuItem key={index} value={option}>
-                                <Checkbox
-                                  checked={
-                                    (
-                                      multiSelectedValues[field.id]?.values ||
-                                      []
-                                    ).indexOf(option) > -1
+                            <Typography
+                              variant="h6"
+                              sx={{ fontWeight: "bold" }}
+                            >
+                              {field.heading || "Date Picker"}
+                              {field.required && "*"}
+                            </Typography>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <Box
+                                sx={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 2,
+                                }}
+                              >
+                                <DatePicker
+                                  value={dateValues[field.id]?.value || null}
+                                  onChange={(newValue) =>
+                                    handleDatePickerChange(
+                                      newValue,
+                                      field.id,
+                                      field.heading
+                                    )
+                                  }
+                                  renderInput={(params) => (
+                                    <TextField
+                                      {...params}
+                                      error={Boolean(datePickerError[field.id])}
+                                      helperText={datePickerError[field.id]}
+                                    />
+                                  )}
+                                  minDate={
+                                    field.allowBeforeToday ? undefined : today
                                   }
                                 />
-                                <ListItemText primary={option} />
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                      );
-
-                    case "datePicker":
-                      return (
-                        <FormControl
-                          key={field.id}
-                          sx={{ marginBottom: 2, display: "block" }}
-                        >
-                          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                            {field.heading || "Date Picker"}
-                            {field.required && "*"}
-                          </Typography>
-                          <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <Box
-                              sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 2,
-                              }}
+                              </Box>
+                            </LocalizationProvider>
+                          </FormControl>
+                        );
+                      case "timePicker":
+                        return (
+                          <FormControl
+                            key={field.id}
+                            sx={{ marginBottom: 2, display: "block" }}
+                          >
+                            <Typography
+                              variant="h6"
+                              sx={{ fontWeight: "bold" }}
                             >
-                              <DatePicker
-                                value={dateValues[field.id]?.value || null}
+                              {field.heading || "Time Picker"}
+                              {field.required && "*"}
+                            </Typography>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <TimePicker
+                                ampm={field.clockFormat === "12h"}
+                                value={timeValues[field.id]?.value || null}
                                 onChange={(newValue) =>
-                                  handleDatePickerChange(
+                                  handleTimePickerChange(
                                     newValue,
                                     field.id,
                                     field.heading
@@ -663,138 +763,110 @@ const DynamicFormPreviewFaculty = () => {
                                 renderInput={(params) => (
                                   <TextField
                                     {...params}
-                                    error={Boolean(datePickerError[field.id])}
-                                    helperText={datePickerError[field.id]}
+                                    required={field.required}
+                                    error={Boolean(
+                                      field.required && !timeValues[field.id]
+                                    )}
+                                    helperText={
+                                      field.required && !timeValues[field.id]
+                                        ? "Time is required"
+                                        : ""
+                                    }
                                   />
                                 )}
-                                minDate={
-                                  field.allowBeforeToday ? undefined : today
-                                }
                               />
-                            </Box>
-                          </LocalizationProvider>
-                        </FormControl>
-                      );
-                    case "timePicker":
-                      return (
-                        <FormControl
-                          key={field.id}
-                          sx={{ marginBottom: 2, display: "block" }}
-                        >
-                          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                            {field.heading || "Time Picker"}
-                            {field.required && "*"}
-                          </Typography>
-                          <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <TimePicker
-                              ampm={field.clockFormat === "12h"}
-                              value={timeValues[field.id]?.value || null}
-                              onChange={(newValue) =>
-                                handleTimePickerChange(
-                                  newValue,
-                                  field.id,
-                                  field.heading
-                                )
+                            </LocalizationProvider>
+                          </FormControl>
+                        );
+                      case "fileUpload":
+                        return (
+                          <div key={field.id} style={{ marginBottom: "16px" }}>
+                            <Typography
+                              variant="h6"
+                              sx={{ fontWeight: "bold", color: "black" }}
+                            >
+                              {field.heading || "File Upload"}
+                              {field.required && "*"}
+                            </Typography>
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              component="span"
+                              fullWidth
+                              startIcon={<CloudUploadIcon />}
+                              onClick={() =>
+                                inputRefs[field.id].current.click()
                               }
-                              renderInput={(params) => (
-                                <TextField
-                                  {...params}
-                                  required={field.required}
-                                  error={Boolean(
-                                    field.required && !timeValues[field.id]
-                                  )}
-                                  helperText={
-                                    field.required && !timeValues[field.id]
-                                      ? "Time is required"
-                                      : ""
-                                  }
-                                />
-                              )}
+                            >
+                              Upload
+                            </Button>
+                            <input
+                              type="file"
+                              id={field.id}
+                              name={field.name}
+                              required={field.required}
+                              hidden
+                              accept=".pdf,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*"
+                              ref={inputRefs[field.id]}
+                              onChange={(event) =>
+                                handleFileSelect(event, field.id)
+                              }
                             />
-                          </LocalizationProvider>
-                        </FormControl>
-                      );
-                    case "fileUpload":
-                      return (
-                        <div key={field.id} style={{ marginBottom: "16px" }}>
-                          <Typography
-                            variant="h6"
-                            sx={{ fontWeight: "bold", color: "black" }}
-                          >
-                            {field.heading || "File Upload"}
-                            {field.required && "*"}
-                          </Typography>
-                          <Button
-                            variant="contained"
-                            color="primary"
-                            component="span"
-                            fullWidth
-                            startIcon={<CloudUploadIcon />}
-                            onClick={() => inputRefs[field.id].current.click()}
-                          >
-                            Upload
-                          </Button>
-                          <input
-                            type="file"
-                            id={field.id}
-                            name={field.name}
-                            required={field.required}
-                            hidden
-                            accept=".pdf,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*"
-                            ref={inputRefs[field.id]}
-                            onChange={(event) =>
-                              handleFileSelect(event, field.id)
-                            }
-                          />
-                          {selectedFiles[field.id] && (
-                            <p style={{ marginTop: "8px" }}>
-                              Selected file:{" "}
-                              <strong>{selectedFiles[field.id].name}</strong>
-                            </p>
-                          )}
-                        </div>
-                      );
-                    default:
-                      return null;
-                  }
-                })}
-              <Box sx={{ marginBottom: "1rem", marginTop: "2rem" }}>
-                <Divider />
-              </Box>
-              <Box sx={{ marginBottom: "1rem", marginTop: "1rem" }}>
-                {form[0].undertaking.map((item, index) => (
-                  <Typography
-                    key={index}
-                    sx={{ fontWeight: "bold", fontFamily: "sans-serif" }}
-                  >
-                    {item}
-                  </Typography>
-                ))}
-              </Box>
-              <Box sx={{ marginBottom: "1rem", marginTop: "1rem" }}>
-                <Divider />
-              </Box>
+                            {selectedFiles[field.id] && (
+                              <p style={{ marginTop: "8px" }}>
+                                Selected file:{" "}
+                                <strong>{selectedFiles[field.id].name}</strong>
+                              </p>
+                            )}
+                          </div>
+                        );
+                      default:
+                        return null;
+                    }
+                  })}
+                <Box sx={{ marginBottom: "1rem", marginTop: "2rem" }}>
+                  <Divider />
+                </Box>
+                <Box sx={{ marginBottom: "1rem", marginTop: "1rem" }}>
+                  {form[0].undertaking.map((item, index) => (
+                    <Typography
+                      key={index}
+                      sx={{ fontWeight: "bold", fontFamily: "sans-serif" }}
+                    >
+                      {item}
+                    </Typography>
+                  ))}
+                </Box>
+                <Box sx={{ marginBottom: "1rem", marginTop: "1rem" }}>
+                  <Divider />
+                </Box>
 
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  marginTop: ".5rem",
-                }}
-              >
-                <StyledButton
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  onClick={handleSubmit}
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    marginTop: ".5rem",
+                  }}
                 >
-                  Submit
-                </StyledButton>
+                  <StyledButton
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSubmit}
+                  >
+                    Submit
+                  </StyledButton>
+                </Box>
               </Box>
-            </Box>
-          </div>
-        </StyledPaper>
-      </StyledContainer>
+            </div>
+          </StyledPaper>
+        </StyledContainer>
+      </Box>
+      <Snackbar open={open} autoHideDuration={2500} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={severity} sx={{ width: "100%" }}>
+          {message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

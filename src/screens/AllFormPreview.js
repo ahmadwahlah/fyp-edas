@@ -32,8 +32,6 @@ import {
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { Divider } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import Snackbar from "@mui/material/Snackbar";
-import MuiAlert from "@mui/material/Alert";
 
 import LoggedInHeader from "../components/LoggedInHeader";
 
@@ -58,25 +56,10 @@ const StyledButton = styled(Button)(({ theme }) => ({
   marginTop: theme.spacing(2),
 }));
 
-const Alert = React.forwardRef(function Alert(props, ref) {
-  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-});
-
 const DynamicFormPreview = () => {
   const navigate = useNavigate();
   const { formId } = useParams();
   const [form, setForm] = useState(null);
-
-  const [open, setOpen] = useState(false);
-  const [message, setMessage] = useState("This is a success message!");
-  const [severity, setSeverity] = useState("success");
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
-  };
 
   useEffect(() => {
     const fetchFormData = async () => {
@@ -109,189 +92,6 @@ const DynamicFormPreview = () => {
     };
     fetchFormData();
   }, [formId]);
-
-  const validateForm = () => {
-    let valid = true;
-    let errors = {};
-
-    form[0].fields.forEach((field) => {
-      if (field.required) {
-        let fieldError = false;
-        switch (field.type) {
-          case "inputField":
-          case "multiTextArea":
-            if (!inputValues[field.id]?.value) {
-              fieldError = true;
-            }
-            break;
-          case "radioButton":
-            if (!radioSelectedValue[field.id]?.value) {
-              fieldError = true;
-            }
-            break;
-          case "checkboxGroup":
-            if (
-              !checkboxSelectedValues[field.id]?.values ||
-              !checkboxSelectedValues[field.id]?.values.length
-            ) {
-              fieldError = true;
-            }
-            break;
-          case "dropdownSelect":
-            if (!selectedValue[field.id]?.value) {
-              fieldError = true;
-            }
-            break;
-          case "dropdownMultiSelect":
-            if (
-              !multiSelectedValues[field.id]?.values ||
-              !multiSelectedValues[field.id]?.values.length
-            ) {
-              fieldError = true;
-            }
-            break;
-          case "datePicker":
-            if (!dateValues[field.id]?.value) {
-              fieldError = true;
-            }
-            break;
-          case "timePicker":
-            if (!timeValues[field.id]?.value) {
-              fieldError = true;
-            }
-            break;
-          case "fileUpload":
-            if (!selectedFiles[field.id]) {
-              fieldError = true;
-            }
-            break;
-          default:
-            break;
-        }
-        if (fieldError) {
-          errors[field.id] = "This field is required";
-          valid = false;
-        }
-      }
-    });
-
-    setFormErrors(errors);
-    return valid;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      logFormData();
-      postFormData();
-    } else {
-      alert("Please fill all required fields");
-    }
-  };
-
-  const logFormData = () => {
-    const token = localStorage.getItem("token");
-    const decodedPayload = jwt_decode(token);
-    const id = decodedPayload.student.id || decodedPayload.faculty.id;
-    const faculty =
-      decodedPayload.student.faculty || decodedPayload.faculty.department;
-
-    // Combine all the objects
-    const combinedObjects = {
-      ...inputValues,
-      ...radioSelectedValue,
-      ...selectedValue,
-      ...dateValues,
-      ...timeValues,
-      ...selectedFiles,
-    };
-
-    // Concatenate the arrays from checkboxSelectedValues and multiSelectedValues
-    const combinedArrays = Object.entries(checkboxSelectedValues)
-      .concat(Object.entries(multiSelectedValues))
-      .map(([id, item]) => ({ id, ...item }));
-
-    // Combine the objects and arrays
-    const combinedArray = Object.entries(combinedObjects)
-      .map(([id, item]) => ({ id, ...item }))
-      .concat(combinedArrays);
-
-    console.log(combinedArray);
-
-    const responces = {
-      combinedArray,
-    };
-
-    console.log(responces);
-    console.log(form[0].formName);
-    console.log(form[0].approvalHierarchy);
-    console.log(id);
-    console.log(faculty);
-  };
-  const postFormData = async () => {
-    const token = localStorage.getItem("token");
-    const decodedPayload = jwt_decode(token);
-    const id = decodedPayload.student.id || decodedPayload.faculty.id;
-    const faculty =
-      decodedPayload.student.faculty || decodedPayload.faculty.department;
-    const combinedObjects = {
-      ...inputValues,
-      ...radioSelectedValue,
-      ...selectedValue,
-      ...dateValues,
-      ...timeValues,
-      ...selectedFiles,
-    };
-
-    // Concatenate the arrays from checkboxSelectedValues and multiSelectedValues
-    const combinedArrays = Object.entries(checkboxSelectedValues)
-      .concat(Object.entries(multiSelectedValues))
-      .map(([id, item]) => ({ id, ...item }));
-
-    // Combine the objects and arrays
-    const combinedArray = Object.entries(combinedObjects)
-      .map(([id, item]) => ({ id, ...item }))
-      .concat(combinedArrays);
-
-    console.log(combinedArray);
-
-    const responces = {
-      combinedArray,
-    };
-
-    const payload = {
-      responces,
-      formName: form[0].formName,
-      approvalHierarchy: form[0].approvalHierarchy,
-      id,
-      faculty,
-    };
-
-    try {
-      const response = await axios.post(
-        "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/forms/",
-        payload,
-        {
-          headers: {
-            "x-auth-token": token,
-          },
-        }
-      );
-
-      console.log("Form submitted successfully:", response.data);
-      setMessage("Form submitted successfully!");
-      setSeverity("success");
-      setOpen(true);
-      setTimeout(() => {
-        navigate("/studenthome");
-      }, 2500);
-    } catch (error) {
-      console.error("Error submitting form data:", error, error.response.data);
-      setMessage("An error occurred while submitting the form!");
-      setSeverity("error");
-      setOpen(true);
-    }
-  };
 
   const [inputValues, setInputValues] = useState({});
   const handleChange = (event, id, heading) => {
@@ -859,7 +659,8 @@ const DynamicFormPreview = () => {
                     type="submit"
                     variant="contained"
                     color="primary"
-                    onClick={handleSubmit}
+                    disabled
+                    //   onClick={handleSubmit}
                   >
                     Submit
                   </StyledButton>
@@ -869,11 +670,6 @@ const DynamicFormPreview = () => {
           </StyledPaper>
         </StyledContainer>
       </Box>
-      <Snackbar open={open} autoHideDuration={2500} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={severity} sx={{ width: "100%" }}>
-          {message}
-        </Alert>
-      </Snackbar>
     </Box>
   );
 };

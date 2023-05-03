@@ -16,6 +16,7 @@ import Test from "./screens/test";
 import FormHierarchy from "./components/FormHierarchy";
 import CourseRegistrationForm from "./components/Forms/CourseRegistrationForm";
 import FormBuilderContainer from "./components/DynamicForm/FormBuilderContainer";
+import ALLFormPreview from "./screens/AllFormPreview";
 import DynamicFormPreview from "./screens/DynamicFormPreview";
 import DynamicFormPreviewFaculty from "./screens/DynamicFormPreviewFaculty";
 import EditProfile from "./screens/EditProfile";
@@ -44,6 +45,7 @@ function App() {
           />
           <Route path="/formbuilder" element={<FormBuilderContainer />} />
           <Route path="/formhierarchy" element={<FormHierarchy />} />
+          <Route path="/allform/:formId" exact element={<ALLFormPreview />} />
           <Route path="/form/:formId" exact element={<DynamicFormPreview />} />
           <Route
             path="/facultyform/:formId"
@@ -58,7 +60,3 @@ function App() {
 }
 
 export default App;
-
-//admin
-//set user profile navigation
-//set create form navigation

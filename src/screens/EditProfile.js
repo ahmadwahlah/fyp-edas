@@ -431,7 +431,7 @@ const EditProfile = () => {
                       disabled
                     />
                   </Grid>
-                  <Grid item xs={12}>
+                  {/* <Grid item xs={12}>
                     <Autocomplete
                       multiple
                       options={coursesList}
@@ -448,7 +448,7 @@ const EditProfile = () => {
                       )}
                       sx={{ mt: 2 }}
                     />
-                  </Grid>
+                  </Grid> */}
                 </Grid>
               </CardContent>
             </Card>

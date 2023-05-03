@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { v4 as uuid } from "uuid";
 import DraggableElement from "./DraggableElement";
 import FormEditor from "./FormEditor";
 import FormPreview from "./FormPreview";
@@ -16,6 +15,10 @@ import {
   TextField,
 } from "@mui/material";
 import axios from "axios";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { useNavigate } from "react-router-dom";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 import LoggedInHeader from "../LoggedInHeader";
 import InputFieldDialog from "./Toolbox/InputFieldDialog";
@@ -48,7 +51,22 @@ const styles = {
   },
 };
 
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 const FormBuilderContainer = () => {
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("This is a success message!");
+  const [severity, setSeverity] = useState("success");
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   const [fields, setFields] = useState([]);
   const [formName, setFormName] = useState("");
   const [editingField, setEditingField] = useState(null);
@@ -147,11 +165,24 @@ const FormBuilderContainer = () => {
         }
       );
       console.log("Form saved successfully:", response.data);
-      window.alert("Form saved successfully!");
-      window.location.reload();
+      setMessage("Form saved successfully!");
+      setSeverity("success");
+      setOpen(true);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2500);
     } catch (error) {
       console.error("Error saving form data:", error);
+      setMessage("Error saving form data!");
+      setSeverity("error");
+      setOpen(true);
     }
+  };
+
+  const navigate = useNavigate();
+
+  const handleBackClick = () => {
+    navigate(-1); // Navigate back to the previous page
   };
 
   return (
@@ -165,6 +196,16 @@ const FormBuilderContainer = () => {
           pt: "80px",
         }}
       >
+        <Button
+          onClick={handleBackClick}
+          startIcon={<ArrowBackIosNewIcon />}
+          color="primary"
+          sx={{
+            color: "black",
+          }}
+        >
+          Back
+        </Button>
         <Typography variant="h4">Form Builder</Typography>{" "}
         <Button
           variant="contained"
@@ -575,6 +616,11 @@ const FormBuilderContainer = () => {
         onClose={() => setFormDialogOpen(false)}
         onSave={handleFormSave}
       />
+      <Snackbar open={open} autoHideDuration={2500} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={severity} sx={{ width: "100%" }}>
+          {message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
