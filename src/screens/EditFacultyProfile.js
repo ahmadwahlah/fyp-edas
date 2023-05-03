@@ -15,6 +15,8 @@ import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import LoggedInHeader from "../components/LoggedInHeader";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { useNavigate } from "react-router-dom";
 
 function CustomSelect(props) {
   const { label, options, ...rest } = props;
@@ -222,9 +224,25 @@ const EditFacultyProfile = () => {
     fetchCourses();
   }, []);
 
+  const navigate = useNavigate();
+
+  const handleBackClick = () => {
+    navigate(-1); // Navigate back to the previous page
+  };
+
   return (
     <Container maxWidth="lg" sx={{ display: "flex" }}>
       <LoggedInHeader />
+      <Box>
+        <Button
+          onClick={handleBackClick}
+          startIcon={<ArrowBackIosNewIcon />}
+          color="primary"
+          sx={{ flexGrow: 1, mt: 12 }}
+        >
+          Back
+        </Button>
+      </Box>
       <Box sx={{ flexGrow: 1, mt: 12, mx: 4, marginBottom: "1.5rem" }}>
         <Grid container spacing={4}>
           <Grid item xs={12} md={4}>
@@ -501,9 +519,9 @@ const EditFacultyProfile = () => {
                             }}
                             fullWidth
                             options={[
-                              { value: "Advisor", label: "Advisor" },
-                              { value: "Dean", label: "Dean" },
-                              { value: "Instructor", label: "Instructor" },
+                              { value: "advisor", label: "Advisor" },
+                              { value: "dean", label: "Dean" },
+                              { value: "instructor", label: "Instructor" },
                             ]}
                             disabled={!isEditable}
                           />

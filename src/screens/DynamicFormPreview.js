@@ -179,15 +179,31 @@ const DynamicFormPreview = () => {
     const id = decodedPayload.student.id || decodedPayload.faculty.id;
     const faculty =
       decodedPayload.student.faculty || decodedPayload.faculty.department;
+
+    // Combine all the objects
+    const combinedObjects = {
+      ...inputValues,
+      ...radioSelectedValue,
+      ...selectedValue,
+      ...dateValues,
+      ...timeValues,
+      ...selectedFiles,
+    };
+
+    // Concatenate the arrays from checkboxSelectedValues and multiSelectedValues
+    const combinedArrays = Object.entries(checkboxSelectedValues)
+      .concat(Object.entries(multiSelectedValues))
+      .map(([id, item]) => ({ id, ...item }));
+
+    // Combine the objects and arrays
+    const combinedArray = Object.entries(combinedObjects)
+      .map(([id, item]) => ({ id, ...item }))
+      .concat(combinedArrays);
+
+    console.log(combinedArray);
+
     const responces = {
-      inputValues,
-      radioSelectedValue,
-      checkboxSelectedValues,
-      selectedValue,
-      multiSelectedValues,
-      dateValues,
-      timeValues,
-      selectedFiles,
+      combinedArray,
     };
 
     console.log(responces);
@@ -202,15 +218,29 @@ const DynamicFormPreview = () => {
     const id = decodedPayload.student.id || decodedPayload.faculty.id;
     const faculty =
       decodedPayload.student.faculty || decodedPayload.faculty.department;
+    const combinedObjects = {
+      ...inputValues,
+      ...radioSelectedValue,
+      ...selectedValue,
+      ...dateValues,
+      ...timeValues,
+      ...selectedFiles,
+    };
+
+    // Concatenate the arrays from checkboxSelectedValues and multiSelectedValues
+    const combinedArrays = Object.entries(checkboxSelectedValues)
+      .concat(Object.entries(multiSelectedValues))
+      .map(([id, item]) => ({ id, ...item }));
+
+    // Combine the objects and arrays
+    const combinedArray = Object.entries(combinedObjects)
+      .map(([id, item]) => ({ id, ...item }))
+      .concat(combinedArrays);
+
+    console.log(combinedArray);
+
     const responces = {
-      inputValues,
-      radioSelectedValue,
-      checkboxSelectedValues,
-      selectedValue,
-      multiSelectedValues,
-      dateValues,
-      timeValues,
-      selectedFiles,
+      combinedArray,
     };
 
     const payload = {

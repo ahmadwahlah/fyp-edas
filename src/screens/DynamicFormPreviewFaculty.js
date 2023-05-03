@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import styled from "@mui/material/styles/styled";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
+import moment from "moment";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useNavigate } from "react-router";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -177,15 +178,29 @@ const DynamicFormPreviewFaculty = () => {
     const token = localStorage.getItem("token");
     const decodedPayload = jwt_decode(token);
     const department = decodedPayload.faculty.department;
+    const combinedObjects = {
+      ...inputValues,
+      ...radioSelectedValue,
+      ...selectedValue,
+      ...dateValues,
+      ...timeValues,
+      ...selectedFiles,
+    };
+
+    // Concatenate the arrays from checkboxSelectedValues and multiSelectedValues
+    const combinedArrays = Object.entries(checkboxSelectedValues)
+      .concat(Object.entries(multiSelectedValues))
+      .map(([id, item]) => ({ id, ...item }));
+
+    // Combine the objects and arrays
+    const combinedArray = Object.entries(combinedObjects)
+      .map(([id, item]) => ({ id, ...item }))
+      .concat(combinedArrays);
+
+    console.log(combinedArray);
+
     const responces = {
-      inputValues,
-      radioSelectedValue,
-      checkboxSelectedValues,
-      selectedValue,
-      multiSelectedValues,
-      dateValues,
-      timeValues,
-      selectedFiles,
+      combinedArray,
     };
 
     console.log(responces);
@@ -197,15 +212,29 @@ const DynamicFormPreviewFaculty = () => {
     const token = localStorage.getItem("token");
     const decodedPayload = jwt_decode(token);
     const department = decodedPayload.faculty.department;
+    const combinedObjects = {
+      ...inputValues,
+      ...radioSelectedValue,
+      ...selectedValue,
+      ...dateValues,
+      ...timeValues,
+      ...selectedFiles,
+    };
+
+    // Concatenate the arrays from checkboxSelectedValues and multiSelectedValues
+    const combinedArrays = Object.entries(checkboxSelectedValues)
+      .concat(Object.entries(multiSelectedValues))
+      .map(([id, item]) => ({ id, ...item }));
+
+    // Combine the objects and arrays
+    const combinedArray = Object.entries(combinedObjects)
+      .map(([id, item]) => ({ id, ...item }))
+      .concat(combinedArrays);
+
+    console.log(combinedArray);
+
     const responces = {
-      inputValues,
-      radioSelectedValue,
-      checkboxSelectedValues,
-      selectedValue,
-      multiSelectedValues,
-      dateValues,
-      timeValues,
-      selectedFiles,
+      combinedArray,
     };
 
     const payload = {

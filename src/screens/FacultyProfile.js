@@ -12,6 +12,8 @@ import Autocomplete from "@mui/material/Autocomplete";
 import axios from "axios";
 
 import LoggedInHeader from "../components/LoggedInHeader";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { useNavigate } from "react-router-dom";
 
 function CustomSelect(props) {
   const { label, options, ...rest } = props;
@@ -158,6 +160,12 @@ const FacultyProfile = () => {
     fetchProfileData();
   }, []);
 
+  const navigate = useNavigate();
+
+  const handleBackClick = () => {
+    navigate(-1); // Navigate back to the previous page
+  };
+
   const updateProfileData = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -212,6 +220,16 @@ const FacultyProfile = () => {
   return (
     <Container maxWidth="lg" sx={{ display: "flex" }}>
       <LoggedInHeader />
+      <Box>
+        <Button
+          onClick={handleBackClick}
+          startIcon={<ArrowBackIosNewIcon />}
+          color="primary"
+          sx={{ flexGrow: 1, mt: 12 }}
+        >
+          Back
+        </Button>
+      </Box>
       <Box sx={{ flexGrow: 1, mt: 12, mx: 4, marginBottom: "1.5rem" }}>
         <Grid container spacing={4}>
           <Grid item xs={12} md={4}>

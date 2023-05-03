@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Typography from "@mui/material/Typography";
@@ -12,42 +12,39 @@ import Box from "@mui/material/Box";
 import { Divider } from "@mui/material";
 import { HourglassEmpty } from "@mui/icons-material";
 import moment from "moment";
+import axios from "axios";
 
 const DividerLine = () => <Divider style={{ marginBottom: "8px" }} />;
 
-const pendingForms = [
-  {
-    id: 1,
-    formName: "Student Enrollment",
-    submissionDate: "2022-09-01",
-    submissionTime: "09:30:00",
-    submittedBy: { name: "John Smith", role: "Student" },
-    department: "Admissions",
-    email: "john.smith@example.com",
-  },
-  {
-    id: 2,
-    formName: "Faculty Leave Request",
-    submissionDate: "2022-08-15",
-    submissionTime: "02:15:00",
-    submittedBy: { name: "Emily Jones", role: "Faculty" },
-    department: "Human Resources",
-    email: "emily.jones@example.com",
-  },
-  {
-    id: 3,
-    formName: "IT Helpdesk Ticket",
-    submissionDate: "2022-07-22",
-    submissionTime: "10:45:00",
-    submittedBy: { name: "Michael Lee", role: "Staff" },
-    department: "Information Technology",
-    email: "michael.lee@example.com",
-  },
-];
-
 const PendingForms = () => {
   const [selectedForm, setSelectedForm] = useState(null);
-  const [forms, setForms] = useState(pendingForms);
+  const [forms, setForms] = useState([]);
+
+  useEffect(() => {
+    fetchForms();
+  }, []);
+
+  const fetchForms = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const config = {
+        headers: {
+          "x-auth-token": token,
+        },
+      };
+      const response = await axios.get(
+        "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/faculty/studentForms",
+        config
+      );
+
+      console.log(response.data);
+      console.log(response.data[0].student.role);
+      setForms(response.data);
+      // Assuming the data structure is similar to pendingForms, you can set the state with the fetched data
+    } catch (error) {
+      console.error("Error fetching forms:", error);
+    }
+  };
 
   const handleFormClick = (form) => {
     setSelectedForm(form);
@@ -71,8 +68,9 @@ const PendingForms = () => {
     <div>
       <Box style={{ width: "100%" }}>
         <List>
-          {forms.map((form) => (
+          {forms.map((form, index) => (
             <Box
+              key={index}
               sx={{
                 borderRadius: ".5rem",
                 boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.25)",
@@ -132,7 +130,7 @@ const PendingForms = () => {
                               color: "black",
                             }}
                           >
-                            {`${form.submittedBy.name} (${form.submittedBy.role})`}
+                            {`${form.student.firstname} ${form.student.lastname} (${form.student.role})`}
                           </Typography>
                         </Box>
                         <Box
@@ -155,9 +153,9 @@ const PendingForms = () => {
                               fontStyle: "italic",
                             }}
                           >
-                            {`Submission Date: ${moment(
-                              form.submissionDate
-                            ).format("DD-MM-YYYY")}`}
+                            {`Submission Date: ${moment(form.date).format(
+                              "DD-MM-YYYY"
+                            )}`}
                           </Typography>
                           <Typography
                             variant="body2"
@@ -169,10 +167,9 @@ const PendingForms = () => {
                               fontStyle: "italic",
                             }}
                           >
-                            {`Submission Time: ${moment(
-                              form.submissionTime,
+                            {`Submission Time: ${moment(form.date).format(
                               "HH:mm:ss"
-                            ).format("hh:mm:ss")}`}
+                            )}`}
                           </Typography>
                         </Box>
                         <Box
@@ -215,6 +212,7 @@ const PendingForms = () => {
       <Dialog
         open={Boolean(selectedForm)}
         onClose={() => setSelectedForm(null)}
+        sx={{ Width: "5rem" }}
       >
         <DialogTitle>
           <Typography variant="h6" color="primary">
@@ -225,29 +223,51 @@ const PendingForms = () => {
           <Box sx={{ display: "flex", flexDirection: "column" }}>
             <Box sx={{ mb: 2 }}>
               <Typography variant="subtitle1">
-                <strong>Form Name:</strong> {selectedForm?.formName}
+                <strong>Name: </strong>
+                {selectedForm?.student.firstname}{" "}
+                {selectedForm?.student.lastname}
+              </Typography>
+
+              <Typography variant="subtitle1">
+                <strong>Role: </strong>
+                {selectedForm?.student.role}
+              </Typography>
+
+              <Typography variant="subtitle1">
+                <strong>Batch Number: </strong>
+                {selectedForm?.student.batch}
+              </Typography>
+
+              <Typography variant="subtitle1">
+                <strong>Reg Number: </strong>
+                {selectedForm?.student.regnum}
+              </Typography>
+
+              <Typography variant="subtitle1">
+                <strong>Faculty: </strong>
+                {selectedForm?.student.faculty}
+              </Typography>
+
+              <Typography variant="subtitle1">
+                <strong>Email: </strong>
+                {selectedForm?.student.email}
+              </Typography>
+
+              <Typography variant="subtitle1">
+                <strong>Phone Number: </strong>
+                {selectedForm?.student.phoneNumber}
               </Typography>
             </Box>
             <DividerLine />
             <Box sx={{ mb: 2 }}>
-              <Typography variant="subtitle1">
-                <strong>Submission Date:</strong>{" "}
-                {`${selectedForm?.submissionDate} ${selectedForm?.submissionTime}`}
-              </Typography>
+              {selectedForm?.responces.combinedArray.map((item) => (
+                <Typography key={item.id} variant="subtitle1">
+                  <strong>{item.heading}: </strong>
+                  {item.values ? item.values.join(", ") : item.value}
+                </Typography>
+              ))}
             </Box>
             <DividerLine />
-            <Box sx={{ mb: 2 }}>
-              <Typography variant="subtitle1">
-                <strong>Submitted By:</strong>{" "}
-                {`${selectedForm?.submittedBy?.name} (${selectedForm?.submittedBy?.role})`}
-              </Typography>
-            </Box>
-            <DividerLine />
-            <Box sx={{ mb: 2 }}>
-              <Typography variant="subtitle1">
-                <strong>Department:</strong> {selectedForm?.department}
-              </Typography>
-            </Box>
           </Box>
         </DialogContent>
         <DialogActions>
