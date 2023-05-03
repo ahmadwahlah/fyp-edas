@@ -20,14 +20,12 @@ const drawerWidth = 240;
 
 export default function StudentNavigation() {
   const [content, setContent] = React.useState(() => {
-    // Retrieve the previous state from browser storage
     const storedContent = window.localStorage.getItem(
       "studentNavigationContent"
     );
     return storedContent ? storedContent : "dashboard";
   });
 
-  // Update the state and browser storage whenever the user selects a different content
   const handleListItemClick = (event, content) => {
     setContent(content);
     window.localStorage.setItem("studentNavigationContent", content);
@@ -63,24 +61,22 @@ export default function StudentNavigation() {
         <Toolbar />
         <Box sx={{ overflow: "auto" }}>
           <List>
-            <ListItem
-              disablePadding
-              onClick={(event) => handleListItemClick(event, "dashboard")}
-              sx={{ cursor: "pointer" }}
-            >
-              <ListItemButton>
+            <ListItem disablePadding sx={{ cursor: "pointer" }}>
+              <ListItemButton
+                selected={content === "dashboard"}
+                onClick={(event) => handleListItemClick(event, "dashboard")}
+              >
                 <ListItemIcon sx={{ color: "#000000" }}>
                   <DashboardIcon />
                 </ListItemIcon>
                 <ListItemText primary="Dashboard" />
               </ListItemButton>
             </ListItem>
-            <ListItem
-              disablePadding
-              onClick={(event) => handleListItemClick(event, "forms")}
-              sx={{ cursor: "pointer" }}
-            >
-              <ListItemButton>
+            <ListItem disablePadding sx={{ cursor: "pointer" }}>
+              <ListItemButton
+                selected={content === "forms"}
+                onClick={(event) => handleListItemClick(event, "forms")}
+              >
                 <ListItemIcon sx={{ color: "#000000" }}>
                   <DescriptionIcon />
                 </ListItemIcon>

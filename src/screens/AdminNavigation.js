@@ -24,12 +24,10 @@ const drawerWidth = 240;
 export default function AdminNavigation() {
   const navigate = useNavigate();
   const [content, setContent] = React.useState(() => {
-    // Retrieve the previous state from browser storage
     const storedContent = window.localStorage.getItem("adminNavigationContent");
     return storedContent ? storedContent : "dashboard";
   });
 
-  // Update the state and browser storage whenever the user selects a different content
   const handleListItemClick = (event, content) => {
     setContent(content);
     window.localStorage.setItem("adminNavigationContent", content);
@@ -61,43 +59,37 @@ export default function AdminNavigation() {
           [`& .MuiDrawer-paper`]: {
             width: drawerWidth,
             boxSizing: "border-box",
-            //            backgroundColor: "#F5F5F5",
-            //            borderRight: "1px solid black",
           },
         }}
       >
         <Toolbar />
         <Box sx={{ overflow: "auto" }}>
           <List>
-            <ListItem
-              disablePadding
-              onClick={(event) => handleListItemClick(event, "dashboard")}
-              sx={{ cursor: "pointer" }}
-            >
-              <ListItemButton>
+            <ListItem disablePadding sx={{ cursor: "pointer" }}>
+              <ListItemButton
+                selected={content === "dashboard"}
+                onClick={(event) => handleListItemClick(event, "dashboard")}
+              >
                 <ListItemIcon sx={{ color: "#000000" }}>
                   <DashboardIcon />
                 </ListItemIcon>
                 <ListItemText primary="Dashboard" />
               </ListItemButton>
             </ListItem>
-            <ListItem
-              disablePadding
-              onClick={(event) => handleListItemClick(event, "userManagement")}
-              sx={{ cursor: "pointer" }}
-            >
-              <ListItemButton>
+            <ListItem disablePadding sx={{ cursor: "pointer" }}>
+              <ListItemButton
+                selected={content === "userManagement"}
+                onClick={(event) =>
+                  handleListItemClick(event, "userManagement")
+                }
+              >
                 <ListItemIcon sx={{ color: "#000000" }}>
                   <PeopleIcon />
                 </ListItemIcon>
                 <ListItemText primary="User Management" />
               </ListItemButton>
             </ListItem>
-            <ListItem
-              disablePadding
-              onClick={(event) => handleListItemClick(event, "createform")}
-              sx={{ cursor: "pointer" }}
-            >
+            <ListItem disablePadding sx={{ cursor: "pointer" }}>
               <ListItemButton onClick={() => navigate("/formbuilder")}>
                 <ListItemIcon sx={{ color: "#000000" }}>
                   <NoteAddIcon />
@@ -105,12 +97,11 @@ export default function AdminNavigation() {
                 <ListItemText primary="Create Form" />
               </ListItemButton>
             </ListItem>
-            <ListItem
-              disablePadding
-              onClick={(event) => handleListItemClick(event, "forms")}
-              sx={{ cursor: "pointer" }}
-            >
-              <ListItemButton>
+            <ListItem disablePadding sx={{ cursor: "pointer" }}>
+              <ListItemButton
+                selected={content === "forms"}
+                onClick={(event) => handleListItemClick(event, "forms")}
+              >
                 <ListItemIcon sx={{ color: "#000000" }}>
                   <DescriptionIcon />
                 </ListItemIcon>

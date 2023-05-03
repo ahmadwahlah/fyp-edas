@@ -11,7 +11,6 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import DescriptionIcon from "@mui/icons-material/Description";
-
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 
 import LoggedInHeader from "../components/LoggedInHeader";
@@ -21,16 +20,14 @@ import PendingForms from "../components/PendingForms";
 
 const drawerWidth = 240;
 
-export default function StudentNavigation() {
+export default function FacultyNavigation() {
   const [content, setContent] = React.useState(() => {
-    // Retrieve the previous state from browser storage
     const storedContent = window.localStorage.getItem(
       "facultyNavigationContent"
     );
     return storedContent ? storedContent : "dashboard";
   });
 
-  // Update the state and browser storage whenever the user selects a different content
   const handleListItemClick = (event, content) => {
     setContent(content);
     window.localStorage.setItem("facultyNavigationContent", content);
@@ -62,44 +59,39 @@ export default function StudentNavigation() {
           [`& .MuiDrawer-paper`]: {
             width: drawerWidth,
             boxSizing: "border-box",
-            //            backgroundColor: "#F5F5F5",
-            //            borderRight: "1px solid black",
           },
         }}
       >
         <Toolbar />
         <Box sx={{ overflow: "auto" }}>
           <List>
-            <ListItem
-              disablePadding
-              onClick={(event) => handleListItemClick(event, "dashboard")}
-              sx={{ cursor: "pointer" }}
-            >
-              <ListItemButton>
+            <ListItem disablePadding sx={{ cursor: "pointer" }}>
+              <ListItemButton
+                selected={content === "dashboard"}
+                onClick={(event) => handleListItemClick(event, "dashboard")}
+              >
                 <ListItemIcon sx={{ color: "#000000" }}>
                   <DashboardIcon />
                 </ListItemIcon>
                 <ListItemText primary="Dashboard" />
               </ListItemButton>
             </ListItem>
-            <ListItem
-              disablePadding
-              onClick={(event) => handleListItemClick(event, "forms")}
-              sx={{ cursor: "pointer" }}
-            >
-              <ListItemButton>
+            <ListItem disablePadding sx={{ cursor: "pointer" }}>
+              <ListItemButton
+                selected={content === "forms"}
+                onClick={(event) => handleListItemClick(event, "forms")}
+              >
                 <ListItemIcon sx={{ color: "#000000" }}>
                   <DescriptionIcon />
                 </ListItemIcon>
                 <ListItemText primary="Forms" />
               </ListItemButton>
             </ListItem>
-            <ListItem
-              disablePadding
-              onClick={(event) => handleListItemClick(event, "pendingforms")}
-              sx={{ cursor: "pointer" }}
-            >
-              <ListItemButton>
+            <ListItem disablePadding sx={{ cursor: "pointer" }}>
+              <ListItemButton
+                selected={content === "pendingforms"}
+                onClick={(event) => handleListItemClick(event, "pendingforms")}
+              >
                 <ListItemIcon sx={{ color: "#000000" }}>
                   <PendingActionsIcon />
                 </ListItemIcon>
