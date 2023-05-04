@@ -76,7 +76,7 @@ const DynamicFormPreview = () => {
         console.log(formId);
 
         const response = await axios.get(
-          `http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/dynamicforms/student/${formId}`,
+          `http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/dynamicforms/${formId}`,
           {
             headers: {
               "x-auth-token": token,

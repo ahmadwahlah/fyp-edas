@@ -31,8 +31,8 @@ export default function FacultyDashboard() {
             },
           }
         );
-        setFilteredForms(response.data);
-        setAllForms(response.data); // store fetched forms in the state
+        setFilteredForms(response.data.forms);
+        setAllForms(response.data.forms); // store fetched forms in the state
         console.log(response.data);
       } catch (error) {
         console.error("Error fetching forms:", error);

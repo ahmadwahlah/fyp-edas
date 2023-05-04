@@ -9,6 +9,8 @@ import {
   Typography,
   DialogActions,
   Button,
+  Box,
+  Divider,
 } from "@mui/material";
 
 export default function FormTracingDialog({
@@ -17,6 +19,8 @@ export default function FormTracingDialog({
   hierarchy,
   activestep,
   formName,
+  response,
+  user,
 }) {
   const getStepLabelColor = (status) => {
     switch (status) {
@@ -43,11 +47,68 @@ export default function FormTracingDialog({
         },
       }}
     >
-      <DialogTitle id="hierarchy-dialog-title" sx={{ textAlign: "center" }}>
-        {" "}
-        {formName} - Form Approval Progress
-      </DialogTitle>
       <DialogContent>
+        <Box sx={{ mb: 2 }}>
+          <Typography variant="h5" sx={{ textAlign: "center" }}>
+            <strong>{formName}</strong>
+          </Typography>
+        </Box>
+        <Divider />
+        <Box sx={{ mb: 2, mt: 2, ml: 2 }}>
+          <Typography variant="subtitle1">
+            <strong>Name: </strong>
+            {user.firstname} {user.lastname}
+          </Typography>
+
+          <Typography variant="subtitle1">
+            <strong>Role: </strong>
+            {user.role}
+          </Typography>
+
+          <Typography variant="subtitle1">
+            <strong>Batch Number: </strong>
+            {user.batch}
+          </Typography>
+
+          <Typography variant="subtitle1">
+            <strong>Reg Number: </strong>
+            {user.regnum}
+          </Typography>
+
+          <Typography variant="subtitle1">
+            <strong>Faculty: </strong>
+            {user.faculty}
+          </Typography>
+
+          <Typography variant="subtitle1">
+            <strong>Email: </strong>
+            {user.email}
+          </Typography>
+
+          <Typography variant="subtitle1">
+            <strong>Phone Number: </strong>
+            {user.phoneNumber}
+          </Typography>
+        </Box>
+        <Divider />
+        <Box sx={{ mb: 2, mt: 2, ml: 2 }}>
+          {response && response.combinedArray ? (
+            response.combinedArray.map((item) => (
+              <Typography key={item.id} variant="subtitle1">
+                <strong>{item.heading}: </strong>
+                {item.value ? item.value : item.values.join(", ")}
+              </Typography>
+            ))
+          ) : (
+            <Typography variant="subtitle1">No data available</Typography>
+          )}
+        </Box>
+        <Divider />
+        <Box sx={{ mb: 2, mt: 2 }}>
+          <Typography variant="h6" sx={{ textAlign: "center" }}>
+            <strong>Form Approval Progress</strong>
+          </Typography>
+        </Box>
         <Stepper
           orientation="horizontal"
           alternativeLabel

@@ -6,7 +6,7 @@ import Toolbar from "@mui/material/Toolbar";
 import { Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import NotificationButton from "./NotificationButton";
+// import NotificationButton from "./NotificationButton";
 import AccountButton from "./AccountButton";
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
@@ -36,7 +36,7 @@ const LoggedInHeader = () => {
           <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
             EDAS
           </Typography>
-          <NotificationButton />
+          {/* <NotificationButton /> */}
           <AccountButton />
         </Toolbar>
       </StyledAppBar>

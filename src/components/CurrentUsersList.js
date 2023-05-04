@@ -123,7 +123,7 @@ const CurrentUsersList = () => {
     const token = localStorage.getItem("token");
     axios
       .delete(
-        `http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/admin/${role}/${id}`,
+        `http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/admin/${role}/remove/${id}`,
         {
           headers: {
             "x-auth-token": token,

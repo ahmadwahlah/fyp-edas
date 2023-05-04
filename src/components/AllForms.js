@@ -49,8 +49,9 @@ export default function AllForms() {
   const [openDialog, setOpenDialog] = useState(false);
   const [deleteForm, setDeleteForm] = useState({});
 
-  const handleOpenDialog = (event) => {
-    event.preventDefault(); // Change this line
+  const handleOpenDialog = (event, form) => {
+    event.preventDefault();
+    setDeleteForm(form);
     setOpenDialog(true);
   };
 
@@ -58,7 +59,25 @@ export default function AllForms() {
     setOpenDialog(false);
   };
 
-  const handleDisapproveConfirmation = () => {
+  const handleDisapproveConfirmation = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(
+        `http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/dynamicforms/${deleteForm.id}`,
+        {
+          headers: {
+            "x-auth-token": token,
+          },
+        }
+      );
+      // Remove the deleted form from the local state
+      setForms(forms.filter((form) => form.id !== deleteForm.id));
+      setFilteredForms(
+        filteredForms.filter((form) => form.id !== deleteForm.id)
+      );
+    } catch (error) {
+      console.error("Error deleting form:", error);
+    }
     setOpenDialog(false);
   };
 
@@ -98,13 +117,14 @@ export default function AllForms() {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/dynamicforms/student",
+          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/dynamicforms",
           {
             headers: {
               "x-auth-token": token,
             },
           }
         );
+        console.log(response.data);
         const data = response.data;
         const mappedData = data.map((form) => ({
           id: form._id,
@@ -191,16 +211,16 @@ export default function AllForms() {
                     </Typography>
                   </Box>
                   <Box>
-                    <IconButton
+                    {/* <IconButton
                       aria-label="edit"
                       onClick={(event) => handleOpenFormDialog(event, form)}
                     >
                       <EditIcon fontSize="large" style={{ color: "#1976d2" }} />
-                    </IconButton>
+                    </IconButton> */}
 
                     <IconButton
-                      aria-label="disapprove"
-                      onClick={(event) => handleOpenDialog(event)}
+                      aria-label="delete"
+                      onClick={(event) => handleOpenDialog(event, form)}
                     >
                       <DeleteIcon style={{ color: "red" }} fontSize="large" />
                     </IconButton>

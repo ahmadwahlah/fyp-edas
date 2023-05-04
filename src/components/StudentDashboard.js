@@ -14,6 +14,8 @@ export default function StudentDashboard() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [currentHierarchy, setCurrentHierarchy] = useState([]);
   const [currentFormName, setCurrentFormName] = useState("");
+  const [response, setResponse] = useState({});
+  const [student, setStudent] = useState({});
 
   const [activeStep, setActiveStep] = useState(0);
   const [allForms, setAllForms] = useState([]);
@@ -31,8 +33,9 @@ export default function StudentDashboard() {
             },
           }
         );
-        setFilteredForms(response.data);
-        setAllForms(response.data); // store fetched forms in the state
+        setFilteredForms(response.data.forms);
+        setAllForms(response.data.forms); // store fetched forms in the state
+        setStudent(response.data.student);
         console.log(response.data);
       } catch (error) {
         console.error("Error fetching forms:", error);
@@ -59,7 +62,7 @@ export default function StudentDashboard() {
 
   // ... (previous imports and code)
 
-  const handleHierarchyClick = (approvers, formName) => {
+  const handleHierarchyClick = (approvers, formName, response) => {
     const hierarchy = approvers.map((approver) => ({
       title: approver.role,
       status: approver.disapproved
@@ -72,6 +75,8 @@ export default function StudentDashboard() {
     setCurrentHierarchy(hierarchy);
     setActiveStep(setActiveStepIndex(hierarchy));
     setCurrentFormName(formName);
+    setResponse(response);
+    console.log(response);
     setDialogOpen(true);
   };
 
@@ -151,7 +156,11 @@ export default function StudentDashboard() {
             submissionDate={data.date}
             status={getFormStatus(data.approvers)}
             onHierarchyClick={() =>
-              handleHierarchyClick(data.approvers, data.formName)
+              handleHierarchyClick(
+                data.approvers,
+                data.formName,
+                data.responces
+              )
             }
           />
         ))}
@@ -163,6 +172,8 @@ export default function StudentDashboard() {
         hierarchy={currentHierarchy}
         activestep={activeStep}
         formName={currentFormName}
+        response={response}
+        user={student}
       />
     </Box>
   );

@@ -212,7 +212,13 @@ const PendingForms = () => {
       <Dialog
         open={Boolean(selectedForm)}
         onClose={() => setSelectedForm(null)}
-        sx={{ Width: "5rem" }}
+        maxWidth="100vw"
+        fullWidth
+        sx={{
+          "& .MuiPaper-root": {
+            width: "60%",
+          },
+        }}
       >
         <DialogTitle>
           <Typography variant="h6" color="primary">

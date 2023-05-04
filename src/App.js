@@ -60,3 +60,10 @@ function App() {
 }
 
 export default App;
+
+// Only Heading, Text Input, Multi Text add heading,
+// external role set in faculty
+// set admin profile
+// create a card that render data both for history and approve dispprove *****
+// ADD Faculty in administrator
+// Cousrse for faculty in administrator
