@@ -277,7 +277,7 @@ const DynamicFormPreviewFaculty = () => {
       setOpen(true);
       setTimeout(() => {
         navigate("/facultyhome");
-      }, 2500);
+      }, 2000);
     } catch (error) {
       console.error("Error submitting form data:", error, error.response.data);
       setMessage("An error occurred while submitting the form!");
@@ -862,7 +862,7 @@ const DynamicFormPreviewFaculty = () => {
           </StyledPaper>
         </StyledContainer>
       </Box>
-      <Snackbar open={open} autoHideDuration={2500} onClose={handleClose}>
+      <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
         <Alert onClose={handleClose} severity={severity} sx={{ width: "100%" }}>
           {message}
         </Alert>

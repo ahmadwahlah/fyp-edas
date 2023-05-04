@@ -5,7 +5,7 @@ import CardGroupFaculty from "./CardGroupFaculty";
 import SearchBar from "./SearchBar";
 import Typography from "@mui/material/Typography";
 import FormHistoryCard from "./FormHistoryCard";
-import FormTrackingDialog from "./FormTrackingDialog";
+import FormTrackingDialogFaculty from "./FormTrackingDialogFaculty";
 import axios from "axios";
 
 export default function FacultyDashboard() {
@@ -14,6 +14,8 @@ export default function FacultyDashboard() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [currentHierarchy, setCurrentHierarchy] = useState([]);
   const [currentFormName, setCurrentFormName] = useState("");
+  const [response, setResponse] = useState({});
+  const [faculty, setFaculty] = useState({});
 
   const [activeStep, setActiveStep] = useState(0);
   const [allForms, setAllForms] = useState([]);
@@ -33,6 +35,7 @@ export default function FacultyDashboard() {
         );
         setFilteredForms(response.data.forms);
         setAllForms(response.data.forms); // store fetched forms in the state
+        setFaculty(response.data.faculty);
         console.log(response.data);
       } catch (error) {
         console.error("Error fetching forms:", error);
@@ -59,7 +62,7 @@ export default function FacultyDashboard() {
 
   // ... (previous imports and code)
 
-  const handleHierarchyClick = (approvers, formName) => {
+  const handleHierarchyClick = (approvers, formName, response) => {
     const hierarchy = approvers.map((approver) => ({
       title: approver.role,
       status: approver.disapproved
@@ -72,6 +75,8 @@ export default function FacultyDashboard() {
     setCurrentHierarchy(hierarchy);
     setActiveStep(setActiveStepIndex(hierarchy));
     setCurrentFormName(formName);
+    setResponse(response);
+    console.log(response);
     setDialogOpen(true);
   };
 
@@ -150,18 +155,24 @@ export default function FacultyDashboard() {
             submissionDate={data.date}
             status={getFormStatus(data.approvers)}
             onHierarchyClick={() =>
-              handleHierarchyClick(data.approvers, data.formName)
+              handleHierarchyClick(
+                data.approvers,
+                data.formName,
+                data.responces
+              )
             }
           />
         ))}
         <Divider />
       </Box>
-      <FormTrackingDialog
+      <FormTrackingDialogFaculty
         open={dialogOpen}
         onClose={handleDialogClose}
         hierarchy={currentHierarchy}
         activestep={activeStep}
         formName={currentFormName}
+        response={response}
+        user={faculty}
       />
     </Box>
   );

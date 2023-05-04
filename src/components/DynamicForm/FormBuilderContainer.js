@@ -170,7 +170,7 @@ const FormBuilderContainer = () => {
       setOpen(true);
       setTimeout(() => {
         window.location.reload();
-      }, 2500);
+      }, 2000);
     } catch (error) {
       console.error("Error saving form data:", error);
       setMessage("Error saving form data!");
@@ -616,7 +616,7 @@ const FormBuilderContainer = () => {
         onClose={() => setFormDialogOpen(false)}
         onSave={handleFormSave}
       />
-      <Snackbar open={open} autoHideDuration={2500} onClose={handleClose}>
+      <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
         <Alert onClose={handleClose} severity={severity} sx={{ width: "100%" }}>
           {message}
         </Alert>
