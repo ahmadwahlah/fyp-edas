@@ -3,6 +3,7 @@ import { TextField, IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import Divider from "@mui/material/Divider";
+import Typography from "@mui/material/Typography";
 
 const MultiTextAreaField = ({
   id,
@@ -24,18 +25,29 @@ const MultiTextAreaField = ({
           marginTop: "1rem",
         }}
       >
-        <TextField
-          id={`multi-text-area-${id}`}
-          name={name}
-          label={placeholder || "Multi-line Text Area"}
-          multiline
-          rows={4}
-          variant="outlined"
-          sx={{ marginRight: 1, flexGrow: 1 }}
-          required={required}
-          fullWidth
-          disabled
-        />
+        <div
+          style={{
+            flexGrow: 1,
+            textAlign: "left",
+          }}
+        >
+          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+            {name || "Multi-line Text Area"}
+            {required ? " *" : ""}
+          </Typography>
+          <TextField
+            id={`multi-text-area-${id}`}
+            name={name}
+            label={placeholder || "Multi-line Text Area"}
+            multiline
+            rows={4}
+            variant="outlined"
+            sx={{ marginRight: 1, flexGrow: 1 }}
+            required={required}
+            fullWidth
+            disabled
+          />
+        </div>
         <IconButton
           onClick={() => onEdit(fieldData)}
           color="primary"

@@ -12,6 +12,7 @@ import {
   Box,
   Divider,
 } from "@mui/material";
+import axios from "axios";
 
 export default function PendingFormsDialog({
   open,
@@ -21,6 +22,7 @@ export default function PendingFormsDialog({
   formName,
   response,
   user,
+  id,
 }) {
   const getStepLabelColor = (status) => {
     switch (status) {
@@ -34,12 +36,48 @@ export default function PendingFormsDialog({
     }
   };
 
-  const handleApprove = () => {
-    // Add your logic to handle the approval action
+  const handleApprove = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      console.log(id);
+      console.log(token);
+      const response = await axios.put(
+        `http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/faculty/studentForms/${id}`,
+        {},
+        {
+          headers: {
+            "x-auth-token": token,
+          },
+        }
+      );
+      console.log("Form approved:", response);
+      // TODO: You can add any additional logic to handle the successful approval here
+    } catch (error) {
+      console.error("Error approving form:", error);
+      // TODO: You can add any additional logic to handle the error here
+    }
   };
 
-  const handleDisapprove = () => {
-    // Add your logic to handle the disapproval action
+  const handleDisapprove = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      console.log(id);
+      console.log(token);
+      const response = await axios.put(
+        `http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/faculty/studentForms/disapprove/${id}`,
+        {},
+        {
+          headers: {
+            "x-auth-token": token,
+          },
+        }
+      );
+      console.log("Form approved:", response);
+      // TODO: You can add any additional logic to handle the successful approval here
+    } catch (error) {
+      console.error("Error approving form:", error);
+      // TODO: You can add any additional logic to handle the error here
+    }
   };
 
   return (

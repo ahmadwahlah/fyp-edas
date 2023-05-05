@@ -17,6 +17,7 @@ export default function StudentDashboard() {
   const [currentFormName, setCurrentFormName] = useState("");
   const [response, setResponse] = useState({});
   const [user, setUser] = useState({});
+  const [id, setId] = useState({});
 
   const [activeStep, setActiveStep] = useState(0);
   const [allForms, setAllForms] = useState([]);
@@ -74,7 +75,8 @@ export default function StudentDashboard() {
     formName,
     response,
     student,
-    faculty
+    faculty,
+    id
   ) => {
     const hierarchy = approvers.map((approver) => ({
       title: approver.role,
@@ -89,6 +91,7 @@ export default function StudentDashboard() {
     setActiveStep(setActiveStepIndex(hierarchy));
     setCurrentFormName(formName);
     setResponse(response);
+    setId(id);
     if (student) {
       setUser(student);
       setDialogOpen(true);
@@ -177,7 +180,8 @@ export default function StudentDashboard() {
                 data.formName,
                 data.responces,
                 data.student,
-                data.faculty
+                data.faculty,
+                data._id
               )
             }
           />
@@ -192,6 +196,7 @@ export default function StudentDashboard() {
         formName={currentFormName}
         response={response}
         user={user}
+        id={id}
       />
       <PendingFormDialogFaculty
         open={dialogFacultyOpen}
@@ -201,6 +206,7 @@ export default function StudentDashboard() {
         formName={currentFormName}
         response={response}
         user={user}
+        id={id}
       />
     </Box>
   );

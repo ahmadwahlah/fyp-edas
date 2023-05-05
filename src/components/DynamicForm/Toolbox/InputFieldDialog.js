@@ -44,14 +44,9 @@ const InputFieldDialog = ({ open, onClose, onSave, editingField }) => {
           label="Name"
           fullWidth
           value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <TextField
-          margin="dense"
-          label="Placeholder"
-          fullWidth
-          value={placeholder}
-          onChange={(e) => setPlaceholder(e.target.value)}
+          onChange={(e) => (
+            setName(e.target.value), setPlaceholder(e.target.value)
+          )}
         />
         <FormControlLabel
           control={

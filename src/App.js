@@ -61,10 +61,9 @@ function App() {
 
 export default App;
 
-// Only Heading, Text Input, Multi Text add heading,
 // external role set in faculty
 // set admin profile
-// create a card that render data and approve dispprove *****
+// create a card that render data and approve dispprove
 // ADD Faculty in administrator
 // Cousrse for faculty in administrator
 // Form Submission Restructure Date and Time

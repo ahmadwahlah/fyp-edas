@@ -57,15 +57,9 @@ const MultiTextAreaDialog = ({
           type="text"
           fullWidth
           value={inputName}
-          onChange={(e) => setInputName(e.target.value)}
-        />
-        <TextField
-          margin="dense"
-          label="Placeholder"
-          type="text"
-          fullWidth
-          value={inputPlaceholder}
-          onChange={(e) => setInputPlaceholder(e.target.value)}
+          onChange={(e) => (
+            setInputName(e.target.value), setInputPlaceholder(e.target.value)
+          )}
         />
         <FormControlLabel
           control={

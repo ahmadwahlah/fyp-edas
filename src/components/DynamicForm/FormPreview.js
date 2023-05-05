@@ -171,34 +171,41 @@ const FormPreview = ({ fields, formName }) => {
             );
           case "multiTextArea":
             return (
-              <TextareaAutosize
-                key={field.id}
-                aria-label="minimum height"
-                minRows={3}
-                name={field.name}
-                placeholder={field.placeholder || "Type here..."}
-                required={field.required}
-                style={{
-                  width: "96.5%",
-                  padding: "8px",
-                  marginBottom: "16px",
-                  resize: "vertical",
-                  borderColor:
-                    field.required && !inputValues[field.id]
-                      ? "red"
-                      : undefined,
-                  borderWidth:
-                    field.required && !inputValues[field.id]
-                      ? "1.5px"
-                      : undefined,
-                  borderStyle:
-                    field.required && !inputValues[field.id]
-                      ? "solid"
-                      : undefined,
-                }}
-                onChange={(event) => handleChange(event, field.id)}
-              />
+              <>
+                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                  {field.name || "Multi-line Text Area"}
+                  {field.required ? " *" : ""}
+                </Typography>
+                <TextareaAutosize
+                  key={field.id}
+                  aria-label="minimum height"
+                  minRows={3}
+                  name={field.name}
+                  placeholder={field.placeholder || "Type here..."}
+                  required={field.required}
+                  style={{
+                    width: "96.5%",
+                    padding: "8px",
+                    marginBottom: "16px",
+                    resize: "vertical",
+                    borderColor:
+                      field.required && !inputValues[field.id]
+                        ? "red"
+                        : undefined,
+                    borderWidth:
+                      field.required && !inputValues[field.id]
+                        ? "1.5px"
+                        : undefined,
+                    borderStyle:
+                      field.required && !inputValues[field.id]
+                        ? "solid"
+                        : undefined,
+                  }}
+                  onChange={(event) => handleChange(event, field.id)}
+                />
+              </>
             );
+
           case "radioButton":
             return (
               <FormControl
