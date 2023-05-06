@@ -38,7 +38,7 @@ const CustomSelect = ({ label, options, ...rest }) => (
 const hierarchyOptions = [
   { value: "advisor", label: "Advisor" },
   { value: "dean", label: "Dean" },
-  { value: "committee convener", label: "Committee Convener" },
+  { value: "Committee Convener", label: "Committee Convener" },
   { value: "Rector", label: "Rector" },
   {
     value: "Pro-Rector (A)",

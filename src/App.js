@@ -61,13 +61,12 @@ function App() {
 
 export default App;
 
-// set admin profile
-// fcaulty on click close dialog box === when view pending buttons which are approved dont show button
-
 // Cousrse for faculty in administrator
-// Form Submission Restructure Date and Time
 // File Upload
-// Administartor Form List card Delete and edit button
+// fcaulty approved and pending snack bar etc on click close dialog box
 // seprate pending and Form Reviewed
 
-// when add new user show department
+// on click new user show details
+// Form Submission Restructure Date and Time
+// Administartor Form List card Delete and edit button
+// set admin profile

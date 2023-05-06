@@ -585,6 +585,10 @@ const FacultyProfile = () => {
                                 label: "Security Manager",
                               },
                               {
+                                value: "Committee Convener",
+                                label: "Committee Convener",
+                              },
+                              {
                                 value: "Incharge of Guest House",
                                 label: "Incharge of Guest House",
                               },
