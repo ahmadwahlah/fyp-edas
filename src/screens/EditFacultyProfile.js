@@ -187,14 +187,15 @@ const EditFacultyProfile = () => {
         { value: "Account Section", label: "Account Section" },
         { value: "HR", label: "HR" },
       ]);
-    } else if (
-      department === "IT" ||
-      department === "Transportation" ||
-      department === "Security"
-    ) {
+    } else if (department === "IT") {
+      setSubRoleOptions([{ value: "IT Manager", label: "IT Manager" }]);
+    } else if (department === "Transportation") {
       setSubRoleOptions([
-        // { value: "Junior Manager", label: "Junior Manager" },
-        { value: "Manager", label: "Manager" },
+        { value: "Transportation Manager", label: "Transportation Manager" },
+      ]);
+    } else if (department === "Security") {
+      setSubRoleOptions([
+        { value: "Security Manager", label: "Security Manager" },
       ]);
     } else {
       setSubRoleOptions([
@@ -229,12 +230,16 @@ const EditFacultyProfile = () => {
         { value: "Account Section", label: "Account Section" },
         { value: "HR", label: "HR" },
       ];
-    } else if (
-      selectedDepartment === "IT" ||
-      selectedDepartment === "Transportation" ||
-      selectedDepartment === "Security"
-    ) {
-      newSubRoleOptions = [{ value: "Manager", label: "Manager" }];
+    } else if (selectedDepartment === "IT") {
+      newSubRoleOptions = [{ value: "IT Manager", label: "IT Manager" }];
+    } else if (selectedDepartment === "Transportation") {
+      newSubRoleOptions = [
+        { value: "Transportation Manager", label: "Transportation Manager" },
+      ];
+    } else if (selectedDepartment === "Security") {
+      newSubRoleOptions = [
+        { value: "Security Manager", label: "Security Manager" },
+      ];
     } else {
       newSubRoleOptions = [
         { value: "Professor", label: "Professor" },
@@ -630,7 +635,15 @@ const EditFacultyProfile = () => {
                                 label: "Account Section",
                               },
                               { value: "HR", label: "HR" },
-                              { value: "Manager", label: "Manager" },
+                              { value: "IT Manager", label: "IT Manager" },
+                              {
+                                value: "Transportation Manager",
+                                label: "Transportation Manager",
+                              },
+                              {
+                                value: "Security Manager",
+                                label: "Security Manager",
+                              },
                               {
                                 value: "Incharge of Guest House",
                                 label: "Incharge of Guest House",

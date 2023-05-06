@@ -57,7 +57,15 @@ const hierarchyOptions = [
     label: "Account Section",
   },
   { value: "HR", label: "HR" },
-  { value: "Manager", label: "Manager" },
+  { value: "IT Manager", label: "IT Manager" },
+  {
+    value: "Transportation Manager",
+    label: "Transportation Manager",
+  },
+  {
+    value: "Security Manager",
+    label: "Security Manager",
+  },
   {
     value: "Incharge of Guest House",
     label: "Incharge of Guest House",

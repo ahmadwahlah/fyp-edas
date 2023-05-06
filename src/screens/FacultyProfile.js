@@ -88,12 +88,16 @@ const FacultyProfile = () => {
         { value: "Account Section", label: "Account Section" },
         { value: "HR", label: "HR" },
       ]);
-    } else if (
-      department === "IT" ||
-      department === "Transportation" ||
-      department === "Security"
-    ) {
-      setSubRoleOptions([{ value: "Manager", label: "Manager" }]);
+    } else if (department === "IT") {
+      setSubRoleOptions([{ value: "IT Manager", label: "IT Manager" }]);
+    } else if (department === "Transportation") {
+      setSubRoleOptions([
+        { value: "Transportation Manager", label: "Transportation Manager" },
+      ]);
+    } else if (department === "Security") {
+      setSubRoleOptions([
+        { value: "Security Manager", label: "Security Manager" },
+      ]);
     } else {
       setSubRoleOptions([
         { value: "Professor", label: "Professor" },
@@ -571,7 +575,15 @@ const FacultyProfile = () => {
                                 label: "Account Section",
                               },
                               { value: "HR", label: "HR" },
-                              { value: "Manager", label: "Manager" },
+                              { value: "IT Manager", label: "IT Manager" },
+                              {
+                                value: "Transportation Manager",
+                                label: "Transportation Manager",
+                              },
+                              {
+                                value: "Security Manager",
+                                label: "Security Manager",
+                              },
                               {
                                 value: "Incharge of Guest House",
                                 label: "Incharge of Guest House",

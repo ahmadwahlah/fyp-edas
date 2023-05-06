@@ -59,12 +59,16 @@ export default function SignUp() {
         { value: "Account Section", label: "Account Section" },
         { value: "HR", label: "HR" },
       ]);
-    } else if (
-      department === "IT" ||
-      department === "Transportation" ||
-      department === "Security"
-    ) {
-      setSubRoleOptions([{ value: "Manager", label: "Manager" }]);
+    } else if (department === "IT") {
+      setSubRoleOptions([{ value: "IT Manager", label: "IT Manager" }]);
+    } else if (department === "Transportation") {
+      setSubRoleOptions([
+        { value: "Transportation Manager", label: "Transportation Manager" },
+      ]);
+    } else if (department === "Security") {
+      setSubRoleOptions([
+        { value: "Security Manager", label: "Security Manager" },
+      ]);
     } else {
       setSubRoleOptions([
         { value: "Professor", label: "Professor" },
