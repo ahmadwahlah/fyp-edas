@@ -12,6 +12,7 @@ import ListItemText from "@mui/material/ListItemText";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import DescriptionIcon from "@mui/icons-material/Description";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
+import TaskSharpIcon from "@mui/icons-material/TaskSharp";
 
 import LoggedInHeader from "../components/LoggedInHeader";
 import FacultyDashboard from "../components/FacultyDashboard";
@@ -40,6 +41,8 @@ export default function FacultyNavigation() {
       case "forms":
         return <FacultyForms />;
       case "pendingforms":
+        return <PendingForms />;
+      case "reviewedforms":
         return <PendingForms />;
       default:
         return <Typography paragraph>Invalid content selected.</Typography>;
@@ -96,6 +99,17 @@ export default function FacultyNavigation() {
                   <PendingActionsIcon />
                 </ListItemIcon>
                 <ListItemText primary="Pending Forms" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding sx={{ cursor: "pointer" }}>
+              <ListItemButton
+                selected={content === "reviewedforms"}
+                onClick={(event) => handleListItemClick(event, "reviewedforms")}
+              >
+                <ListItemIcon sx={{ color: "#000000" }}>
+                  <TaskSharpIcon />
+                </ListItemIcon>
+                <ListItemText primary="Reviewed Forms" />
               </ListItemButton>
             </ListItem>
           </List>

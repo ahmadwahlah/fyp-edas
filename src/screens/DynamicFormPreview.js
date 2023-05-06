@@ -490,7 +490,7 @@ const DynamicFormPreview = () => {
                                     : undefined,
                               }}
                               onChange={(event) =>
-                                handleChange(event, field.id)
+                                handleChange(event, field.id, field.name)
                               }
                             />
                           </>

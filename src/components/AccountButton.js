@@ -23,6 +23,9 @@ export default function AccountButton() {
 
   const handleClose = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("adminNavigationContent");
+    localStorage.removeItem("facultyNavigationContent");
+    localStorage.removeItem("studentNavigationContent");
     navigate("/");
     setAnchorEl(null);
   };

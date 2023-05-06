@@ -39,6 +39,33 @@ const hierarchyOptions = [
   { value: "advisor", label: "Advisor" },
   { value: "dean", label: "Dean" },
   { value: "committee convener", label: "Committee Convener" },
+  { value: "Rector", label: "Rector" },
+  {
+    value: "Pro-Rector (A)",
+    label: "Pro-Rector (A)",
+  },
+  {
+    value: "Pro-Rector (A&F)",
+    label: "Pro-Rector (A&F)",
+  },
+  {
+    value: "Director Facilitation",
+    label: "Director Facilitation",
+  },
+  {
+    value: "Account Section",
+    label: "Account Section",
+  },
+  { value: "HR", label: "HR" },
+  { value: "Manager", label: "Manager" },
+  {
+    value: "Incharge of Guest House",
+    label: "Incharge of Guest House",
+  },
+  {
+    value: "Secretary of Faculty Club",
+    label: "Secretary of Faculty Club",
+  },
 ];
 
 const FormDialog = ({ open, onClose, onSave }) => {

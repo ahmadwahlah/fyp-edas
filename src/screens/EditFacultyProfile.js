@@ -122,10 +122,11 @@ const EditFacultyProfile = () => {
   };
 
   const handleRoleChange = (event) => {
-    setProfileData({
-      ...profileData,
-      [event.target.name]: event.target.value,
-    });
+    const { name, value } = event.target;
+    setProfileData((prevProfileData) => ({
+      ...prevProfileData,
+      [name]: value,
+    }));
   };
 
   useEffect(() => {
@@ -169,6 +170,90 @@ const EditFacultyProfile = () => {
     fetchProfileData();
   }, []);
 
+  const [department, setDepartment] = useState(profileData.department || "");
+  useEffect(() => {
+    setDepartment(profileData.department);
+  }, [profileData.department]);
+
+  const [subRoleOptions, setSubRoleOptions] = useState([]);
+
+  useEffect(() => {
+    if (department === "Admin") {
+      setSubRoleOptions([
+        { value: "Rector", label: "Rector" },
+        { value: "Pro-Rector (A)", label: "Pro-Rector (A)" },
+        { value: "Pro-Rector (A&F)", label: "Pro-Rector (A&F)" },
+        { value: "Director Facilitation", label: "Director Facilitation" },
+        { value: "Account Section", label: "Account Section" },
+        { value: "HR", label: "HR" },
+      ]);
+    } else if (
+      department === "IT" ||
+      department === "Transportation" ||
+      department === "Security"
+    ) {
+      setSubRoleOptions([
+        // { value: "Junior Manager", label: "Junior Manager" },
+        { value: "Manager", label: "Manager" },
+      ]);
+    } else {
+      setSubRoleOptions([
+        { value: "Professor", label: "Professor" },
+        { value: "Associate Professor", label: "Associate Professor" },
+        { value: "Assistant Professor", label: "Assistant Professor" },
+        { value: "Lecturer", label: "Lecturer" },
+        { value: "Lab Instructor", label: "Lab Instructor" },
+      ]);
+    }
+  }, [department]);
+
+  const handleDepartmentChange = (event) => {
+    const selectedDepartment = event.target.value;
+    setDepartment(selectedDepartment);
+  };
+
+  const handleDepartmentInputChange = (event) => {
+    handleDepartmentChange(event);
+    handleInputChange(event);
+
+    // Update the subrole to the first subrole option of the new department
+    const selectedDepartment = event.target.value;
+    let newSubRoleOptions = [];
+
+    if (selectedDepartment === "Admin") {
+      newSubRoleOptions = [
+        { value: "Rector", label: "Rector" },
+        { value: "Pro-Rector (A)", label: "Pro-Rector (A)" },
+        { value: "Pro-Rector (A&F)", label: "Pro-Rector (A&F)" },
+        { value: "Director Facilitation", label: "Director Facilitation" },
+        { value: "Account Section", label: "Account Section" },
+        { value: "HR", label: "HR" },
+      ];
+    } else if (
+      selectedDepartment === "IT" ||
+      selectedDepartment === "Transportation" ||
+      selectedDepartment === "Security"
+    ) {
+      newSubRoleOptions = [{ value: "Manager", label: "Manager" }];
+    } else {
+      newSubRoleOptions = [
+        { value: "Professor", label: "Professor" },
+        { value: "Associate Professor", label: "Associate Professor" },
+        { value: "Assistant Professor", label: "Assistant Professor" },
+        { value: "Lecturer", label: "Lecturer" },
+        { value: "Lab Instructor", label: "Lab Instructor" },
+      ];
+    }
+
+    if (newSubRoleOptions.length > 0) {
+      setProfileData({
+        ...profileData,
+        department: selectedDepartment,
+        subrole: newSubRoleOptions[0].value,
+      });
+    }
+  };
+
   const updateProfileData = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -190,6 +275,7 @@ const EditFacultyProfile = () => {
           },
         }
       );
+      console.log(profileData.subrole);
 
       if (response.status === 200) {
         console.log("Profile updated successfully");
@@ -343,7 +429,7 @@ const EditFacultyProfile = () => {
                       value={profileData.department}
                       fullWidth
                       margin="normal"
-                      onChange={handleInputChange}
+                      onChange={handleDepartmentInputChange}
                       disabled={!isEditable}
                       options={[
                         {
@@ -371,8 +457,9 @@ const EditFacultyProfile = () => {
                           label: "Cyber Security",
                         },
                         { value: "Admin", label: "Admin" },
-                        { value: "Transportation", label: "Transportation" },
+                        { value: "IT", label: "IT" },
                         { value: "Security", label: "Security" },
+                        { value: "Transportation", label: "Transportation" },
                       ]}
                     />
                   </Grid>
@@ -381,22 +468,10 @@ const EditFacultyProfile = () => {
                       label="Sub Role"
                       name="subrole"
                       type="subrole"
-                      onChange={handleRoleChange}
-                      disabled={!isEditable}
                       value={profileData.subrole}
-                      options={[
-                        { value: "Professor", label: "Professor" },
-                        {
-                          value: "Associate Professor",
-                          label: "Associate Professor",
-                        },
-                        {
-                          value: "Assistant Professor",
-                          label: "Assistant Professor",
-                        },
-                        { value: "Lecturer", label: "Lecturer" },
-                        { value: "Lab Instructor", label: "Lab Instructor" },
-                      ]}
+                      disabled={!isEditable}
+                      onChange={handleRoleChange}
+                      options={subRoleOptions}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -474,6 +549,10 @@ const EditFacultyProfile = () => {
                             fullWidth
                             options={[
                               {
+                                value: "",
+                                label: "",
+                              },
+                              {
                                 value: "Computer Science",
                                 label: "Computer Science",
                               },
@@ -497,6 +576,13 @@ const EditFacultyProfile = () => {
                                 value: "Cyber Security",
                                 label: "Cyber Security",
                               },
+                              { value: "Admin", label: "Admin" },
+                              { value: "IT", label: "IT" },
+                              { value: "Security", label: "Security" },
+                              {
+                                value: "Transportation",
+                                label: "Transportation",
+                              },
                             ]}
                             disabled={!isEditable}
                           />
@@ -519,9 +605,40 @@ const EditFacultyProfile = () => {
                             }}
                             fullWidth
                             options={[
+                              {
+                                value: "",
+                                label: "",
+                              },
                               { value: "advisor", label: "Advisor" },
                               { value: "dean", label: "Dean" },
                               { value: "instructor", label: "Instructor" },
+                              { value: "Rector", label: "Rector" },
+                              {
+                                value: "Pro-Rector (A)",
+                                label: "Pro-Rector (A)",
+                              },
+                              {
+                                value: "Pro-Rector (A&F)",
+                                label: "Pro-Rector (A&F)",
+                              },
+                              {
+                                value: "Director Facilitation",
+                                label: "Director Facilitation",
+                              },
+                              {
+                                value: "Account Section",
+                                label: "Account Section",
+                              },
+                              { value: "HR", label: "HR" },
+                              { value: "Manager", label: "Manager" },
+                              {
+                                value: "Incharge of Guest House",
+                                label: "Incharge of Guest House",
+                              },
+                              {
+                                value: "Secretary of Faculty Club",
+                                label: "Secretary of Faculty Club",
+                              },
                             ]}
                             disabled={!isEditable}
                           />
@@ -530,7 +647,7 @@ const EditFacultyProfile = () => {
                           <CustomSelect
                             label="Batch"
                             name={`externalrole[${index}].batch`}
-                            value={external.batch}
+                            value={external.batch || ""}
                             onChange={(event) => {
                               const updatedExternalRole = [
                                 ...profileData.externalrole,
@@ -544,6 +661,10 @@ const EditFacultyProfile = () => {
                             }}
                             fullWidth
                             options={[
+                              {
+                                value: "",
+                                label: "",
+                              },
                               {
                                 value: "27",
                                 label: "27",

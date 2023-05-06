@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -46,6 +46,40 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 export default function SignUp() {
+  const [department, setDepartment] = useState("");
+  const [subRoleOptions, setSubRoleOptions] = useState([]);
+
+  useEffect(() => {
+    if (department === "Admin") {
+      setSubRoleOptions([
+        { value: "Rector", label: "Rector" },
+        { value: "Pro-Rector (A)", label: "Pro-Rector (A)" },
+        { value: "Pro-Rector (A&F)", label: "Pro-Rector (A&F)" },
+        { value: "Director Facilitation", label: "Director Facilitation" },
+        { value: "Account Section", label: "Account Section" },
+        { value: "HR", label: "HR" },
+      ]);
+    } else if (
+      department === "IT" ||
+      department === "Transportation" ||
+      department === "Security"
+    ) {
+      setSubRoleOptions([{ value: "Manager", label: "Manager" }]);
+    } else {
+      setSubRoleOptions([
+        { value: "Professor", label: "Professor" },
+        { value: "Associate Professor", label: "Associate Professor" },
+        { value: "Assistant Professor", label: "Assistant Professor" },
+        { value: "Lecturer", label: "Lecturer" },
+        { value: "Lab Instructor", label: "Lab Instructor" },
+      ]);
+    }
+  }, [department]);
+
+  const handleDepartmentChange = (event) => {
+    setDepartment(event.target.value);
+  };
+
   const navigate = useNavigate();
 
   const [role, setRole] = useState("");
@@ -470,6 +504,7 @@ export default function SignUp() {
                       id="department"
                       label="Department"
                       name="department"
+                      onChange={handleDepartmentChange}
                       options={[
                         {
                           value: "Computer Science",
@@ -490,8 +525,9 @@ export default function SignUp() {
                         },
                         { value: "Cyber Security", label: "Cyber Security" },
                         { value: "Admin", label: "Admin" },
-                        { value: "Transportation", label: "Transportation" },
+                        { value: "IT", label: "IT" },
                         { value: "Security", label: "Security" },
+                        { value: "Transportation", label: "Transportation" },
                       ]}
                     />
                     <CustomSelect
@@ -502,19 +538,7 @@ export default function SignUp() {
                       label=" Sub Role"
                       onChange={handleRoleChange}
                       name="subrole"
-                      options={[
-                        { value: "Professor", label: "Professor" },
-                        {
-                          value: "Associate Professor",
-                          label: "Associate Professor",
-                        },
-                        {
-                          value: "Assistant Professor",
-                          label: "Assistant Professor",
-                        },
-                        { value: "Lecturer", label: "Lecturer" },
-                        { value: "Lab Instructor", label: "Lab Instructor" },
-                      ]}
+                      options={subRoleOptions}
                     />
                   </Stack>
                 )}

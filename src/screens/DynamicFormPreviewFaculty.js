@@ -193,6 +193,7 @@ const DynamicFormPreviewFaculty = () => {
   const logFormData = () => {
     const token = localStorage.getItem("token");
     const decodedPayload = jwt_decode(token);
+    console.log(decodedPayload);
     const department = decodedPayload.faculty.department;
     const combinedObjects = {
       ...inputValues,
@@ -483,7 +484,7 @@ const DynamicFormPreviewFaculty = () => {
                                     : undefined,
                               }}
                               onChange={(event) =>
-                                handleChange(event, field.id)
+                                handleChange(event, field.id, field.name)
                               }
                             />
                           </>

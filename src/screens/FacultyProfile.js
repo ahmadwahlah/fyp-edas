@@ -71,6 +71,45 @@ const FacultyProfile = () => {
     ],
   });
 
+  const [department, setDepartment] = useState(profileData.department || "");
+  useEffect(() => {
+    setDepartment(profileData.department);
+  }, [profileData.department]);
+
+  const [subRoleOptions, setSubRoleOptions] = useState([]);
+
+  useEffect(() => {
+    if (department === "Admin") {
+      setSubRoleOptions([
+        { value: "Rector", label: "Rector" },
+        { value: "Pro-Rector (A)", label: "Pro-Rector (A)" },
+        { value: "Pro-Rector (A&F)", label: "Pro-Rector (A&F)" },
+        { value: "Director Facilitation", label: "Director Facilitation" },
+        { value: "Account Section", label: "Account Section" },
+        { value: "HR", label: "HR" },
+      ]);
+    } else if (
+      department === "IT" ||
+      department === "Transportation" ||
+      department === "Security"
+    ) {
+      setSubRoleOptions([{ value: "Manager", label: "Manager" }]);
+    } else {
+      setSubRoleOptions([
+        { value: "Professor", label: "Professor" },
+        { value: "Associate Professor", label: "Associate Professor" },
+        { value: "Assistant Professor", label: "Assistant Professor" },
+        { value: "Lecturer", label: "Lecturer" },
+        { value: "Lab Instructor", label: "Lab Instructor" },
+      ]);
+    }
+  }, [department]);
+
+  const handleDepartmentChange = (event) => {
+    const { name, value } = event.target;
+    setDepartment(value);
+  };
+
   const allCourses = [
     "Course 1",
     "Course 2",
@@ -113,10 +152,11 @@ const FacultyProfile = () => {
   };
 
   const handleRoleChange = (event) => {
-    setProfileData({
-      ...profileData,
-      [event.target.name]: event.target.value,
-    });
+    const { name, value } = event.target;
+    setProfileData((prevProfileData) => ({
+      ...prevProfileData,
+      [name]: value,
+    }));
   };
 
   useEffect(() => {
@@ -328,6 +368,9 @@ const FacultyProfile = () => {
                       value={profileData.department}
                       fullWidth
                       margin="normal"
+                      onChange={(event) => {
+                        handleDepartmentChange(event);
+                      }}
                       disabled
                       options={[
                         {
@@ -355,8 +398,9 @@ const FacultyProfile = () => {
                           label: "Cyber Security",
                         },
                         { value: "Admin", label: "Admin" },
-                        { value: "Transportation", label: "Transportation" },
+                        { value: "IT", label: "IT" },
                         { value: "Security", label: "Security" },
+                        { value: "Transportation", label: "Transportation" },
                       ]}
                     />
                   </Grid>
@@ -367,19 +411,7 @@ const FacultyProfile = () => {
                       type="subrole"
                       onChange={handleRoleChange}
                       value={profileData.subrole}
-                      options={[
-                        { value: "Professor", label: "Professor" },
-                        {
-                          value: "Associate Professor",
-                          label: "Associate Professor",
-                        },
-                        {
-                          value: "Assistant Professor",
-                          label: "Assistant Professor",
-                        },
-                        { value: "Lecturer", label: "Lecturer" },
-                        { value: "Lab Instructor", label: "Lab Instructor" },
-                      ]}
+                      options={subRoleOptions}
                       disabled
                     />
                   </Grid>
@@ -458,6 +490,10 @@ const FacultyProfile = () => {
                             fullWidth
                             options={[
                               {
+                                value: "",
+                                label: "",
+                              },
+                              {
                                 value: "Computer Science",
                                 label: "Computer Science",
                               },
@@ -481,6 +517,13 @@ const FacultyProfile = () => {
                                 value: "Cyber Security",
                                 label: "Cyber Security",
                               },
+                              { value: "Admin", label: "Admin" },
+                              { value: "IT", label: "IT" },
+                              { value: "Security", label: "Security" },
+                              {
+                                value: "Transportation",
+                                label: "Transportation",
+                              },
                             ]}
                             disabled
                           />
@@ -503,62 +546,99 @@ const FacultyProfile = () => {
                             }}
                             fullWidth
                             options={[
-                              { value: "Advisor", label: "Advisor" },
-                              { value: "Dean", label: "Dean" },
-                              { value: "Instructor", label: "Instructor" },
+                              {
+                                value: "",
+                                label: "",
+                              },
+                              { value: "advisor", label: "Advisor" },
+                              { value: "dean", label: "Dean" },
+                              { value: "instructor", label: "Instructor" },
+                              { value: "Rector", label: "Rector" },
+                              {
+                                value: "Pro-Rector (A)",
+                                label: "Pro-Rector (A)",
+                              },
+                              {
+                                value: "Pro-Rector (A&F)",
+                                label: "Pro-Rector (A&F)",
+                              },
+                              {
+                                value: "Director Facilitation",
+                                label: "Director Facilitation",
+                              },
+                              {
+                                value: "Account Section",
+                                label: "Account Section",
+                              },
+                              { value: "HR", label: "HR" },
+                              { value: "Manager", label: "Manager" },
+                              {
+                                value: "Incharge of Guest House",
+                                label: "Incharge of Guest House",
+                              },
+                              {
+                                value: "Secretary of Faculty Club",
+                                label: "Secretary of Faculty Club",
+                              },
                             ]}
                             disabled
                           />
                         </Grid>
                         <Grid item xs={12} sm={4}>
-                          <CustomSelect
-                            label="Batch"
-                            name={`externalrole[${index}].batch`}
-                            value={external.batch}
-                            onChange={(event) => {
-                              const updatedExternalRole = [
-                                ...profileData.externalrole,
-                              ];
-                              updatedExternalRole[index].batch =
-                                event.target.value;
-                              setProfileData({
-                                ...profileData,
-                                externalrole: updatedExternalRole,
-                              });
-                            }}
-                            fullWidth
-                            options={[
-                              {
-                                value: "27",
-                                label: "27",
-                              },
-                              {
-                                value: "28",
-                                label: "28",
-                              },
-                              {
-                                value: "29",
-                                label: "29",
-                              },
-                              {
-                                value: "30",
-                                label: "30",
-                              },
-                              {
-                                value: "31",
-                                label: "31",
-                              },
-                              {
-                                value: "32",
-                                label: "32",
-                              },
-                              {
-                                value: "33",
-                                label: "33",
-                              },
-                            ]}
-                            disabled
-                          />
+                          {profileData.externalrole[index].batch && (
+                            <CustomSelect
+                              label="Batch"
+                              name={`externalrole[${index}].batch`}
+                              value={external.batch}
+                              onChange={(event) => {
+                                const updatedExternalRole = [
+                                  ...profileData.externalrole,
+                                ];
+                                updatedExternalRole[index].batch =
+                                  event.target.value;
+                                setProfileData({
+                                  ...profileData,
+                                  externalrole: updatedExternalRole,
+                                });
+                              }}
+                              fullWidth
+                              options={[
+                                {
+                                  value: "",
+                                  label: "",
+                                },
+                                {
+                                  value: "27",
+                                  label: "27",
+                                },
+                                {
+                                  value: "28",
+                                  label: "28",
+                                },
+                                {
+                                  value: "29",
+                                  label: "29",
+                                },
+                                {
+                                  value: "30",
+                                  label: "30",
+                                },
+                                {
+                                  value: "31",
+                                  label: "31",
+                                },
+                                {
+                                  value: "32",
+                                  label: "32",
+                                },
+                                {
+                                  value: "33",
+                                  label: "33",
+                                },
+                              ]}
+                              disabled
+                            />
+                          )}
                         </Grid>
                       </Grid>
                     ))}

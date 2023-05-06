@@ -61,11 +61,13 @@ function App() {
 
 export default App;
 
-// external role set in faculty
 // set admin profile
-// create a card that render data and approve dispprove
-// ADD Faculty in administrator
+// fcaulty on click close dialog box === when view pending buttons which are approved dont show button
+
 // Cousrse for faculty in administrator
 // Form Submission Restructure Date and Time
 // File Upload
 // Administartor Form List card Delete and edit button
+// seprate pending and Form Reviewed
+
+// when add new user show department

@@ -31,17 +31,23 @@ export default function StudentDashboard() {
             "x-auth-token": token,
           },
         };
-        const response = await axios.get(
-          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/faculty/studentForms",
-          config
-        );
 
-        console.log(response.data);
-        console.log(response.data[0].student.role);
-        setFilteredForms(response.data);
-        setAllForms(response.data);
+        const apiFacultyForms =
+          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/faculty/facultyForms";
+        const apiStudentForms =
+          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/faculty/studentForms";
 
-        // Assuming the data structure is similar to pendingForms, you can set the state with the fetched data
+        const [facultyResponse, studentResponse] = await Promise.all([
+          axios.get(apiFacultyForms, config),
+          axios.get(apiStudentForms, config),
+        ]);
+
+        const combinedData = [...facultyResponse.data, ...studentResponse.data];
+
+        console.log(combinedData);
+
+        setFilteredForms(combinedData);
+        setAllForms(combinedData);
       } catch (error) {
         console.error("Error fetching forms:", error);
       }
@@ -70,14 +76,9 @@ export default function StudentDashboard() {
 
   // ... (previous imports and code)
 
-  const handleHierarchyClick = (
-    approvers,
-    formName,
-    response,
-    student,
-    faculty,
-    id
-  ) => {
+  const handleHierarchyClick = (data) => {
+    const { approvers, formName, responces, student, faculty, _id: id } = data;
+
     const hierarchy = approvers.map((approver) => ({
       title: approver.role,
       status: approver.disapproved
@@ -90,13 +91,13 @@ export default function StudentDashboard() {
     setCurrentHierarchy(hierarchy);
     setActiveStep(setActiveStepIndex(hierarchy));
     setCurrentFormName(formName);
-    setResponse(response);
+    setResponse(responces);
     setId(id);
+    setUser(student ? student : faculty);
+
     if (student) {
-      setUser(student);
       setDialogOpen(true);
     } else {
-      setUser(faculty);
       setDialogFacultyOpen(true);
     }
   };
@@ -173,19 +174,11 @@ export default function StudentDashboard() {
             formName={data.formName}
             submissionDate={data.date}
             status={getFormStatus(data.approvers)}
-            user={data.student}
-            onHierarchyClick={() =>
-              handleHierarchyClick(
-                data.approvers,
-                data.formName,
-                data.responces,
-                data.student,
-                data.faculty,
-                data._id
-              )
-            }
+            user={data.student ? data.student : data.faculty}
+            onHierarchyClick={() => handleHierarchyClick(data)}
           />
         ))}
+
         <Divider />
       </Box>
       <PendingFormsDialog
