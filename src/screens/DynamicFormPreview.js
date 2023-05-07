@@ -344,10 +344,24 @@ const DynamicFormPreview = () => {
 
   const [selectedFiles, setSelectedFiles] = useState({});
   const [inputRefs, setInputRefs] = useState({});
+
+  // Initialize inputRefs with the correct keys and Ref objects
+  // Initialize inputRefs with the correct keys and Ref objects
+  useEffect(() => {
+    if (form && form[0] && form[0].fields) {
+      const refs = {};
+      form[0].fields.forEach((field) => {
+        if (field.type === "fileUpload") {
+          refs[field.id] = React.createRef();
+        }
+      });
+      setInputRefs(refs);
+    }
+  }, [form]);
+
   const handleFileSelect = (event, id) => {
     const file = event.target.files[0];
     setSelectedFiles({ ...selectedFiles, [id]: file });
-    // Update the fileName property of the field object
   };
 
   const [formErrors, setFormErrors] = useState({});
@@ -813,8 +827,8 @@ const DynamicFormPreview = () => {
                             </Button>
                             <input
                               type="file"
-                              id={field.id}
-                              name={field.name}
+                              id="formDocument"
+                              name="formDocument"
                               required={field.required}
                               hidden
                               accept=".pdf,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*"

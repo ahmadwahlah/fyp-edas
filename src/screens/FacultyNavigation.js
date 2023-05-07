@@ -18,6 +18,7 @@ import LoggedInHeader from "../components/LoggedInHeader";
 import FacultyDashboard from "../components/FacultyDashboard";
 import FacultyForms from "../components/FacultyForms";
 import PendingForms from "../components/PendingForms";
+import ReviewedForms from "../components/ReviewedForms";
 
 const drawerWidth = 240;
 
@@ -43,7 +44,7 @@ export default function FacultyNavigation() {
       case "pendingforms":
         return <PendingForms />;
       case "reviewedforms":
-        return <PendingForms />;
+        return <ReviewedForms />;
       default:
         return <Typography paragraph>Invalid content selected.</Typography>;
     }

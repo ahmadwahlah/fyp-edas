@@ -4,11 +4,11 @@ import Box from "@mui/material/Box";
 import SearchBar from "./SearchBar";
 import Typography from "@mui/material/Typography";
 import PendingFormCard from "./PendingFormCard";
-import PendingFormsDialog from "./PendingFormsDialog";
-import PendingFormDialogFaculty from "./PendingFormDialogFaculty";
+import ReviewedFormsDialog from "./ReviewedFormsDialog";
+import ReviewedFormsDialogFaculty from "./ReviewedFormsDialogFaculty";
 import axios from "axios";
 
-export default function PendingForms() {
+export default function ReviewedForms() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredForms, setFilteredForms] = useState([]);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -33,9 +33,9 @@ export default function PendingForms() {
         };
 
         const apiFacultyForms =
-          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/faculty/facultyForms";
+          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/faculty/studentForms/approvedOrDisapproved";
         const apiStudentForms =
-          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/faculty/studentForms";
+          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/faculty/facultyForms/approvedOrDisapproved";
 
         const [facultyResponse, studentResponse] = await Promise.all([
           axios.get(apiFacultyForms, config),
@@ -154,7 +154,7 @@ export default function PendingForms() {
             mr: 2,
           }}
         >
-          Pending Forms
+          Reviewed Forms
         </Typography>
         <Box
           sx={{
@@ -181,7 +181,7 @@ export default function PendingForms() {
 
         <Divider />
       </Box>
-      <PendingFormsDialog
+      <ReviewedFormsDialog
         open={dialogOpen}
         onClose={handleDialogClose}
         hierarchy={currentHierarchy}
@@ -191,7 +191,7 @@ export default function PendingForms() {
         user={user}
         id={id}
       />
-      <PendingFormDialogFaculty
+      <ReviewedFormsDialogFaculty
         open={dialogFacultyOpen}
         onClose={handleDialogFacultyClose}
         hierarchy={currentHierarchy}

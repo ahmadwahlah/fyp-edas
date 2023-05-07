@@ -63,9 +63,8 @@ export default App;
 
 // Cousrse for faculty in administrator
 // File Upload
-// fcaulty approved and pending snack bar etc on click close dialog box
-// seprate pending and Form Reviewed
 
+// fcaulty approved and pending snack bar etc on click close dialog box
 // on click new user show details
 // Form Submission Restructure Date and Time
 // Administartor Form List card Delete and edit button
