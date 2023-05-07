@@ -235,7 +235,6 @@ const DynamicFormPreviewFaculty = () => {
       ...selectedValue,
       ...dateValues,
       ...timeValues,
-      ...selectedFiles,
     };
 
     // Concatenate the arrays from checkboxSelectedValues and multiSelectedValues
@@ -263,7 +262,7 @@ const DynamicFormPreviewFaculty = () => {
 
     try {
       const response = await axios.post(
-        "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/forms/faculty",
+        "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/forms/faculty/data",
         payload,
         {
           headers: {
@@ -271,6 +270,29 @@ const DynamicFormPreviewFaculty = () => {
           },
         }
       );
+
+      console.log(response.data._id);
+      const formId = response.data._id;
+
+      // Send the files in separate requests
+      for (const [_id, file] of Object.entries(selectedFiles)) {
+        const fileData = new FormData();
+        fileData.append("formDocument", file);
+        fileData.append("formId", formId);
+
+        const fileResponse = await axios.post(
+          `http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/forms/faculty/file`,
+          fileData,
+          {
+            headers: {
+              "x-auth-token": token,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        console.log(`File ${_id} submitted successfully:`, fileResponse.data);
+      }
 
       console.log("Form submitted successfully:", response.data);
       setMessage("Form submitted successfully!");
@@ -338,10 +360,24 @@ const DynamicFormPreviewFaculty = () => {
 
   const [selectedFiles, setSelectedFiles] = useState({});
   const [inputRefs, setInputRefs] = useState({});
+
+  // Initialize inputRefs with the correct keys and Ref objects
+  // Initialize inputRefs with the correct keys and Ref objects
+  useEffect(() => {
+    if (form && form[0] && form[0].fields) {
+      const refs = {};
+      form[0].fields.forEach((field) => {
+        if (field.type === "fileUpload") {
+          refs[field.id] = React.createRef();
+        }
+      });
+      setInputRefs(refs);
+    }
+  }, [form]);
+
   const handleFileSelect = (event, id) => {
     const file = event.target.files[0];
     setSelectedFiles({ ...selectedFiles, [id]: file });
-    // Update the fileName property of the field object
   };
 
   const [formErrors, setFormErrors] = useState({});
@@ -807,8 +843,8 @@ const DynamicFormPreviewFaculty = () => {
                             </Button>
                             <input
                               type="file"
-                              id={field.id}
-                              name={field.name}
+                              id="formDocument"
+                              name="formDocument"
                               required={field.required}
                               hidden
                               accept=".pdf,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*"

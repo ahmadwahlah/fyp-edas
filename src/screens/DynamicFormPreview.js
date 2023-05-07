@@ -228,6 +228,7 @@ const DynamicFormPreview = () => {
     console.log(id);
     console.log(faculty);
   };
+
   const postFormData = async () => {
     const token = localStorage.getItem("token");
     const decodedPayload = jwt_decode(token);
@@ -240,7 +241,6 @@ const DynamicFormPreview = () => {
       ...selectedValue,
       ...dateValues,
       ...timeValues,
-      ...selectedFiles,
     };
 
     // Concatenate the arrays from checkboxSelectedValues and multiSelectedValues
@@ -269,7 +269,7 @@ const DynamicFormPreview = () => {
 
     try {
       const response = await axios.post(
-        "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/forms/",
+        "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/forms/data/",
         payload,
         {
           headers: {
@@ -277,6 +277,30 @@ const DynamicFormPreview = () => {
           },
         }
       );
+
+      console.log(response.data._id);
+      const formId = response.data._id;
+
+      // Send the files in separate requests
+      for (const [_id, file] of Object.entries(selectedFiles)) {
+        const fileData = new FormData();
+        fileData.append("formDocument", file);
+        fileData.append("formId", formId);
+        console.log(id);
+
+        const fileResponse = await axios.post(
+          `http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/forms/file`,
+          fileData,
+          {
+            headers: {
+              "x-auth-token": token,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        console.log(`File ${_id} submitted successfully:`, fileResponse.data);
+      }
 
       console.log("Form submitted successfully:", response.data);
       setMessage("Form submitted successfully!");

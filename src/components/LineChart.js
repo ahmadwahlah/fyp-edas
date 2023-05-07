@@ -11,13 +11,13 @@ export default function LineChart({
 }) {
   const [chartData, setChartData] = useState({
     labels: [
+      "Sunday",
       "Monday",
       "Tuesday",
       "Wednesday",
       "Thursday",
       "Friday",
       "Saturday",
-      "Sunday",
     ],
     datasets: [
       {

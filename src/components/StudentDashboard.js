@@ -16,6 +16,7 @@ export default function StudentDashboard() {
   const [currentFormName, setCurrentFormName] = useState("");
   const [response, setResponse] = useState({});
   const [student, setStudent] = useState({});
+  const [image, setImage] = useState("");
 
   const [activeStep, setActiveStep] = useState(0);
   const [allForms, setAllForms] = useState([]);
@@ -62,7 +63,7 @@ export default function StudentDashboard() {
 
   // ... (previous imports and code)
 
-  const handleHierarchyClick = (approvers, formName, response) => {
+  const handleHierarchyClick = (approvers, formName, response, image) => {
     const hierarchy = approvers.map((approver) => ({
       title: approver.role,
       status: approver.disapproved
@@ -76,6 +77,7 @@ export default function StudentDashboard() {
     setActiveStep(setActiveStepIndex(hierarchy));
     setCurrentFormName(formName);
     setResponse(response);
+    setImage(image);
     console.log(response);
     setDialogOpen(true);
   };
@@ -159,7 +161,8 @@ export default function StudentDashboard() {
               handleHierarchyClick(
                 data.approvers,
                 data.formName,
-                data.responces
+                data.responces,
+                data.image
               )
             }
           />
@@ -174,6 +177,7 @@ export default function StudentDashboard() {
         formName={currentFormName}
         response={response}
         user={student}
+        image={image}
       />
     </Box>
   );
