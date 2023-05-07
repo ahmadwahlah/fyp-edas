@@ -21,6 +21,7 @@ import DynamicFormPreview from "./screens/DynamicFormPreview";
 import DynamicFormPreviewFaculty from "./screens/DynamicFormPreviewFaculty";
 import EditProfile from "./screens/EditProfile";
 import EditFacultyProfile from "./screens/EditFacultyProfile";
+import AdminProfile from "./screens/AdminProfile";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
           <Route path="/studenthome" element={<StudentNavigation />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/facultyprofile" element={<FacultyProfile />} />
+          <Route path="/adminprofile" element={<AdminProfile />} />
           <Route path="/editprofile" element={<EditProfile />} />
           <Route path="/editfacultyprofile" element={<EditFacultyProfile />} />
           <Route path="/leave" element={<Leave />} />
@@ -63,6 +65,3 @@ export default App;
 
 // on click new user show details
 // Form Submission Restructure Date and Time
-//  restructure form
-// set admin profile
-// icons of profile

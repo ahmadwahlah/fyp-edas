@@ -228,21 +228,17 @@ const Profile = () => {
                 }}
               >
                 {/* Profile Picture */}
-                <input
+                {/* <input
                   accept="image/*"
                   id="profilePictureInput"
                   type="file"
                   hidden
                   disabled={!isEditable}
                   onChange={handleProfilePicChange}
-                />
-                <label htmlFor="profilePictureInput">
-                  <StyledAvatar
-                    src={profileData.profilePicture}
-                    alt="Profile Picture"
-                    sx={isEditable ? { cursor: "pointer" } : {}}
-                  />
-                </label>
+                /> */}
+                {/* <label htmlFor="profilePictureInput"> */}
+                <StyledAvatar sx={{ backgroundColor: "#1976d2" }} />
+                {/* </label> */}
                 {/* Role */}
                 <Typography component="h1" variant="h5">
                   {profileData.role}

@@ -228,7 +228,7 @@ export default function SignIn() {
     if (!emailValue) {
       setEmailError(true);
       setHelperText("Email is required");
-    } else if (!/\S+@\S+\.\S+/.test(emailValue)) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
       setEmailError(true);
       setHelperText("Invalid email address");
     } else {

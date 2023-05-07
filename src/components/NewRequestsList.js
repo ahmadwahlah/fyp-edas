@@ -17,6 +17,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
+import { Grid } from "@mui/material";
 
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
@@ -245,33 +246,82 @@ const NewRequestsList = () => {
               <ListItem>
                 <ListItemText
                   primary={
-                    <Box>
-                      <Typography
-                        variant="h6"
-                        style={{
-                          flex: 1,
-                          fontFamily: "Arial, sans-serif",
-                          fontWeight: "bold",
-                          color: "black",
-                        }}
-                      >
-                        {newRequest.firstname} {newRequest.lastname} (
-                        {newRequest.role === "faculty"
-                          ? newRequest.subrole.toUpperCase()
-                          : newRequest.role.toUpperCase()}
-                        )
-                      </Typography>
-                      <Typography
-                        variant="subtitle1"
-                        style={{
-                          flex: 1,
-                          fontFamily: "Arial, sans-serif",
-                          color: "black",
-                        }}
-                      >
-                        {`${newRequest.email}`}
-                      </Typography>
-                    </Box>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12} sm={6}>
+                        <Typography
+                          variant="h6"
+                          sx={{
+                            fontFamily: "Arial, sans-serif",
+                            fontWeight: "bold",
+                            color: "black",
+                          }}
+                        >
+                          {newRequest.firstname} {newRequest.lastname} (
+                          {newRequest.role === "faculty"
+                            ? newRequest.subrole.toUpperCase()
+                            : newRequest.role.toUpperCase()}
+                          )
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          sx={{
+                            fontFamily: "Arial, sans-serif",
+                            color: "black",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {newRequest.role === "faculty"
+                            ? newRequest.department.toUpperCase()
+                            : newRequest.faculty.toUpperCase()}
+                        </Typography>
+                        {newRequest.role === "student" && (
+                          <Typography
+                            variant="subtitle1"
+                            sx={{
+                              fontFamily: "Arial, sans-serif",
+                              color: "black",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            Reg Number: {newRequest.regnum.toUpperCase()}
+                          </Typography>
+                        )}
+                        {newRequest.role === "student" && (
+                          <Typography
+                            variant="subtitle1"
+                            sx={{
+                              fontFamily: "Arial, sans-serif",
+                              color: "black",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            Batch Number: {newRequest.batch.toUpperCase()}
+                          </Typography>
+                        )}
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Typography
+                          variant="subtitle1"
+                          sx={{
+                            fontFamily: "Arial, sans-serif",
+                            color: "black",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {`${newRequest.email}`}
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          sx={{
+                            fontFamily: "Arial, sans-serif",
+                            color: "black",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {`${newRequest.phoneNumber}`}
+                        </Typography>
+                      </Grid>
+                    </Grid>
                   }
                 />
                 <IconButton

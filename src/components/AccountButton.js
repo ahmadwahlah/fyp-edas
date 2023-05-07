@@ -9,6 +9,8 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import Logout from "@mui/icons-material/Logout";
 import jwt_decode from "jwt-decode";
+import AccountCircleSharpIcon from "@mui/icons-material/AccountCircleSharp";
+import AdminProfile from "../screens/AdminProfile";
 
 import { useNavigate } from "react-router-dom";
 
@@ -45,8 +47,10 @@ export default function AccountButton() {
 
       if (userRole === "faculty") {
         navigate("/facultyprofile");
-      } else {
+      } else if (userRole === "student") {
         navigate("/profile");
+      } else {
+        navigate("/adminprofile");
       }
     }
   };
@@ -63,7 +67,9 @@ export default function AccountButton() {
             aria-haspopup="true"
             aria-expanded={open ? "true" : undefined}
           >
-            <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
+            <AccountCircleSharpIcon
+              sx={{ color: "white", fontSize: "2.5rem" }}
+            />
           </IconButton>
         </Tooltip>
       </Box>
@@ -102,7 +108,7 @@ export default function AccountButton() {
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
         <MenuItem onClick={handleNavigation}>
-          <Avatar /> Profile
+          <Avatar sx={{ backgroundColor: "black" }} /> Profile
         </MenuItem>
         <Divider />
         <MenuItem onClick={handleClose}>

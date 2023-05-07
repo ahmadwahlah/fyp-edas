@@ -357,7 +357,7 @@ const EditFacultyProfile = () => {
                   alignItems: "center",
                 }}
               >
-                {/* Profile Picture */}
+                {/* Profile Picture
                 <input
                   accept="image/*"
                   id="profilePictureInput"
@@ -366,14 +366,10 @@ const EditFacultyProfile = () => {
                   disabled={!isEditable}
                   onChange={handleProfilePicChange}
                 />
-                <label htmlFor="profilePictureInput">
-                  <StyledAvatar
-                    src={profileData.profilePicture}
-                    alt="Profile Picture"
-                    sx={isEditable ? { cursor: "pointer" } : {}}
-                  />
-                </label>
-                {/* Role */}
+                <label htmlFor="profilePictureInput"> */}
+                <StyledAvatar sx={{ backgroundColor: "#1976d2" }} />
+                {/* </label>
+                Role */}
                 <Typography component="h1" variant="h5">
                   {profileData.role}
                 </Typography>

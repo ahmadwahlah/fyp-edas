@@ -275,7 +275,7 @@ export default function SignUp() {
     if (!emailValue) {
       setEmailError(true);
       setHelperText("Email is required");
-    } else if (!/\S+@\S+\.\S+/.test(emailValue)) {
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailValue)) {
       setEmailError(true);
       setHelperText("Invalid email address");
     } else {
@@ -314,7 +314,7 @@ export default function SignUp() {
     const phoneNumberValue = event.target.value;
     setPhoneNumber(phoneNumberValue);
 
-    const phoneNumberRegex = /^\d{11}$/;
+    const phoneNumberRegex = /^03\d{9}$/;
     const isValidPhoneNumber = phoneNumberRegex.test(phoneNumberValue);
 
     if (!isValidPhoneNumber) {
@@ -600,7 +600,11 @@ export default function SignUp() {
             >
               Sign Up
             </Button>
-            <Grid container justifyContent="flex-end">
+            <Grid
+              container
+              justifyContent="flex-end"
+              sx={{ marginBottom: "1.5rem" }}
+            >
               <Grid item>
                 <Link href="#" variant="body2" onClick={() => navigate("/")}>
                   Already have an account? Sign in

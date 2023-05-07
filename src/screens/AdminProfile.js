@@ -10,7 +10,6 @@ import { styled } from "@mui/system";
 import { Grid, Card, CardContent } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
 
 import LoggedInHeader from "../components/LoggedInHeader";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
@@ -44,23 +43,17 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
   marginBottom: theme.spacing(2),
 }));
 
-const EditProfile = () => {
-  const location = useLocation(); // Use the useLocation hook
-  const userId = location.state?.userId;
-  const userRole = location.state?.userRole;
-
-  console.log("User ID:", userId);
-  console.log("User Role:", userRole);
+const Profile = () => {
   const [isEditable, setIsEditable] = useState(false);
   const [profileData, setProfileData] = useState({
     profilePicture: "",
-    role: "Student",
-    firstName: "test",
-    lastName: "XXXXX",
+    role: "Admin",
+    firstName: "Abdullah",
+    lastName: "Habib",
     faculty: "Computer Science",
     regNo: "XXXXXXX",
     batchNo: "XX",
-    email: "ahmad@example.com",
+    email: "abdullah.mohammad2019274@gmail.com",
     phoneNumber: "1234567890",
     password: "********",
     courses: [],
@@ -107,7 +100,7 @@ const EditProfile = () => {
         const token = localStorage.getItem("token");
 
         const response = await axios.get(
-          `http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/admin/student/data/${userId}`,
+          "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/student",
           {
             headers: {
               "x-auth-token": token,
@@ -147,15 +140,11 @@ const EditProfile = () => {
       const token = localStorage.getItem("token");
 
       const response = await axios.put(
-        `http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/admin/student/data/${userId}`,
+        "http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/student/",
         {
           phoneNumber: profileData.phoneNumber,
+          //password: profileData.password,
           courses: profileData.courses,
-          firstname: profileData.firstName,
-          lastname: profileData.lastName,
-          faculty: profileData.faculty,
-          regnum: profileData.regNo,
-          batch: profileData.batchNo,
         },
         {
           headers: {
@@ -203,7 +192,7 @@ const EditProfile = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ display: "flex" }}>
+    <Container maxWidth="lg" sx={{ display: "flex", alignItems: "flex-start" }}>
       <LoggedInHeader />
       <Box>
         <Button
@@ -238,31 +227,31 @@ const EditProfile = () => {
                   alignItems: "center",
                 }}
               >
-                {/* Profile Picture
-                <input
+                {/* Profile Picture */}
+                {/* <input
                   accept="image/*"
                   id="profilePictureInput"
                   type="file"
                   hidden
                   disabled={!isEditable}
                   onChange={handleProfilePicChange}
-                />
-                <label htmlFor="profilePictureInput"> */}
+                /> */}
+                {/* <label htmlFor="profilePictureInput"> */}
                 <StyledAvatar sx={{ backgroundColor: "#1976d2" }} />
-                {/* </label>
-                Role */}
+                {/* </label> */}
+                {/* Role */}
                 <Typography component="h1" variant="h5">
                   {profileData.role}
                 </Typography>
                 {/* Edit Button */}
-                <Button
+                {/* <Button
                   fullWidth
                   variant="contained"
                   onClick={handleEditClick}
                   sx={{ mt: 2 }}
                 >
                   {isEditable ? "Save" : "Edit"}
-                </Button>
+                </Button> */}
               </CardContent>
             </Card>
           </Grid>
@@ -289,8 +278,7 @@ const EditProfile = () => {
                       value={profileData.firstName}
                       fullWidth
                       margin="normal"
-                      onChange={handleInputChange}
-                      disabled={!isEditable}
+                      disabled
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -300,99 +288,10 @@ const EditProfile = () => {
                       value={profileData.lastName}
                       fullWidth
                       margin="normal"
-                      onChange={handleInputChange}
-                      disabled={!isEditable}
+                      disabled
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Registration Number"
-                      name="regNo"
-                      value={profileData.regNo}
-                      fullWidth
-                      margin="normal"
-                      onChange={handleInputChange}
-                      disabled={!isEditable}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <CustomSelect
-                      label="Batch Number"
-                      name="batchNo"
-                      value={profileData.batchNo}
-                      fullWidth
-                      margin="normal"
-                      onChange={handleInputChange}
-                      disabled={!isEditable}
-                      options={[
-                        {
-                          value: "27",
-                          label: "27",
-                        },
-                        {
-                          value: "28",
-                          label: "28",
-                        },
-                        {
-                          value: "29",
-                          label: "29",
-                        },
-                        {
-                          value: "30",
-                          label: "30",
-                        },
-                        {
-                          value: "31",
-                          label: "31",
-                        },
-                        {
-                          value: "32",
-                          label: "32",
-                        },
-                        {
-                          value: "33",
-                          label: "33",
-                        },
-                      ]}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <CustomSelect
-                      label="Faculty"
-                      name="faculty"
-                      value={profileData.faculty}
-                      fullWidth
-                      margin="normal"
-                      onChange={handleInputChange}
-                      disabled={!isEditable}
-                      options={[
-                        {
-                          value: "Computer Science",
-                          label: "Computer Science",
-                        },
-                        {
-                          value: "Computer Engineering",
-                          label: "Computer Engineering",
-                        },
-                        {
-                          value: "Artificial Intelligence",
-                          label: "Artificial Intelligence",
-                        },
-                        {
-                          value: "Data Science",
-                          label: "Data Science",
-                        },
-                        {
-                          value: "Software Engineering",
-                          label: "Software Engineering",
-                        },
-                        {
-                          value: "Cyber Security",
-                          label: "Cyber Security",
-                        },
-                      ]}
-                    />
-                  </Grid>
+
                   <Grid item xs={12} sm={6}>
                     <TextField
                       label="Email"
@@ -404,17 +303,7 @@ const EditProfile = () => {
                       disabled
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Phone Number"
-                      name="phoneNumber"
-                      value={profileData.phoneNumber}
-                      onChange={handleInputChange}
-                      fullWidth
-                      margin="normal"
-                      disabled={!isEditable}
-                    />
-                  </Grid>
+
                   <Grid item xs={12} sm={6}>
                     <TextField
                       label="Password"
@@ -427,24 +316,6 @@ const EditProfile = () => {
                       disabled
                     />
                   </Grid>
-                  {/* <Grid item xs={12}>
-                    <Autocomplete
-                      multiple
-                      options={coursesList}
-                      value={profileData.courses}
-                      onChange={handleCoursesChange}
-                      disabled={!isEditable}
-                      renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          label="Courses"
-                          margin="normal"
-                          fullWidth
-                        />
-                      )}
-                      sx={{ mt: 2 }}
-                    />
-                  </Grid> */}
                 </Grid>
               </CardContent>
             </Card>
@@ -455,4 +326,4 @@ const EditProfile = () => {
   );
 };
 
-export default EditProfile;
+export default Profile;
