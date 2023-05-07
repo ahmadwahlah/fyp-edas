@@ -18,6 +18,7 @@ import AttachmentIcon from "@mui/icons-material/Attachment";
 import CloseIcon from "@mui/icons-material/Close";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { useNavigate } from "react-router-dom";
 
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
@@ -37,6 +38,7 @@ export default function FormTracingDialog({
   id,
   image,
 }) {
+  const navigate = useNavigate();
   const getStepLabelColor = (status) => {
     switch (status) {
       case "Approved":

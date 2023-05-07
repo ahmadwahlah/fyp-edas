@@ -169,7 +169,7 @@ const FormBuilderContainer = () => {
       setSeverity("success");
       setOpen(true);
       setTimeout(() => {
-        window.location.reload();
+        navigate("/adminhome");
       }, 2000);
     } catch (error) {
       console.error("Error saving form data:", error);
