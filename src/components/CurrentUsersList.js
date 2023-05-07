@@ -183,6 +183,21 @@ const CurrentUsersList = () => {
           margin: "2rem",
         }}
       >
+        <Typography
+          variant="button"
+          style={{
+            fontFamily: "Arial, sans-serif",
+            fontWeight: "bold",
+            color: "#333", // Slightly lighter black for better readability
+            width: "17rem",
+            fontSize: "1.25rem", // Adjust font size for better visibility
+            letterSpacing: "0.5px",
+            marginRight: "4.7rem",
+          }}
+        >
+          Total Users: {filteredUsers.length}
+        </Typography>
+
         <UserSearchBar sx={{ ml: 2 }} value={searchQuery} func={handleSearch} />
       </Box>
       <Divider />

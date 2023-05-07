@@ -205,6 +205,21 @@ const NewRequestsList = () => {
           margin: "2rem",
         }}
       >
+        <Typography
+          variant="button"
+          style={{
+            fontFamily: "Arial, sans-serif",
+            fontWeight: "bold",
+            color: "#333", // Slightly lighter black for better readability
+            width: "21rem",
+            fontSize: "1.25rem", // Adjust font size for better visibility
+            letterSpacing: "0.5px",
+            marginRight: "1.5rem",
+          }}
+        >
+          Total Requests: {filteredRequests.length}
+        </Typography>
+
         <UserSearchBar sx={{ ml: 2 }} value={searchQuery} func={handleSearch} />
       </Box>
       <Divider />

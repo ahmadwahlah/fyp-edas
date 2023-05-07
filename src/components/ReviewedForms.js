@@ -18,6 +18,7 @@ export default function ReviewedForms() {
   const [response, setResponse] = useState({});
   const [user, setUser] = useState({});
   const [id, setId] = useState({});
+  const [image, setImage] = useState("");
 
   const [activeStep, setActiveStep] = useState(0);
   const [allForms, setAllForms] = useState([]);
@@ -77,7 +78,15 @@ export default function ReviewedForms() {
   // ... (previous imports and code)
 
   const handleHierarchyClick = (data) => {
-    const { approvers, formName, responces, student, faculty, _id: id } = data;
+    const {
+      approvers,
+      formName,
+      responces,
+      student,
+      faculty,
+      _id: id,
+      image,
+    } = data;
 
     const hierarchy = approvers.map((approver) => ({
       title: approver.role,
@@ -93,6 +102,7 @@ export default function ReviewedForms() {
     setCurrentFormName(formName);
     setResponse(responces);
     setId(id);
+    setImage(image);
     setUser(student ? student : faculty);
 
     if (student) {
@@ -190,6 +200,7 @@ export default function ReviewedForms() {
         response={response}
         user={user}
         id={id}
+        image={image}
       />
       <ReviewedFormsDialogFaculty
         open={dialogFacultyOpen}
@@ -200,6 +211,7 @@ export default function ReviewedForms() {
         response={response}
         user={user}
         id={id}
+        image={image}
       />
     </Box>
   );

@@ -23,6 +23,7 @@ export default function FormTracingDialog({
   response,
   user,
   id,
+  image,
 }) {
   const getStepLabelColor = (status) => {
     switch (status) {
@@ -34,6 +35,15 @@ export default function FormTracingDialog({
       default:
         return "darkorange";
     }
+  };
+
+  const handleClick = () => {
+    const link = document.createElement("a");
+    link.href = image;
+    link.target = "_blank";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const handleApprove = async () => {
@@ -179,6 +189,18 @@ export default function FormTracingDialog({
             Close
           </Button>
           <Box>
+            {image && (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleClick}
+                sx={{
+                  mr: 1,
+                }}
+              >
+                View Attachment
+              </Button>
+            )}
             <Button
               onClick={handleDisapprove}
               variant="contained"

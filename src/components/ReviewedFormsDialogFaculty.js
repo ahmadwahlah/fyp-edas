@@ -23,6 +23,7 @@ export default function ReviewedFormsDialogFaculty({
   response,
   user,
   id,
+  image,
 }) {
   const getStepLabelColor = (status) => {
     switch (status) {
@@ -34,6 +35,15 @@ export default function ReviewedFormsDialogFaculty({
       default:
         return "darkorange";
     }
+  };
+
+  const handleClick = () => {
+    const link = document.createElement("a");
+    link.href = image;
+    link.target = "_blank";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -134,6 +144,11 @@ export default function ReviewedFormsDialogFaculty({
           <Button onClick={onClose} variant="contained">
             Close
           </Button>
+          {image && (
+            <Button variant="contained" color="primary" onClick={handleClick}>
+              View Attachment
+            </Button>
+          )}
         </Box>
       </DialogActions>
     </Dialog>
