@@ -62,5 +62,3 @@ function App() {
 }
 
 export default App;
-
-// Form Submission Restructure Date and Time
