@@ -353,8 +353,13 @@ const DynamicFormPreview = () => {
   };
 
   const today = dayjs();
+  const reformatDate = (dateString) => {
+    return dayjs(dateString).format("YYYY-MM-DD");
+  };
+
   const [dateValues, setDateValues] = useState({});
   const [timeValues, setTimeValues] = useState({});
+
   const handleTimePickerChange = (newValue, id, heading) => {
     setTimeValues({
       ...timeValues,
@@ -442,7 +447,7 @@ const DynamicFormPreview = () => {
                         ...dateValues,
                         [id]: {
                           heading: heading || "Date Picker",
-                          value: newValue,
+                          value: reformatDate(newValue),
                         },
                       });
                       if (field.required && !newValue) {

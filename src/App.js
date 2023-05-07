@@ -63,5 +63,4 @@ function App() {
 
 export default App;
 
-// on click new user show details
 // Form Submission Restructure Date and Time
