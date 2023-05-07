@@ -65,4 +65,4 @@ export default App;
 // Form Submission Restructure Date and Time
 //  restructure form
 // set admin profile
-// Set Admin Form Page Delete icon not responsive
+// icons of profile

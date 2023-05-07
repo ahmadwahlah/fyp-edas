@@ -11,6 +11,7 @@ import {
   Button,
   Box,
   Divider,
+  Grid,
 } from "@mui/material";
 import axios from "axios";
 import PrintButton from "./PrintButton";
@@ -70,53 +71,75 @@ export default function ReviewedFormsDialog({
         </Box>
         <Divider />
         <Box sx={{ mb: 2, mt: 2, ml: 2 }}>
-          <Typography variant="subtitle1">
-            <strong>Name: </strong>
-            {user.firstname} {user.lastname}
-          </Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="subtitle1">
+                <strong>Name: </strong>
+                {user.firstname} {user.lastname}
+              </Typography>
+            </Grid>
 
-          <Typography variant="subtitle1">
-            <strong>Role: </strong>
-            {user.role}
-          </Typography>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="subtitle1">
+                <strong>Role: </strong>
+                {user.role}
+              </Typography>
+            </Grid>
 
-          <Typography variant="subtitle1">
-            <strong>Batch Number: </strong>
-            {user.batch}
-          </Typography>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="subtitle1">
+                <strong>Batch Number: </strong>
+                {user.batch}
+              </Typography>
+            </Grid>
 
-          <Typography variant="subtitle1">
-            <strong>Reg Number: </strong>
-            {user.regnum}
-          </Typography>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="subtitle1">
+                <strong>Reg Number: </strong>
+                {user.regnum}
+              </Typography>
+            </Grid>
 
-          <Typography variant="subtitle1">
-            <strong>Faculty: </strong>
-            {user.faculty}
-          </Typography>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="subtitle1">
+                <strong>Faculty: </strong>
+                {user.faculty}
+              </Typography>
+            </Grid>
 
-          <Typography variant="subtitle1">
-            <strong>Email: </strong>
-            {user.email}
-          </Typography>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="subtitle1">
+                <strong>Email: </strong>
+                {user.email}
+              </Typography>
+            </Grid>
 
-          <Typography variant="subtitle1">
-            <strong>Phone Number: </strong>
-            {user.phoneNumber}
-          </Typography>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="subtitle1">
+                <strong>Phone Number: </strong>
+                {user.phoneNumber}
+              </Typography>
+            </Grid>
+          </Grid>
         </Box>
         <Divider />
         <Box sx={{ mb: 2, mt: 2, ml: 2 }}>
-          {response && response.combinedArray ? (
-            response.combinedArray.map((item) => (
-              <Typography key={item.id} variant="subtitle1">
-                <strong>{item.heading}: </strong>
-                {item.value ? item.value : item.values.join(", ")}
-              </Typography>
-            ))
-          ) : (
-            <Typography variant="subtitle1">No data available</Typography>
-          )}
+          <Grid container spacing={2}>
+            {response && response.combinedArray ? (
+              response.combinedArray.map((item) => (
+                <Grid item xs={12} sm={6} key={item.id}>
+                  <Typography variant="subtitle1">
+                    <strong>{item.heading}: </strong>
+                    {item.value ? item.value : item.values.join(", ")}
+                  </Typography>
+                </Grid>
+              ))
+            ) : (
+              <Grid item xs={12}>
+                <Typography variant="subtitle1">No data available</Typography>
+              </Grid>
+            )}
+          </Grid>
         </Box>
         <Divider />
         <Box sx={{ mb: 2, mt: 2 }}>

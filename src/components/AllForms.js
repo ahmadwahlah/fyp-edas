@@ -179,54 +179,61 @@ export default function AllForms() {
         {filteredForms.map((form, index) => (
           <StyledLink to={form.route} key={form._id || index}>
             <StyledCard>
-              <CardContent>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  flex: 1,
+                  height: "12vh",
+                  alignItems: "space-between",
+                  justifyContent: "space-between",
+                  padding: "1rem",
+                }}
+              >
                 <Box
                   sx={{
                     display: "flex",
                     flexDirection: "row",
-                    width: "70rem",
-                    flex: 1,
-                    alignItems: "space-between",
-                    justifyContent: "space-between",
+                    alignItems: "center",
+                    justifyContent: "center",
                   }}
                 >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "row",
-                      alignItems: "center",
-                      justifyContent: "center",
+                  <Typography
+                    variant="h6"
+                    style={{
+                      fontFamily: "Arial, sans-serif",
+                      fontWeight: "bold",
+                      color: "black",
+                      textTransform: "uppercase",
+                      textAlign: "center",
                     }}
                   >
-                    <Typography
-                      variant="h6"
-                      style={{
-                        fontFamily: "Arial, sans-serif",
-                        fontWeight: "bold",
-                        color: "black",
-                        textTransform: "uppercase",
-                      }}
-                    >
-                      {form.name}
-                    </Typography>
-                  </Box>
-                  <Box>
-                    {/* <IconButton
+                    {form.name}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {/* <IconButton
                       aria-label="edit"
                       onClick={(event) => handleOpenFormDialog(event, form)}
                     >
                       <EditIcon fontSize="large" style={{ color: "#1976d2" }} />
                     </IconButton> */}
 
-                    <IconButton
-                      aria-label="delete"
-                      onClick={(event) => handleOpenDialog(event, form)}
-                    >
-                      <DeleteIcon style={{ color: "red" }} fontSize="large" />
-                    </IconButton>
-                  </Box>
+                  <IconButton
+                    aria-label="delete"
+                    onClick={(event) => handleOpenDialog(event, form)}
+                  >
+                    <DeleteIcon style={{ color: "red" }} fontSize="large" />
+                  </IconButton>
                 </Box>
-              </CardContent>
+              </Box>
             </StyledCard>
           </StyledLink>
         ))}
