@@ -1,49 +1,86 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Chart } from "chart.js/auto";
 import { Line } from "react-chartjs-2";
 import Box from "@mui/material/Box";
+import axios from "axios";
 
-const data = {
-  labels: [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ],
-  datasets: [
-    {
-      label: "Number of Form Submissions",
-      data: [10, 5, 15, 8, 20, 12, 6],
-      fill: false,
-      borderColor: "rgb(75, 192, 192)",
-      tension: 0.1,
-    },
-  ],
-};
+export default function LineChart({
+  timeFilter,
+  departmentFilter,
+  formFilter,
+}) {
+  const [chartData, setChartData] = useState({
+    labels: [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ],
+    datasets: [
+      {
+        label: "Number of Form Submissions",
+        data: [0, 0, 0, 0, 0, 0, 0],
+        fill: false,
+        borderColor: "rgb(75, 192, 192)",
+        tension: 0.1,
+      },
+    ],
+  });
 
-const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      display: true,
-      position: "bottom",
-    },
-  },
-  scales: {
-    y: {
-      beginAtZero: true,
-      title: {
+  useEffect(() => {
+    const fetchChartData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const url = `http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/forms/formStats?time=${timeFilter}&faculty=${departmentFilter}&formName=${formFilter}`;
+
+        const response = await axios.get(url, {
+          headers: {
+            "x-auth-token": token,
+          },
+        });
+
+        console.log(response.data.formsByDayOfWeek);
+        const chartDataCopy = { ...chartData };
+        chartDataCopy.datasets[0].data = response.data.formsByDayOfWeek;
+        setChartData((prevState) => ({
+          ...prevState,
+          datasets: [
+            {
+              ...prevState.datasets[0],
+              data: response.data.formsByDayOfWeek,
+            },
+          ],
+        }));
+      } catch (error) {
+        console.error("Error fetching chart data:", error);
+      }
+    };
+
+    fetchChartData();
+  }, [timeFilter, departmentFilter, formFilter]);
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
         display: true,
-        text: "Number of Form Submissions",
+        position: "bottom",
       },
     },
-  },
-};
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: "Number of Form Submissions",
+        },
+      },
+    },
+  };
 
-export default function LineChart() {
   return (
     <Box
       sx={{
@@ -79,7 +116,7 @@ export default function LineChart() {
         >
           Form Submissions by Day of the Week
         </Box>
-        <Line data={data} options={options} />
+        <Line data={chartData} options={options} />
       </Box>
     </Box>
   );

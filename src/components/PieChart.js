@@ -1,19 +1,56 @@
-import React from "react";
-import { Chart } from "chart.js/auto";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Pie } from "react-chartjs-2";
 import Box from "@mui/material/Box";
 
-const PieChart = () => {
-  const data = {
+const PieChart = ({ timeFilter, departmentFilter, formFilter }) => {
+  const [chartData, setChartData] = useState({
     labels: ["Approved", "Rejected", "Pending"],
     datasets: [
       {
-        data: [15, 7, 5],
+        data: [0, 0, 0],
         backgroundColor: ["#36A2EB", "#FF6384", "#FFCE56"],
         hoverBackgroundColor: ["#36A2EB", "#FF6384", "#FFCE56"],
       },
     ],
-  };
+  });
+  const [apiError, setApiError] = useState(false);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const url = `http://ec2-65-0-133-29.ap-south-1.compute.amazonaws.com:8000/api/forms/formStats?time=${timeFilter}&faculty=${departmentFilter}&formName=${formFilter}`;
+
+        const response = await axios.get(url, {
+          headers: {
+            "x-auth-token": token,
+          },
+        });
+
+        setChartData({
+          labels: ["Approved", "Rejected", "Pending"],
+          datasets: [
+            {
+              data: [
+                response.data.approvedForms,
+                response.data.rejectedForms,
+                response.data.pendingForms,
+              ],
+              backgroundColor: ["#36A2EB", "#FF6384", "#FFCE56"],
+              hoverBackgroundColor: ["#36A2EB", "#FF6384", "#FFCE56"],
+            },
+          ],
+        });
+        setApiError(false);
+      } catch (error) {
+        console.error("Error fetching stats:", error);
+        setApiError(true);
+      }
+    };
+
+    fetchStats();
+  }, [timeFilter, departmentFilter, formFilter]);
 
   const boxStyle = {
     width: "75%",
@@ -48,7 +85,7 @@ const PieChart = () => {
     >
       <Box sx={boxStyle}>
         <Box style={headingStyle}>Status Chart</Box>
-        <Pie data={data} />
+        <Pie data={chartData} />
       </Box>
     </Box>
   );

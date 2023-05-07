@@ -1,12 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Divider } from "@mui/material";
 import Box from "@mui/material/Box";
-import CardGroup from "./CardGroup";
+import CardGroupAdmin from "./CardGroupAdmin";
 import FilterBar from "./FilterBar";
 import LineChart from "./LineChart";
 import PieChart from "./PieChart";
 
 export default function AdminDashboard() {
+  const [timeFilter, setTimeFilter] = useState("all");
+  const [departmentFilter, setDepartmentFilter] = useState("all");
+  const [formFilter, setFormFilter] = useState("all");
+
   return (
     <Box
       sx={{
@@ -20,9 +24,20 @@ export default function AdminDashboard() {
         },
       }}
     >
-      <FilterBar />
+      <FilterBar
+        timeFilter={timeFilter}
+        setTimeFilter={setTimeFilter}
+        departmentFilter={departmentFilter}
+        setDepartmentFilter={setDepartmentFilter}
+        formFilter={formFilter}
+        setFormFilter={setFormFilter}
+      />
       <Divider />
-      <CardGroup />
+      <CardGroupAdmin
+        timeFilter={timeFilter}
+        departmentFilter={departmentFilter}
+        formFilter={formFilter}
+      />
       <Box
         sx={{
           width: "95%",
@@ -38,8 +53,16 @@ export default function AdminDashboard() {
           },
         }}
       >
-        <LineChart />
-        <PieChart />
+        <LineChart
+          timeFilter={timeFilter}
+          departmentFilter={departmentFilter}
+          formFilter={formFilter}
+        />
+        <PieChart
+          timeFilter={timeFilter}
+          departmentFilter={departmentFilter}
+          formFilter={formFilter}
+        />
       </Box>
     </Box>
   );
