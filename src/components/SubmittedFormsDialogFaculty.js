@@ -17,7 +17,7 @@ import PrintButton from "./PrintButton";
 import AttachmentIcon from "@mui/icons-material/Attachment";
 import CloseIcon from "@mui/icons-material/Close";
 
-export default function ReviewedFormsDialog({
+export default function SubmittedFormsDialogFaculty({
   open,
   onClose,
   hierarchy,
@@ -81,18 +81,13 @@ export default function ReviewedFormsDialog({
           </Typography>
 
           <Typography variant="subtitle1">
-            <strong>Batch Number: </strong>
-            {user.batch}
-          </Typography>
-
-          <Typography variant="subtitle1">
-            <strong>Reg Number: </strong>
-            {user.regnum}
+            <strong>Subrole: </strong>
+            {user.subrole}
           </Typography>
 
           <Typography variant="subtitle1">
             <strong>Faculty: </strong>
-            {user.faculty}
+            {user.department}
           </Typography>
 
           <Typography variant="subtitle1">
@@ -155,7 +150,7 @@ export default function ReviewedFormsDialog({
             variant="contained"
           >
             Close
-          </Button>
+          </Button>{" "}
           <Box>
             {image && (
               <Button

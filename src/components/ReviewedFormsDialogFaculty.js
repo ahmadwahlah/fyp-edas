@@ -13,6 +13,9 @@ import {
   Divider,
 } from "@mui/material";
 import axios from "axios";
+import PrintButton from "./PrintButton";
+import AttachmentIcon from "@mui/icons-material/Attachment";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function ReviewedFormsDialogFaculty({
   open,
@@ -141,14 +144,26 @@ export default function ReviewedFormsDialogFaculty({
       </DialogContent>
       <DialogActions>
         <Box display="flex" justifyContent="space-between" width="100%">
-          <Button onClick={onClose} variant="contained">
+          <Button
+            startIcon={<CloseIcon />}
+            onClick={onClose}
+            variant="contained"
+          >
             Close
           </Button>
-          {image && (
-            <Button variant="contained" color="primary" onClick={handleClick}>
-              View Attachment
-            </Button>
-          )}
+          <Box>
+            {image && (
+              <Button
+                startIcon={<AttachmentIcon />}
+                variant="contained"
+                color="primary"
+                onClick={handleClick}
+              >
+                View Attachment
+              </Button>
+            )}
+            <PrintButton />
+          </Box>
         </Box>
       </DialogActions>
     </Dialog>

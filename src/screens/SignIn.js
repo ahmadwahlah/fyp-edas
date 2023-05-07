@@ -326,8 +326,8 @@ export default function SignIn() {
             >
               Sign In
             </Button>
-            <Grid container>
-              <Grid item xs>
+            <Grid container sx={{ justifyContent: "flex-end" }}>
+              {/* <Grid item xs>
                 <Link
                   href="#"
                   variant="body2"
@@ -335,7 +335,7 @@ export default function SignIn() {
                 >
                   Forgot password?
                 </Link>
-              </Grid>
+              </Grid> */}
               <Grid item>
                 <Link
                   href="#"
@@ -358,7 +358,7 @@ export default function SignIn() {
           </Alert>
         </Snackbar>
       </Container>
-      <Footer />
+      {/* <Footer /> */}
     </ThemeProvider>
   );
 }

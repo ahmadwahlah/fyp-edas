@@ -17,7 +17,7 @@ import PrintButton from "./PrintButton";
 import AttachmentIcon from "@mui/icons-material/Attachment";
 import CloseIcon from "@mui/icons-material/Close";
 
-export default function ReviewedFormsDialog({
+export default function SubmittedFormsDialog({
   open,
   onClose,
   hierarchy,

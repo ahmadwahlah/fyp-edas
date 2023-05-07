@@ -12,6 +12,9 @@ import {
   Box,
   Divider,
 } from "@mui/material";
+import PrintButton from "./PrintButton";
+import AttachmentIcon from "@mui/icons-material/Attachment";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function FormTracingDialog({
   open,
@@ -143,14 +146,28 @@ export default function FormTracingDialog({
         </Stepper>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} variant="contained">
-          Close
-        </Button>
-        {image && (
-          <Button variant="contained" color="primary" onClick={handleClick}>
-            View Attachment
+        <Box display="flex" justifyContent="space-between" width="100%">
+          <Button
+            startIcon={<CloseIcon />}
+            onClick={onClose}
+            variant="contained"
+          >
+            Close
           </Button>
-        )}
+          <Box>
+            {image && (
+              <Button
+                startIcon={<AttachmentIcon />}
+                variant="contained"
+                color="primary"
+                onClick={handleClick}
+              >
+                View Attachment
+              </Button>
+            )}
+            <PrintButton />
+          </Box>
+        </Box>
       </DialogActions>
     </Dialog>
   );

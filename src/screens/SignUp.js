@@ -619,7 +619,7 @@ export default function SignUp() {
           </Alert>
         </Snackbar>
       </Container>
-      <Footer />
+      {/* <Footer /> */}
     </ThemeProvider>
   );
 }

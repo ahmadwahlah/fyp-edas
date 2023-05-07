@@ -13,6 +13,17 @@ import {
   Divider,
 } from "@mui/material";
 import axios from "axios";
+import AttachmentIcon from "@mui/icons-material/Attachment";
+import CloseIcon from "@mui/icons-material/Close";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import CancelIcon from "@mui/icons-material/Cancel";
+
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 export default function PendingFormsDialog({
   open,
@@ -25,6 +36,17 @@ export default function PendingFormsDialog({
   id,
   image,
 }) {
+  const [snackOpen, setSnackOpen] = useState(false);
+  const [message, setMessage] = useState("This is a success message!");
+  const [severity, setSeverity] = useState("success");
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackOpen(false);
+  };
+
   const getStepLabelColor = (status) => {
     switch (status) {
       case "Approved":
@@ -61,9 +83,21 @@ export default function PendingFormsDialog({
         }
       );
       console.log("Form approved:", response);
+      setMessage("Form approved successfully!");
+      setSeverity("success");
+      setSnackOpen(true);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
       // TODO: You can add any additional logic to handle the successful approval here
     } catch (error) {
       console.error("Error approving form:", error);
+      setMessage("Error approving form!");
+      setSeverity("success");
+      setSnackOpen(true);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
       // TODO: You can add any additional logic to handle the error here
     }
   };
@@ -82,166 +116,192 @@ export default function PendingFormsDialog({
           },
         }
       );
-      console.log("Form approved:", response);
+      console.log("Form disapproved:", response);
+      setMessage("Form disapproved successfully!");
+      setSeverity("success");
+      setSnackOpen(true);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
       // TODO: You can add any additional logic to handle the successful approval here
     } catch (error) {
-      console.error("Error approving form:", error);
+      console.error("Error disapproving form:", error);
       // TODO: You can add any additional logic to handle the error here
+      setMessage("Error disapproving form!");
+      setSeverity("error");
+      setSnackOpen(true);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     }
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-      aria-labelledby="hierarchy-dialog-title"
-      maxWidth="100vw"
-      fullWidth
-      sx={{
-        "& .MuiPaper-root": {
-          width: "60%",
-        },
-      }}
-    >
-      <DialogContent>
-        <Box sx={{ mb: 2 }}>
-          <Typography variant="h5" sx={{ textAlign: "center" }}>
-            <strong>{formName}</strong>
-          </Typography>
-        </Box>
-        <Divider />
-        <Box sx={{ mb: 2, mt: 2, ml: 2 }}>
-          <Typography variant="subtitle1">
-            <strong>Name: </strong>
-            {user.firstname} {user.lastname}
-          </Typography>
+    <>
+      <Dialog
+        open={open}
+        onClose={onClose}
+        aria-labelledby="hierarchy-dialog-title"
+        maxWidth="100vw"
+        fullWidth
+        sx={{
+          "& .MuiPaper-root": {
+            width: "60%",
+          },
+        }}
+      >
+        <DialogContent>
+          <Box sx={{ mb: 2 }}>
+            <Typography variant="h5" sx={{ textAlign: "center" }}>
+              <strong>{formName}</strong>
+            </Typography>
+          </Box>
+          <Divider />
+          <Box sx={{ mb: 2, mt: 2, ml: 2 }}>
+            <Typography variant="subtitle1">
+              <strong>Name: </strong>
+              {user.firstname} {user.lastname}
+            </Typography>
 
-          <Typography variant="subtitle1">
-            <strong>Role: </strong>
-            {user.role}
-          </Typography>
+            <Typography variant="subtitle1">
+              <strong>Role: </strong>
+              {user.role}
+            </Typography>
 
-          <Typography variant="subtitle1">
-            <strong>Batch Number: </strong>
-            {user.batch}
-          </Typography>
+            <Typography variant="subtitle1">
+              <strong>Batch Number: </strong>
+              {user.batch}
+            </Typography>
 
-          <Typography variant="subtitle1">
-            <strong>Reg Number: </strong>
-            {user.regnum}
-          </Typography>
+            <Typography variant="subtitle1">
+              <strong>Reg Number: </strong>
+              {user.regnum}
+            </Typography>
 
-          <Typography variant="subtitle1">
-            <strong>Faculty: </strong>
-            {user.faculty}
-          </Typography>
+            <Typography variant="subtitle1">
+              <strong>Faculty: </strong>
+              {user.faculty}
+            </Typography>
 
-          <Typography variant="subtitle1">
-            <strong>Email: </strong>
-            {user.email}
-          </Typography>
+            <Typography variant="subtitle1">
+              <strong>Email: </strong>
+              {user.email}
+            </Typography>
 
-          <Typography variant="subtitle1">
-            <strong>Phone Number: </strong>
-            {user.phoneNumber}
-          </Typography>
-        </Box>
-        <Divider />
-        <Box sx={{ mb: 2, mt: 2, ml: 2 }}>
-          {response && response.combinedArray ? (
-            response.combinedArray.map((item) => (
-              <Typography key={item.id} variant="subtitle1">
-                <strong>{item.heading}: </strong>
-                {item.value ? item.value : item.values.join(", ")}
-              </Typography>
-            ))
-          ) : (
-            <Typography variant="subtitle1">No data available</Typography>
-          )}
-        </Box>
-        <Divider />
-        <Box sx={{ mb: 2, mt: 2 }}>
-          <Typography variant="h6" sx={{ textAlign: "center" }}>
-            <strong>Form Approval Progress</strong>
-          </Typography>
-        </Box>
-        <Stepper
-          orientation="horizontal"
-          alternativeLabel
-          activeStep={activestep}
-        >
-          {hierarchy.map((step, index) => (
-            <Step key={index}>
-              <StepLabel
-                optional={
-                  <Typography
-                    variant="overline"
-                    sx={{ color: getStepLabelColor(step.status) }}
-                  >
-                    {step.status}
-                  </Typography>
-                }
-              >
-                {step.title}
-              </StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-      </DialogContent>
-      <DialogActions>
-        <Box display="flex" justifyContent="space-between" width="100%">
-          <Button onClick={onClose} variant="outlined">
-            Close
-          </Button>
-          <Box>
-            {image && (
+            <Typography variant="subtitle1">
+              <strong>Phone Number: </strong>
+              {user.phoneNumber}
+            </Typography>
+          </Box>
+          <Divider />
+          <Box sx={{ mb: 2, mt: 2, ml: 2 }}>
+            {response && response.combinedArray ? (
+              response.combinedArray.map((item) => (
+                <Typography key={item.id} variant="subtitle1">
+                  <strong>{item.heading}: </strong>
+                  {item.value ? item.value : item.values.join(", ")}
+                </Typography>
+              ))
+            ) : (
+              <Typography variant="subtitle1">No data available</Typography>
+            )}
+          </Box>
+          <Divider />
+          <Box sx={{ mb: 2, mt: 2 }}>
+            <Typography variant="h6" sx={{ textAlign: "center" }}>
+              <strong>Form Approval Progress</strong>
+            </Typography>
+          </Box>
+          <Stepper
+            orientation="horizontal"
+            alternativeLabel
+            activeStep={activestep}
+          >
+            {hierarchy.map((step, index) => (
+              <Step key={index}>
+                <StepLabel
+                  optional={
+                    <Typography
+                      variant="overline"
+                      sx={{ color: getStepLabelColor(step.status) }}
+                    >
+                      {step.status}
+                    </Typography>
+                  }
+                >
+                  {step.title}
+                </StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+        </DialogContent>
+        <DialogActions>
+          <Box display="flex" justifyContent="space-between" width="100%">
+            <Button
+              startIcon={<CloseIcon />}
+              onClick={onClose}
+              variant="outlined"
+            >
+              Close
+            </Button>
+            <Box>
+              {image && (
+                <Button
+                  startIcon={<AttachmentIcon />}
+                  variant="contained"
+                  color="primary"
+                  onClick={handleClick}
+                  sx={{
+                    mr: 1,
+                  }}
+                >
+                  View Attachment
+                </Button>
+              )}
               <Button
+                startIcon={<CancelIcon />}
+                onClick={handleDisapprove}
                 variant="contained"
-                color="primary"
-                onClick={handleClick}
                 sx={{
                   mr: 1,
+                  backgroundColor: "red",
+                  "&:hover": {
+                    backgroundColor: "darkred",
+                  },
+                  "&:focus": {
+                    backgroundColor: "red",
+                    boxShadow: "0 0 0 3px rgba(255, 0, 0, 0.3)", // Optional: Add a red glow around the button when focused
+                  },
                 }}
               >
-                View Attachment
+                Disapprove
               </Button>
-            )}
-            <Button
-              onClick={handleDisapprove}
-              variant="contained"
-              sx={{
-                mr: 1,
-                backgroundColor: "red",
-                "&:hover": {
-                  backgroundColor: "darkred",
-                },
-                "&:focus": {
-                  backgroundColor: "red",
-                  boxShadow: "0 0 0 3px rgba(255, 0, 0, 0.3)", // Optional: Add a red glow around the button when focused
-                },
-              }}
-            >
-              Disapprove
-            </Button>
-            <Button
-              onClick={handleApprove}
-              variant="contained"
-              sx={{
-                backgroundColor: "green",
-                "&:hover": {
-                  backgroundColor: "darkgreen",
-                },
-                "&:focus": {
+              <Button
+                startIcon={<CheckCircleIcon />}
+                onClick={handleApprove}
+                variant="contained"
+                sx={{
                   backgroundColor: "green",
-                  boxShadow: "0 0 0 3px rgba(0, 128, 0, 0.3)", // Optional: Add a green glow around the button when focused
-                },
-              }}
-            >
-              Approve
-            </Button>
+                  "&:hover": {
+                    backgroundColor: "darkgreen",
+                  },
+                  "&:focus": {
+                    backgroundColor: "green",
+                    boxShadow: "0 0 0 3px rgba(0, 128, 0, 0.3)", // Optional: Add a green glow around the button when focused
+                  },
+                }}
+              >
+                Approve
+              </Button>
+            </Box>
           </Box>
-        </Box>
-      </DialogActions>
-    </Dialog>
+        </DialogActions>
+      </Dialog>
+      <Snackbar open={snackOpen} autoHideDuration={2000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={severity} sx={{ width: "100%" }}>
+          {message}
+        </Alert>
+      </Snackbar>
+    </>
   );
 }

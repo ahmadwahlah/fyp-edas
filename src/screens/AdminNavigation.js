@@ -12,11 +12,13 @@ import ListItemText from "@mui/material/ListItemText";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
 import DescriptionIcon from "@mui/icons-material/Description";
+import TaskIcon from "@mui/icons-material/Task";
 
 import LoggedInHeader from "../components/LoggedInHeader";
 import AdminDashboard from "../components/AdminDashboard";
 import AdminUserManagement from "../components/AdminUserManagement";
 import AllForms from "../components/AllForms";
+import SubmittedForms from "../components/SubmittedForms";
 import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
@@ -41,6 +43,8 @@ export default function AdminNavigation() {
         return <AdminUserManagement />;
       case "forms":
         return <AllForms />;
+      case "submittedForms":
+        return <SubmittedForms />;
       default:
         return <AdminDashboard />;
     }
@@ -106,6 +110,19 @@ export default function AdminNavigation() {
                   <DescriptionIcon />
                 </ListItemIcon>
                 <ListItemText primary="Forms" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding sx={{ cursor: "pointer" }}>
+              <ListItemButton
+                selected={content === "submittedForms"}
+                onClick={(event) =>
+                  handleListItemClick(event, "submittedForms")
+                }
+              >
+                <ListItemIcon sx={{ color: "#000000" }}>
+                  <TaskIcon />
+                </ListItemIcon>
+                <ListItemText primary="Submitted Forms" />
               </ListItemButton>
             </ListItem>
           </List>

@@ -11,6 +11,7 @@ const PrintButton = () => {
       color="primary"
       startIcon={<PrintIcon />}
       onClick={handlePrint}
+      sx={{ marginLeft: 1 }}
     >
       Print
     </Button>
