@@ -141,7 +141,8 @@ To install and use the Electronic Document and Approval System, follow these ste
 1. Clone the repository.
 2. Navigate to the project directory.
 3. Install dependencies: npm install.
-4. Open your browser and visit [http://localhost:3000](http://localhost:3000) to access the EDAS application.
+4. Start the development server: npm start.
+5. Open your browser and visit [http://localhost:3000](http://localhost:3000) to access the EDAS application.
 
 ## Contribution Guidelines
 
