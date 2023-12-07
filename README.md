@@ -57,101 +57,81 @@ These technologies work together to provide a robust, secure, and scalable solut
 ![Signin](/screenshots/signin.png)
 ***Sign In Page***
 
-
-
+##
 ![Signup](/screenshots/signup.png)
 ***Sign Up Page***
 
-
-
+##
 ![Password](/screenshots/password.png)
 ***Forgot Password Page***
 
-
-
+##
 ![studentDashboard](/screenshots/student-dashboard.png)
 ***Student Dashboard***
 
-
-
+##
 ![studentForms](/screenshots/student-forms.png)
 ***Student Forms List***
 
-
-
+##
 ![formSubmission](/screenshots/student-form-submission.png)
 ***Student Form Submission***
 
-
-
+##
 ![formProgress](/screenshots/student-form-progress.png)
 ***Student Form Progress View***
 
-
-
+##
 ![profile](/screenshots/update-profile.png)
 ***Update Profile***
 
-
-
+##
 ![facultyDashboard](/screenshots/faculty-dashboard.png)
 ***Faculty/Staff Dashboard***
 
-
-
+##
 ![pendingForms](/screenshots/faculty-pending-forms.png)
 ***Faculty/Staff Pending Forms Page***
 
-
-
+##
 ![facultyApproval](/screenshots/faculty-approval:disapproval.png)
 ***Faculty/Staff Form Approval/Disapproval Page***
 
-
-
+##
 ![administratorDashboard](/screenshots/administrator-dashboard.png)
 ***System Administrator Dashboard***
 
-
-
+##
 ![userManagement](/screenshots/administrator-usermanagement.png)
 ***System Administrator User Management; New Requests Page***
 
-
-
+##
 ![currentUser](/screenshots/administrator-currentuser.png)
 ***System Administrator User Management; Current Users Page***
 
-
-
+##
 ![deleteUser](/screenshots/user-delete.png)
 ***System Administrator User Delete Confirmation***
 
-
-
+##
 ![formlist](/screenshots/administrator-formlist.png)
 ***System Administrator Forms List Page***
 
-
-
+##
 ![userUpdatePage](/screenshots/administrator-userupdate.png)
 ***System Administrator User Credentials Update Page***
 
-
-
+##
 ![formbuilder](/screenshots/form-builder.png)
 ***System Administrator Dynamic Form Builder Page***
 
-
-
+##
 ![formBuilder2](/screenshots/form-builder-2.png)
 ***System Administrator Dynamic Form Builder Cont'd***
 
-
-
+##
 ![formView](/screenshots/form-view.png)
 ***System Administrator Form View Page***
-
 
 
 ## Installation and Usage
