@@ -55,64 +55,104 @@ These technologies work together to provide a robust, secure, and scalable solut
 ## Screenshots
 
 ![Signin](/screenshots/signin.png)
-*Sign In Page*
+***Sign In Page***
+
+
 
 ![Signup](/screenshots/signup.png)
-*Sign Up Page*
+***Sign Up Page***
+
+
 
 ![Password](/screenshots/password.png)
-*Forgot Password Page*
+***Forgot Password Page***
+
+
 
 ![studentDashboard](/screenshots/student-dashboard.png)
-*Student Dashboard*
+***Student Dashboard***
+
+
 
 ![studentForms](/screenshots/student-forms.png)
-*Student Forms List*
+***Student Forms List***
+
+
 
 ![formSubmission](/screenshots/student-form-submission.png)
-*Student Form Submission*
+***Student Form Submission***
+
+
 
 ![formProgress](/screenshots/student-form-progress.png)
-*Student Form Progress View*
+***Student Form Progress View***
+
+
 
 ![profile](/screenshots/update-profile.png)
-*Update Profile*
+***Update Profile***
+
+
 
 ![facultyDashboard](/screenshots/faculty-dashboard.png)
-*Faculty/Staff Dashboard*
+***Faculty/Staff Dashboard***
+
+
 
 ![pendingForms](/screenshots/faculty-pending-forms.png)
-*Faculty/Staff Pending Forms Page*
+***Faculty/Staff Pending Forms Page***
+
+
 
 ![facultyApproval](/screenshots/faculty-approval:disapproval.png)
-*Faculty/Staff Form Approval/Disapproval Page*
+***Faculty/Staff Form Approval/Disapproval Page***
+
+
 
 ![administratorDashboard](/screenshots/administrator-dashboard.png)
-*System Administrator Dashboard*
+***System Administrator Dashboard***
+
+
 
 ![userManagement](/screenshots/administrator-usermanagement.png)
-*System Administrator User Management; New Requests Page*
+***System Administrator User Management; New Requests Page***
+
+
 
 ![currentUser](/screenshots/administrator-currentuser.png)
-*System Administrator User Management; Current Users Page*
+***System Administrator User Management; Current Users Page***
+
+
 
 ![deleteUser](/screenshots/user-delete.png)
-*System Administrator User Delete Confirmation*
+***System Administrator User Delete Confirmation***
+
+
 
 ![formlist](/screenshots/administrator-formlist.png)
-*System Administrator Forms List Page*
+***System Administrator Forms List Page***
+
+
 
 ![userUpdatePage](/screenshots/administrator-userupdate.png)
-*System Administrator User Credentials Update Page*
+***System Administrator User Credentials Update Page***
+
+
 
 ![formbuilder](/screenshots/form-builder.png)
-*System Administrator Dynamic Form Builder Page*
+***System Administrator Dynamic Form Builder Page***
+
+
 
 ![formBuilder2](/screenshots/form-builder-2.png)
-*System Administrator Dynamic Form Builder Cont'd*
+***System Administrator Dynamic Form Builder Cont'd***
+
+
 
 ![formView](/screenshots/form-view.png)
-*System Administrator Form View Page*
+***System Administrator Form View Page***
+
+
 
 ## Installation and Usage
 
@@ -125,7 +165,7 @@ To install and use the Electronic Document and Approval System, follow these ste
 
 ## Contribution Guidelines
 
-We welcome contributions to enhance and improve the Document Approval System. To contribute, follow these guidelines:
+We welcome contributions to enhance and improve the Electronic Document and Approval System. To contribute, follow these guidelines:
 
 1. Fork the repository.
 2. Create a new branch: `git checkout -b feature/new-feature`
