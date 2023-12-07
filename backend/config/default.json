@@ -1,0 +1,13 @@
+{
+    "mongoURI": "mongodb+srv://abdullah:pelikan1@edascluster.lgnqdlh.mongodb.net/edas",
+    "user": "abdullah",
+    "host": "edas-admin.csujcs5csopi.ap-south-1.rds.amazonaws.com",
+    "database": "demoEdasDatabase",
+    "password": "pelikan1",
+    "jwtsecret":"secret",
+    "PORT":8000,
+    "BUCKET_NAME":"edasbucket",
+    "BUCKET_REGION":"ap-south-1",
+    "ACCESS_KEY_ID":"AKIAWH7Y3NY3M3AOSW57",
+    "SECRET_ACCESS_KEY":"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"
+}
